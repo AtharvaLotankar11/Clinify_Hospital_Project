@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/auth/Login';
 import DoctorDashboard from './pages/doctor/Dashboard';
 import Orders from './pages/doctor/Orders';
@@ -32,67 +34,275 @@ import './App.css'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Route */}
+          <Route path="/login" element={<Login />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/register-user" element={<RegisterUser />} />
-        <Route path="/admin/users" element={<UserManagement />} />
-        <Route path="/admin/users/:userId" element={<EditUser />} />
+          {/* Admin Routes */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/register-user"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <RegisterUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <UserManagement />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users/:userId"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <EditUser />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Reception Routes */}
-        <Route path="/reception/dashboard" element={<ReceptionDashboard />} />
-        <Route path="/reception/register-patient" element={<RegisterPatient />} />
-        <Route path="/reception/create-visit" element={<CreateVisit />} />
-        <Route path="/reception/admissions" element={<AdmissionManagement />} />
-        <Route path="/reception/view-all" element={<ViewAllRecords />} />
-        <Route path="/ot/dashboard" element={<OTDashboard />} />
-        <Route path="/ot/surgery/:id" element={<SurgeryConsole />} />
+          {/* Reception Routes */}
+          <Route
+            path="/reception/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['reception']}>
+                <ReceptionDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reception/register-patient"
+            element={
+              <PrivateRoute allowedRoles={['reception']}>
+                <RegisterPatient />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reception/create-visit"
+            element={
+              <PrivateRoute allowedRoles={['reception']}>
+                <CreateVisit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reception/admissions"
+            element={
+              <PrivateRoute allowedRoles={['reception']}>
+                <AdmissionManagement />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reception/view-all"
+            element={
+              <PrivateRoute allowedRoles={['reception']}>
+                <ViewAllRecords />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Doctor Routes - Bypassing auth for development */}
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-        <Route path="/doctor/orders" element={<Orders />} />
-        <Route path="/doctor/patients" element={<PatientProfile />} />
-        <Route path="/doctor/patients/:patientId" element={<PatientProfile />} />
+          {/* OT Routes */}
+          <Route
+            path="/ot/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['ot']}>
+                <OTDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/ot/surgery/:id"
+            element={
+              <PrivateRoute allowedRoles={['ot']}>
+                <SurgeryConsole />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Nurse Routes */}
-        <Route path="/nurse/dashboard" element={<NurseDashboard />} />
-        <Route path="/nurse/vitals" element={<Vitals />} />
-        <Route path="/nurse/beds" element={<BedManagement />} />
+          {/* Doctor Routes */}
+          <Route
+            path="/doctor/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['doctor']}>
+                <DoctorDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/doctor/orders"
+            element={
+              <PrivateRoute allowedRoles={['doctor']}>
+                <Orders />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/doctor/patients"
+            element={
+              <PrivateRoute allowedRoles={['doctor']}>
+                <PatientProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/doctor/patients/:patientId"
+            element={
+              <PrivateRoute allowedRoles={['doctor']}>
+                <PatientProfile />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Lab Routes */}
-        <Route path="/lab_tech/dashboard" element={<LabDashboard />} />
-        <Route path="/lab_tech/upload" element={<UploadReport />} />
+          {/* Nurse Routes */}
+          <Route
+            path="/nurse/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['nurse']}>
+                <NurseDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/nurse/vitals"
+            element={
+              <PrivateRoute allowedRoles={['nurse']}>
+                <Vitals />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/nurse/beds"
+            element={
+              <PrivateRoute allowedRoles={['nurse']}>
+                <BedManagement />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Billing Routes */}
-        <Route path="/billing/dashboard" element={<BillingDashboard />} />
-        <Route path="/billing/create" element={<CreateBill />} />
-        <Route path="/billing/bills" element={<PatientBill />} />
+          {/* Lab Routes */}
+          <Route
+            path="/lab_tech/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['lab_tech', 'lab']}>
+                <LabDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/lab_tech/upload"
+            element={
+              <PrivateRoute allowedRoles={['lab_tech', 'lab']}>
+                <UploadReport />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Pharmacy Routes */}
-        <Route path="/pharmacy/dashboard" element={<PharmacyDashboard />} />
-        <Route path="/pharmacy/prescriptions" element={<Prescriptions />} />
-        <Route path="/pharmacy/inventory" element={<Inventory />} />
-        <Route path="/pharmacy/dispense" element={<DispenseMedicine />} />
-        <Route path="/pharmacy/alerts" element={<InteractionAlerts />} />
+          {/* Billing Routes */}
+          <Route
+            path="/billing/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['billing']}>
+                <BillingDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/billing/create"
+            element={
+              <PrivateRoute allowedRoles={['billing']}>
+                <CreateBill />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/billing/bills"
+            element={
+              <PrivateRoute allowedRoles={['billing']}>
+                <PatientBill />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Support Staff Routes */}
-        <Route path="/support/dashboard" element={<SupportDashboard />} />
+          {/* Pharmacy Routes */}
+          <Route
+            path="/pharmacy/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['pharmacy', 'pharmacist']}>
+                <PharmacyDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pharmacy/prescriptions"
+            element={
+              <PrivateRoute allowedRoles={['pharmacy', 'pharmacist']}>
+                <Prescriptions />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pharmacy/inventory"
+            element={
+              <PrivateRoute allowedRoles={['pharmacy', 'pharmacist']}>
+                <Inventory />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pharmacy/dispense"
+            element={
+              <PrivateRoute allowedRoles={['pharmacy', 'pharmacist']}>
+                <DispenseMedicine />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pharmacy/alerts"
+            element={
+              <PrivateRoute allowedRoles={['pharmacy', 'pharmacist']}>
+                <InteractionAlerts />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Default Redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="/reception" element={<Navigate to="/reception/dashboard" replace />} />
-        <Route path="/doctor" element={<Navigate to="/doctor/dashboard" replace />} />
-        <Route path="/nurse" element={<Navigate to="/nurse/dashboard" replace />} />
-        <Route path="/lab_tech" element={<Navigate to="/lab_tech/dashboard" replace />} />
-        <Route path="/billing" element={<Navigate to="/billing/dashboard" replace />} />
-        <Route path="/pharmacy" element={<Navigate to="/pharmacy/dashboard" replace />} />
-        <Route path="/support" element={<Navigate to="/support/dashboard" replace />} />
-      </Routes>
-    </Router>
+          {/* Support Staff Routes */}
+          <Route
+            path="/support/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['support']}>
+                <SupportDashboard />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Default Redirect */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/reception" element={<Navigate to="/reception/dashboard" replace />} />
+          <Route path="/doctor" element={<Navigate to="/doctor/dashboard" replace />} />
+          <Route path="/nurse" element={<Navigate to="/nurse/dashboard" replace />} />
+          <Route path="/lab_tech" element={<Navigate to="/lab_tech/dashboard" replace />} />
+          <Route path="/billing" element={<Navigate to="/billing/dashboard" replace />} />
+          <Route path="/pharmacy" element={<Navigate to="/pharmacy/dashboard" replace />} />
+          <Route path="/support" element={<Navigate to="/support/dashboard" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

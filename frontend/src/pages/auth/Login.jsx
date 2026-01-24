@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Login() {
+    const navigate = useNavigate();
+    const { login, isAuthenticated, user } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -10,6 +14,20 @@ export default function Login() {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (isAuthenticated && user?.role) {
+            const rolePathMap = {
+                'lab': 'lab_tech',
+                'lab_tech': 'lab_tech',
+                'pharmacist': 'pharmacy',
+                'pharmacy': 'pharmacy'
+            };
+            const redirectPath = rolePathMap[user.role] || user.role;
+            navigate(`/${redirectPath}/dashboard`, { replace: true });
+        }
+    }, [isAuthenticated, user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,18 +40,12 @@ export default function Login() {
                 password: formData.password
             };
             const response = await authAPI.login(loginData);
-            localStorage.setItem('token', response.data.access);
 
-            // Backend now returns user object with name and role
-            if (response.data.user) {
-                localStorage.setItem('user', JSON.stringify(response.data.user));
-            }
+            // Use AuthContext login function
+            login(response.data.access, response.data.user);
 
             // Redirect based on role
-            // Redirect based on role
-            let userRole = response.data.user?.role;
-
-            // Map roles to their specific dashboard paths if they differ
+            const userRole = response.data.user?.role;
             const rolePathMap = {
                 'lab': 'lab_tech',
                 'lab_tech': 'lab_tech',
@@ -42,7 +54,7 @@ export default function Login() {
             };
 
             const redirectPath = rolePathMap[userRole] || userRole;
-            window.location.href = `/${redirectPath}/dashboard`;
+            navigate(`/${redirectPath}/dashboard`, { replace: true });
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please try again.');
         } finally {

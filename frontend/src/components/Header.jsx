@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-export default function Header({ userName = 'Dr. Smith', userRole = 'Doctor' }) {
+export default function Header({ userName, userRole }) {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const navigate = useNavigate();
+    const { logout, user } = useAuth();
+
+    // Use context user if props not provided
+    const displayName = userName || user?.name || 'User';
+    const displayRole = userRole || user?.role || 'Staff';
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        logout();
         navigate('/login');
     };
 
@@ -40,11 +45,11 @@ export default function Header({ userName = 'Dr. Smith', userRole = 'Doctor' }) 
                                 className="flex items-center gap-4 px-5 py-2.5 rounded-2xl hover:bg-gray-50 transition-all duration-200 border-2 border-transparent hover:border-emerald-100"
                             >
                                 <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white text-xl font-black shadow-lg shadow-emerald-500/30">
-                                    {userName.charAt(0)}
+                                    {displayName.charAt(0)}
                                 </div>
                                 <div className="text-left hidden sm:block">
-                                    <p className="text-base font-black text-gray-900 leading-tight">{userName}</p>
-                                    <p className="text-sm font-bold text-emerald-600 uppercase tracking-wider">{userRole}</p>
+                                    <p className="text-base font-black text-gray-900 leading-tight">{displayName}</p>
+                                    <p className="text-sm font-bold text-emerald-600 uppercase tracking-wider">{displayRole}</p>
                                 </div>
                                 <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
@@ -55,8 +60,8 @@ export default function Header({ userName = 'Dr. Smith', userRole = 'Doctor' }) 
                             {showProfileMenu && (
                                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border-2 border-gray-100 overflow-hidden animate-slideDown">
                                     <div className="p-4 border-b-2 border-gray-100 bg-gradient-to-br from-emerald-50 to-teal-50">
-                                        <p className="font-bold text-gray-800">{userName}</p>
-                                        <p className="text-sm text-gray-600">{userRole}</p>
+                                        <p className="font-bold text-gray-800">{displayName}</p>
+                                        <p className="text-sm text-gray-600">{displayRole}</p>
                                     </div>
                                     <div className="p-2 border-t-2 border-gray-100">
                                         <button
