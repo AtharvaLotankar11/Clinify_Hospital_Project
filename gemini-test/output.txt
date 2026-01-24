@@ -1,0 +1,12 @@
+Enter path to lab report PDF: 
+Analyzing report with Gemini...
+
+Trying model: gemini-3-flash-preview...
+Successfully used model: gemini-3-flash-preview
+========================================
+LAB REPORT SUMMARY
+========================================
+* All laboratory parameters in this report are within the established normal reference ranges.
+* No abnormal or critical values were identified in the biochemistry or special chemistry panels.
+* All renal, hepatic, and glycemic markers are within normal clinical limits.
+========================================
