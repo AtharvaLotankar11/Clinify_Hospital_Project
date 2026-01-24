@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
 from django.db.models import Sum, Count
+from decimal import Decimal
 from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation
 from .serializers import AllergySerializer, BillSerializer, BillItemSerializer, InsuranceClaimSerializer, PatientSerializer, StaffSerializer, StaffRegistrationSerializer, VisitSerializer, AdmissionSerializer, BedSerializer, VitalSerializer, ClinicalNoteSerializer,OrderSerializer, LabTestSerializer, RadiologyTestSerializer, MedicineSerializer, MedicineBatchSerializer, StockTransactionSerializer, PrescriptionSerializer, PrescriptionDispenseSerializer, OperationSerializer, CreateOrderSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -495,10 +496,12 @@ class BillViewSet(ModelViewSet):
                     'patientId': p_id,
                     'patientName': p_name,
                     'items': [],
-                    'totalAmount': 0
+                    'totalAmount': Decimal('0')
                 }
             pending[p_id]['items'].append(item)
-            pending[p_id]['totalAmount'] += item.get('price', 0)
+            # Convert price to Decimal to avoid type mismatch
+            price = item.get('price', 0)
+            pending[p_id]['totalAmount'] += Decimal(str(price)) if price else Decimal('0')
 
         # Helper to filter by patient
         def filter_by_patient(queryset, patient_field):
@@ -517,7 +520,7 @@ class BillViewSet(ModelViewSet):
                     'type': 'LAB_TEST',
                     'id': test.id,
                     'name': test.test_name,
-                    'price': test.price,
+                    'price': float(test.price),
                     'date': test.completed_at,
                     'visitId': test.order.visit.id
                 })
@@ -533,7 +536,7 @@ class BillViewSet(ModelViewSet):
                     'type': 'RADIOLOGY_TEST',
                     'id': test.id,
                     'name': test.scan_type,
-                    'price': test.price,
+                    'price': float(test.price),
                     'date': test.completed_at,
                     'visitId': test.order.visit.id
                 })
@@ -550,7 +553,7 @@ class BillViewSet(ModelViewSet):
                     'type': 'OPERATION',
                     'id': op.operation_id,
                     'name': op.operation_name,
-                    'price': op.price,
+                    'price': float(op.price),
                     'date': op.performed_at,
                     'visitId': op.order.visit.id
                 })
@@ -578,7 +581,7 @@ class BillViewSet(ModelViewSet):
                         'type': 'OT_CONSUMABLE',
                         'id': c_id,
                         'name': f"OT Consumable: {consumable.get('item')}",
-                        'price': consumable.get('price', 0),
+                        'price': float(consumable.get('price', 0)),
                         'date': op.performed_at or op.scheduled_time, # Fallback date
                         'visitId': op.order.visit.id
                     })
@@ -590,12 +593,26 @@ class BillViewSet(ModelViewSet):
         
         for p in prescriptions:
             if p.prescription_id not in billed_presc_ids:
-                cost = p.quantity * p.medicine.unit_price
+                # Calculate cost from dispensed batches if available
+                dispenses = p.dispenses.all()
+                if dispenses.exists():
+                    # Sum up actual dispensed costs
+                    cost = sum(d.quantity_dispensed * (d.batch.unit_price if d.batch else Decimal('0')) for d in dispenses)
+                else:
+                    # Fallback: use average batch price for this medicine
+                    batches = p.medicine.batches.filter(stock_qty__gt=0)
+                    if batches.exists():
+                        avg_price = sum(b.unit_price for b in batches) / batches.count()
+                        cost = p.quantity * avg_price
+                    else:
+                        # No batches available, use 0 or skip
+                        cost = Decimal('0')
+                
                 add_item(p.visit.patient.id, p.visit.patient.name, {
                     'type': 'PHARMACY',
                     'id': p.prescription_id,
                     'name': f"{p.medicine.name} (x{p.quantity})",
-                    'price': cost,
+                    'price': float(cost),
                     'date': p.visit.visit_date,
                     'visitId': p.visit.id
                 })
@@ -614,7 +631,7 @@ class BillViewSet(ModelViewSet):
                     'type': 'BED',
                     'id': adm.admission_id,
                     'name': f"Bed Charge ({days} days)",
-                    'price': cost,
+                    'price': float(cost),
                     'date': adm.discharge_date,
                     'visitId': adm.visit.id
                 })
