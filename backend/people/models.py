@@ -256,6 +256,37 @@ class Staff(models.Model):
         ('SUPPORT', 'Support'),
     ]
 
+    DOCTOR_TYPE_CHOICES = [
+        ('GENERAL_PHYSICIAN', 'General Physician'),
+        ('CARDIOLOGIST', 'Cardiologist'),
+        ('DERMATOLOGIST', 'Dermatologist'),
+        ('ENT', 'ENT Specialist'),
+        ('NEUROLOGIST', 'Neurologist'),
+        ('GYNECOLOGIST', 'Gynecologist'),
+        ('ORTHOPEDIC', 'Orthopedic Surgeon'),
+        ('PEDIATRICIAN', 'Pediatrician'),
+        ('PSYCHIATRIST', 'Psychiatrist'),
+        ('SURGEON', 'General Surgeon'),
+        ('UROLOGIST', 'Urologist'),
+        ('OPHTHALMOLOGIST', 'Ophthalmologist'),
+        ('DENTIST', 'Dentist'),
+        ('ENDOCRINOLOGIST', 'Endocrinologist'),
+        ('GASTROENTEROLOGIST', 'Gastroenterologist'),
+        ('ONCOLOGIST', 'Oncologist'),
+        ('PULMONOLOGIST', 'Pulmonologist'),
+        ('NEPHROLOGIST', 'Nephrologist'),
+        ('RHEUMATOLOGIST', 'Rheumatologist'),
+        ('ANESTHESIOLOGIST', 'Anesthesiologist'),
+        ('RADIOLOGIST', 'Radiologist'),
+        ('PATHOLOGIST', 'Pathologist'),
+    ]
+
+    EXPERIENCE_CHOICES = [
+        ('LESS_5', '<5 years'),
+        ('5_10', '5-10 years'),
+        ('MORE_10', '10+ years'),
+    ]
+
     user_id = models.BigAutoField(primary_key=True)
     user_email = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
@@ -278,6 +309,26 @@ class Staff(models.Model):
         help_text="Consultation fee (required for doctors only)"
     )
 
+    doctor_type = models.CharField(
+        max_length=50, 
+        choices=DOCTOR_TYPE_CHOICES, 
+        blank=True, 
+        null=True,
+        help_text="Type of doctor (Doctors only)"
+    )
+    specialization = models.TextField(
+        blank=True, 
+        null=True,
+        help_text="Detailed specialization (Doctors only)"
+    )
+    experience_years = models.CharField(
+        max_length=20, 
+        choices=EXPERIENCE_CHOICES, 
+        blank=True, 
+        null=True,
+        help_text="Years of experience (Doctors only)"
+    )
+
     # Doctor Scheduling Fields
     shift_start = models.TimeField(null=True, blank=True, help_text="Shift start time (Doctors only)")
     shift_end = models.TimeField(null=True, blank=True, help_text="Shift end time (Doctors only)")
@@ -295,12 +346,21 @@ class Staff(models.Model):
             if not self.shift_start or not self.shift_end:
                  # Optional: enforce shift times for doctors or leave flexible
                  pass 
+            
+            # Enforce new fields for doctors
+            # We can make them optional or required based on strictness. 
+            # The prompt implies they "should be added", usually meaning they are relevant data.
+            # Let's verify if we want to enforce them to be non-null. 
+            # For now, let's just allow them to be set. validation below ensures only doctors have them.
+            pass
         
         if self.role != 'DOCTOR':
             if self.fee is not None:
                 raise ValidationError({'fee': 'Only doctors can have a fee.'})
             if any([self.shift_start, self.shift_end, self.break_start, self.break_end]):
                  raise ValidationError("Shift times are for doctors only.")
+            if any([self.doctor_type, self.specialization, self.experience_years]):
+                raise ValidationError("Doctor details (type, specialization, experience) are for doctors only.")
 
     def save(self, *args, **kwargs):
         self.full_clean()
