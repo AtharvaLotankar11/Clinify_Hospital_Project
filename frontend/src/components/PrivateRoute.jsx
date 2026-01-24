@@ -18,7 +18,9 @@ const PrivateRoute = ({ children, allowedRoles }) => {
 
     // Redirect to login if not authenticated
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+        // If they were trying to access a patient route, send them to the patient login
+        const isPatientRoute = window.location.pathname.startsWith('/patient');
+        return <Navigate to={isPatientRoute ? "/patients-login" : "/login"} replace />;
     }
 
     // Check role-based access if allowedRoles is specified

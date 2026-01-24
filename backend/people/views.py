@@ -2,15 +2,111 @@ from rest_framework import filters, status as http_status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import permissions
 from django.utils import timezone
 from django.db.models import Sum, Count
 from decimal import Decimal
+from django.core.mail import send_mail
+from django.core.cache import cache
+from django.conf import settings
+import random
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation
 from .serializers import AllergySerializer, BillSerializer, BillItemSerializer, InsuranceClaimSerializer, PatientSerializer, StaffSerializer, StaffRegistrationSerializer, VisitSerializer, AdmissionSerializer, BedSerializer, VitalSerializer, ClinicalNoteSerializer,OrderSerializer, LabTestSerializer, RadiologyTestSerializer, MedicineSerializer, MedicineBatchSerializer, StockTransactionSerializer, PrescriptionSerializer, PrescriptionDispenseSerializer, OperationSerializer, CreateOrderSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
+
+class PatientAuthView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, action=None):
+        if action == 'send-otp':
+            email = request.data.get('email')
+            if not email:
+                return Response({'error': 'Email is required'}, status=400)
+            
+            try:
+                # Use filter().first() to avoid MultipleObjectsReturned error
+                patient = Patient.objects.filter(email=email).first()
+                if not patient:
+                    return Response({'error': 'No patient found with this email. Please contact support.'}, status=404)
+            except Exception as e:
+                return Response({'error': 'Database error occurred'}, status=500)
+            
+            otp = str(random.randint(100000, 999999))
+            try:
+                cache.set(f"otp_{email}", otp, timeout=300) # 5 minutes
+            except Exception as e:
+                print(f"Cache Error: {e}")
+                # Fallback: Can't really proceed without cache unless we store in DB, 
+                # but for now let's return error so frontend knows.
+                return Response({'error': 'System error: Unable to generate OTP. Support notified.'}, status=500)
+            
+            import threading
+            from django.core.mail import EmailMessage
+            
+            def send_otp_email():
+                try:
+                    msg = EmailMessage(
+                        subject=f'Login OTP: {otp}',
+                        body=f'Dear {patient.name},\n\nYour security code is: {otp}',
+                        from_email=settings.EMAIL_HOST_USER,
+                        to=[email]
+                    )
+                    msg.send(fail_silently=True)
+                except Exception as e:
+                     print(f"Mail Error: {e}")
+
+            try:
+                thread = threading.Thread(target=send_otp_email, daemon=True)
+                thread.start()
+            except Exception as e:
+                send_otp_email()
+            
+            return Response({'message': 'OTP sent successfully'})
+
+        elif action == 'verify-otp':
+            email = request.data.get('email')
+            otp = request.data.get('otp')
+            
+            if not email or not otp:
+                return Response({'error': 'Email and OTP are required'}, status=400)
+            
+            cached_otp = cache.get(f"otp_{email}")
+            if cached_otp and str(cached_otp) == str(otp):
+                cache.delete(f"otp_{email}")
+                
+                try:
+                    patient = Patient.objects.get(email=email)
+                    
+                    # Ensure a User object exists for this patient for JWT authentication
+                    from django.contrib.auth.models import User
+                    user, created = User.objects.get_or_create(
+                        username=f"p_{patient.uhid}", 
+                        email=email,
+                        defaults={'first_name': patient.name}
+                    )
+                    
+                    refresh = RefreshToken.for_user(user)
+                    
+                    return Response({
+                        'access': str(refresh.access_token),
+                        'refresh': str(refresh),
+                        'user': {
+                            'id': patient.id,
+                            'name': patient.name,
+                            'role': 'patient',
+                            'email': patient.email,
+                            'uhid': patient.uhid
+                        }
+                    })
+                except Patient.DoesNotExist:
+                    return Response({'error': 'Patient not found'}, status=404)
+            
+            return Response({'error': 'Invalid or expired OTP'}, status=400)
+        
+        return Response({'error': 'Invalid action'}, status=400)
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -169,10 +265,13 @@ class ClinicalNoteViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = ClinicalNote.objects.all().order_by('-created_at')
         visit_id = self.request.query_params.get('visit')
+        patient_id = self.request.query_params.get('patient')
         note_type = self.request.query_params.get('note_type')
         
         if visit_id is not None:
             queryset = queryset.filter(visit_id=visit_id)
+        if patient_id is not None:
+            queryset = queryset.filter(visit__patient_id=patient_id)
         if note_type is not None:
             queryset = queryset.filter(note_type=note_type)
             
@@ -230,7 +329,10 @@ class LabTestViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = LabTest.objects.all()
+        patient_id = self.request.query_params.get('patient')
         status = self.request.query_params.get('status')
+        if patient_id:
+            queryset = queryset.filter(order__visit__patient_id=patient_id)
         if status:
             queryset = queryset.filter(status=status)
         return queryset
@@ -244,7 +346,10 @@ class RadiologyTestViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = RadiologyTest.objects.all()
+        patient_id = self.request.query_params.get('patient')
         status = self.request.query_params.get('status')
+        if patient_id:
+            queryset = queryset.filter(order__visit__patient_id=patient_id)
         if status:
             queryset = queryset.filter(status=status)
         return queryset
@@ -326,14 +431,14 @@ class PrescriptionViewSet(ModelViewSet):
         )
         visit_id = self.request.query_params.get('visit')
         status = self.request.query_params.get('status')
-        patient = self.request.query_params.get('patient')
+        patient_id = self.request.query_params.get('patient')
         
         if visit_id is not None:
             queryset = queryset.filter(visit_id=visit_id)
         if status is not None:
             queryset = queryset.filter(status=status)
-        if patient is not None:
-            queryset = queryset.filter(visit__patient_id=patient)
+        if patient_id is not None:
+            queryset = queryset.filter(visit__patient_id=patient_id)
             
         return queryset
 
@@ -476,6 +581,13 @@ class PrescriptionDispenseViewSet(ModelViewSet):
 class BillViewSet(ModelViewSet):
     queryset = Bill.objects.all()
     serializer_class = BillSerializer
+
+    def get_queryset(self):
+        queryset = Bill.objects.all()
+        patient_id = self.request.query_params.get('patient')
+        if patient_id:
+            queryset = queryset.filter(visit__patient_id=patient_id)
+        return queryset
 
     @action(detail=False, methods=['get'])
     def pending_items(self, request):

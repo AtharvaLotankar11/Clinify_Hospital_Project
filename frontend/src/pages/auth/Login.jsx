@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
@@ -228,6 +228,22 @@ export default function Login() {
                                 )}
                             </button>
                         </form>
+
+                        {/* Patient Login Link */}
+                        <div className="pt-6 border-t border-gray-100">
+                            <div className="text-center space-y-3">
+                                <p className="text-sm text-gray-500">Are you a patient looking for your records?</p>
+                                <Link
+                                    to="/patients-login"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-50 text-emerald-700 font-bold rounded-xl hover:bg-emerald-100 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group"
+                                >
+                                    <span>If you are a Patient, Click Here</span>
+                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div >

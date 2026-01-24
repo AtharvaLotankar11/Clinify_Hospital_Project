@@ -51,6 +51,12 @@ export const authAPI = {
     },
 };
 
+// Patient Auth endpoints
+export const patientAuthAPI = {
+    sendOtp: (email) => api.post('/patient-auth/send-otp/', { email }),
+    verifyOtp: (email, otp) => api.post('/patient-auth/verify-otp/', { email, otp }),
+};
+
 // Patient endpoints
 export const patientAPI = {
     getAll: (params) => api.get('/patients/', { params }),
@@ -186,6 +192,21 @@ export const doctorAPI = {
     getClinicalNotes: (id) => api.get(`/doctor/patients/${id}/notes`),
     addClinicalNote: (id, note) => api.post(`/doctor/patients/${id}/notes`, note),
     getLabResults: (id) => api.get(`/doctor/patients/${id}/lab-results`),
+};
+
+// Patient Dashboard endpoints
+export const patientDashboardAPI = {
+    getProfile: (id) => api.get(`/patients/${id}/`),
+    getVisits: (patientId) => api.get('/visits/', { params: { patient: patientId } }),
+    getPrescriptions: (patientId) => api.get('/prescriptions/', { params: { patient: patientId } }),
+    getLabTests: (patientId) => api.get('/lab-tests/', { params: { patient: patientId } }),
+    getRadiologyTests: (patientId) => api.get('/radiology-tests/', { params: { patient: patientId } }),
+    getClinicalNotes: (patientId) => api.get('/clinical-notes/', { params: { patient: patientId } }),
+    getVitals: (patientId) => api.get('/vitals/', { params: { patient: patientId } }),
+    getBills: (patientId) => api.get('/bills/', { params: { patient_id: patientId } }),
+    getOperations: (patientId) => api.get('/operations/', { params: { patient: patientId } }),
+    getOrders: (patientId) => api.get('/orders/', { params: { patient: patientId } }),
+    getDoctors: () => api.get('/staff/', { params: { role: 'DOCTOR' } }),
 };
 
 

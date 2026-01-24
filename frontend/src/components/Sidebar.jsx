@@ -48,6 +48,12 @@ export default function Sidebar({ role = 'doctor' }) {
             { path: '/admin/register-user', icon: 'add', label: 'Register User' },
             { path: '/admin/users', icon: 'users', label: 'Manage Users' }
         ],
+        patient: [
+            { path: '/patient/dashboard', icon: 'dashboard', label: 'Dashboard' },
+            { path: '/patient/vitals', icon: 'vitals', label: 'My Vitals' },
+            { path: '/patient/medications', icon: 'prescriptions', label: 'Medications' },
+            { path: '/patient/reports', icon: 'reports', label: 'Lab Reports' }
+        ],
         support: [
             { path: '/support/dashboard', icon: 'beds', label: 'Bed Management' }
         ]

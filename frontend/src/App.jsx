@@ -30,6 +30,8 @@ import ViewAllRecords from './pages/reception/ViewAll';
 import OTDashboard from './pages/ot/OTDashboard';
 import SurgeryConsole from './pages/ot/SurgeryConsole';
 import SupportDashboard from './pages/support/Dashboard';
+import PatientLogin from './pages/auth/PatientLogin';
+import PatientDashboard from './pages/patient/PatientDashboard';
 import './App.css'
 
 function App() {
@@ -37,8 +39,9 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public Route */}
+          {/* Public Routes */}
           <Route path="/login" element={<Login />} />
+          <Route path="/patients-login" element={<PatientLogin />} />
 
           {/* Admin Routes */}
           <Route
@@ -290,6 +293,39 @@ function App() {
             }
           />
 
+          <Route
+            path="/patient/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['patient']}>
+                <PatientDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/patient/vitals"
+            element={
+              <PrivateRoute allowedRoles={['patient']}>
+                <PatientDashboard initialTab="vitals" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/patient/medications"
+            element={
+              <PrivateRoute allowedRoles={['patient']}>
+                <PatientDashboard initialTab="meds" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/patient/reports"
+            element={
+              <PrivateRoute allowedRoles={['patient']}>
+                <PatientDashboard initialTab="reports" />
+              </PrivateRoute>
+            }
+          />
+
           {/* Default Redirect */}
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
@@ -300,6 +336,7 @@ function App() {
           <Route path="/billing" element={<Navigate to="/billing/dashboard" replace />} />
           <Route path="/pharmacy" element={<Navigate to="/pharmacy/dashboard" replace />} />
           <Route path="/support" element={<Navigate to="/support/dashboard" replace />} />
+          <Route path="/patient" element={<Navigate to="/patient/dashboard" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
