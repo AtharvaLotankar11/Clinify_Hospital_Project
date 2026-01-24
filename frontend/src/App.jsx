@@ -120,7 +120,7 @@ function App() {
           <Route
             path="/ot/dashboard"
             element={
-              <PrivateRoute allowedRoles={['ot']}>
+              <PrivateRoute allowedRoles={['ot', 'doctor', 'nurse']}>
                 <OTDashboard />
               </PrivateRoute>
             }
@@ -128,7 +128,7 @@ function App() {
           <Route
             path="/ot/surgery/:id"
             element={
-              <PrivateRoute allowedRoles={['ot']}>
+              <PrivateRoute allowedRoles={['ot', 'doctor', 'nurse']}>
                 <SurgeryConsole />
               </PrivateRoute>
             }
