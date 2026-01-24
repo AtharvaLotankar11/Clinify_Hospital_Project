@@ -7,7 +7,7 @@ from rest_framework import permissions
 from django.utils import timezone
 from django.db.models import Sum, Count
 from decimal import Decimal
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.core.cache import cache
 from django.conf import settings
 import random
@@ -43,28 +43,18 @@ class PatientAuthView(APIView):
                 # but for now let's return error so frontend knows.
                 return Response({'error': 'System error: Unable to generate OTP. Support notified.'}, status=500)
             
-            import threading
-            from django.core.mail import EmailMessage
-            
-            def send_otp_email():
-                try:
-                    msg = EmailMessage(
-                        subject=f'Login OTP: {otp}',
-                        body=f'Dear {patient.name},\n\nYour security code is: {otp}',
-                        from_email=settings.EMAIL_HOST_USER,
-                        to=[email]
-                    )
-                    msg.send(fail_silently=True)
-                except Exception as e:
-                     print(f"Mail Error: {e}")
-
             try:
-                thread = threading.Thread(target=send_otp_email, daemon=True)
-                thread.start()
+                msg = EmailMessage(
+                    subject=f'Login OTP: {otp}',
+                    body=f'Dear {patient.name},\n\nYour security code is: {otp}',
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=[email]
+                )
+                msg.send(fail_silently=False)
+                return Response({'message': 'OTP sent successfully'})
             except Exception as e:
-                send_otp_email()
-            
-            return Response({'message': 'OTP sent successfully'})
+                print(f"Mail Error: {e}")
+                return Response({'error': f'Failed to send OTP: {str(e)}'}, status=500)
 
         elif action == 'verify-otp':
             email = request.data.get('email')
