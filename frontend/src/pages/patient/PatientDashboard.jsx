@@ -143,7 +143,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="patient" />
 
             <div className="ml-72 transition-all duration-300">
@@ -153,10 +153,10 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                     <div className="max-w-7xl mx-auto space-y-6">
 
                         {/* Header Card */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm text-2xl">
+                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm text-2xl">
                                         👤
                                     </div>
                                     <div>
@@ -166,7 +166,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                 </div>
                                 <button
                                     onClick={() => setBookingMode(!bookingMode)}
-                                    className="px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
+                                    className="px-6 py-2 btn-medical-primary font-bold rounded-lg transition-colors shadow-sm"
                                 >
                                     {bookingMode ? 'View Dashboard' : 'Book Appointment +'}
                                 </button>
@@ -174,7 +174,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                         </div>
 
                         {bookingMode ? (
-                            <div className="bg-white rounded-xl shadow-md border border-emerald-100 p-8 animate-fadeIn">
+                            <div className="card-medical border-blue-100 p-8 animate-fadeIn">
                                 <h2 className="text-xl font-bold text-gray-900 mb-6">Schedule Appointment</h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-4">
@@ -185,14 +185,14 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                     key={doc.user_id}
                                                     onClick={() => setSelectedDoctor(doc)}
                                                     className={`p-4 rounded-xl border-2 text-left transition-all flex items-center gap-4 ${selectedDoctor?.user_id === doc.user_id
-                                                        ? 'border-emerald-500 bg-emerald-50'
+                                                        ? 'border-blue-500 bg-blue-50'
                                                         : 'border-gray-100 hover:bg-gray-50'
                                                         }`}
                                                 >
                                                     <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">👨‍⚕️</div>
                                                     <div>
                                                         <div className="font-bold text-gray-900">Dr. {doc.name}</div>
-                                                        <div className="text-[10px] text-emerald-600 font-bold uppercase">{doc.department}</div>
+                                                        <div className="text-[10px] text-blue-600 font-bold uppercase">{doc.department}</div>
                                                     </div>
                                                 </button>
                                             ))}
@@ -206,7 +206,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                 value={selectedDate}
                                                 onChange={(e) => setSelectedDate(e.target.value)}
                                                 min={new Date().toISOString().split('T')[0]}
-                                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:border-emerald-500"
+                                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:border-blue-500"
                                             />
                                         </div>
                                         {selectedDoctor && (
@@ -218,8 +218,8 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                             key={slot}
                                                             onClick={() => setSelectedSlot(slot)}
                                                             className={`p-2 rounded-lg text-xs font-bold border transition-all ${selectedSlot === slot
-                                                                ? 'bg-emerald-600 text-white border-emerald-600'
-                                                                : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-400'
+                                                                ? 'bg-blue-600 text-white border-blue-600'
+                                                                : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400'
                                                                 }`}
                                                         >
                                                             {slot}
@@ -231,7 +231,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                         <button
                                             disabled={!selectedSlot || bookingLoading}
                                             onClick={handleCreateAppointment}
-                                            className="w-full py-4 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 shadow-lg disabled:opacity-50 transition-all"
+                                            className="w-full py-4 btn-medical-primary font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all"
                                         >
                                             {bookingLoading ? 'Confirming...' : 'Confirm Appointment'}
                                         </button>
@@ -243,12 +243,12 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                 {/* Stats */}
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                                     {[
-                                        { label: 'Total Visits', value: stats.visits, color: 'emerald', icon: '/icons/visit.png' },
-                                        { label: 'Active Meds', value: stats.prescriptions, color: 'blue', icon: '/icons/medicine.png' },
-                                        { label: 'Lab Reports', value: stats.labReports, color: 'amber', icon: '/icons/lab.png' },
+                                        { label: 'Total Visits', value: stats.visits, color: 'blue', icon: '/icons/visit.png' },
+                                        { label: 'Active Meds', value: stats.prescriptions, color: 'indigo', icon: '/icons/medicine.png' },
+                                        { label: 'Lab Reports', value: stats.labReports, color: 'purple', icon: '/icons/lab.png' },
                                         { label: 'Pending Bills', value: stats.bills, color: 'rose', icon: '/icons/bill.png' }
                                     ].map((stat, i) => (
-                                        <div key={i} className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                                        <div key={i} className="card-medical p-6">
                                             <div className="flex items-center justify-between">
                                                 <div>
                                                     <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">{stat.label}</p>
@@ -263,7 +263,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                 </div>
 
                                 {/* Main Tabs Layout */}
-                                <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                                <div className="card-medical overflow-hidden">
                                     <div className="flex border-b border-gray-100 overflow-x-auto">
                                         {[
                                             { id: 'overview', label: 'History' },
@@ -276,8 +276,8 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                 key={tab.id}
                                                 onClick={() => setActiveTab(tab.id)}
                                                 className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === tab.id
-                                                    ? 'border-b-2 border-emerald-600 text-emerald-600 bg-emerald-50/50'
-                                                    : 'text-gray-500 hover:text-emerald-500'
+                                                    ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50'
+                                                    : 'text-gray-500 hover:text-blue-500'
                                                     }`}
                                             >
                                                 {tab.label}
@@ -322,9 +322,9 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                         {activeTab === 'vitals' && (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {vitals.length > 0 ? vitals.map(v => (
-                                                    <div key={v.id} className="p-4 border border-emerald-100 rounded-xl bg-emerald-50/20">
+                                                    <div key={v.id} className="p-4 border border-blue-100 rounded-xl bg-blue-50/20">
                                                         <div className="flex justify-between items-center mb-3">
-                                                            <span className="text-xs font-bold text-emerald-700">{new Date(v.recorded_at).toLocaleDateString()}</span>
+                                                            <span className="text-xs font-bold text-blue-700">{new Date(v.recorded_at).toLocaleDateString()}</span>
                                                             <span className="text-[10px] text-gray-400">By {v.recorded_by_name || 'Nurse'}</span>
                                                         </div>
                                                         <div className="grid grid-cols-4 gap-2 text-center">
@@ -363,7 +363,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                         <div className="flex items-center gap-3">
                                                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getStatusBadge(test.status)}`}>{test.status}</span>
                                                             {test.report_file && (
-                                                                <a href={test.report_file} target="_blank" className="text-emerald-600 hover:text-emerald-700 font-bold text-sm">Download ↓</a>
+                                                                <a href={test.report_file} target="_blank" className="text-blue-600 hover:text-blue-700 font-bold text-sm">Download ↓</a>
                                                             )}
                                                         </div>
                                                     </div>

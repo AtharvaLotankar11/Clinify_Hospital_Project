@@ -151,16 +151,16 @@ export default function AdmissionManagement() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="reception" />
             <div className="ml-72 transition-all duration-300">
                 <Header userName="Receptionist" userRole="Reception" />
                 <main className="p-6">
                     <div className="max-w-4xl mx-auto space-y-6">
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <h1 className="text-2xl font-bold text-gray-900 border-b pb-4 mb-4">Create / Edit Admission</h1>
 
-                            {success && <div className="p-4 mb-4 bg-emerald-50 text-emerald-700 font-bold rounded-lg border border-emerald-100">{success}</div>}
+                            {success && <div className="p-4 mb-4 bg-blue-50 text-blue-700 font-bold rounded-lg border border-blue-100">{success}</div>}
                             {error && <div className="p-4 mb-4 bg-red-50 text-red-700 font-bold rounded-lg border border-red-100">{error}</div>}
 
                             {/* Search */}
@@ -172,7 +172,7 @@ export default function AdmissionManagement() {
                                         value={searchTerm}
                                         onChange={handleSearch}
                                         placeholder="Name, ID, or Phone..."
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none pr-10"
+                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
                                     />
                                     <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,12 +183,12 @@ export default function AdmissionManagement() {
                                 {searchResults.length > 0 && (
                                     <ul className="mt-2 text-sm border rounded-lg divide-y bg-white shadow-lg overflow-hidden">
                                         {searchResults.map(p => (
-                                            <li key={p.id} onClick={() => handleSelectPatient(p)} className="p-3 hover:bg-emerald-50 cursor-pointer flex justify-between items-center group">
+                                            <li key={p.id} onClick={() => handleSelectPatient(p)} className="p-3 hover:bg-blue-50 cursor-pointer flex justify-between items-center group">
                                                 <div>
                                                     <span className="font-bold text-gray-800 block">{p.name}</span>
                                                     <span className="text-gray-500 text-xs">{p.phone} (ID: {p.id})</span>
                                                 </div>
-                                                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">{p.uhid || 'No UHID'}</span>
+                                                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">{p.uhid || 'No UHID'}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -198,10 +198,10 @@ export default function AdmissionManagement() {
                             {/* Patient Details & Visits */}
                             {selectedPatient && (
                                 <div className="space-y-6 animate-fadeIn">
-                                    <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100 flex justify-between items-center">
+                                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 flex justify-between items-center">
                                         <div>
-                                            <h3 className="font-bold text-lg text-emerald-800">{selectedPatient.name}</h3>
-                                            <p className="text-sm text-emerald-600">ID: {selectedPatient.id} • UHID: {selectedPatient.uhid || 'N/A'} • {selectedPatient.gender}, {selectedPatient.age}y</p>
+                                            <h3 className="font-bold text-lg text-blue-800">{selectedPatient.name}</h3>
+                                            <p className="text-sm text-blue-600">ID: {selectedPatient.id} • UHID: {selectedPatient.uhid || 'N/A'} • {selectedPatient.gender}, {selectedPatient.age}y</p>
                                         </div>
                                         <button onClick={() => setSelectedPatient(null)} className="text-sm text-red-500 underline">Change</button>
                                     </div>
@@ -224,7 +224,7 @@ export default function AdmissionManagement() {
                                                     </div>
                                                     <button
                                                         onClick={() => handlePrepareForm(visit, visit.existingAdmission)}
-                                                        className={`px-4 py-2 rounded-lg text-xs font-bold uppercase ${visit.existingAdmission ? 'bg-blue-600 text-white' : 'bg-emerald-600 text-white'}`}
+                                                        className={`px-4 py-2 rounded-lg text-xs font-bold uppercase ${visit.existingAdmission ? 'bg-blue-600 text-white' : 'btn-medical-primary'}`}
                                                     >
                                                         {visit.existingAdmission ? 'Edit Admission' : 'Admit Patient'}
                                                     </button>
@@ -247,7 +247,7 @@ export default function AdmissionManagement() {
                                                 required
                                                 value={formData.bedId}
                                                 onChange={e => setFormData(prev => ({ ...prev, bedId: e.target.value }))}
-                                                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-emerald-500 outline-none"
+                                                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none"
                                             >
                                                 <option value="">Select Bed</option>
                                                 {availableBeds.map(bed => (
@@ -269,7 +269,7 @@ export default function AdmissionManagement() {
                                                 required
                                                 value={formData.admissionDate}
                                                 onChange={e => setFormData(prev => ({ ...prev, admissionDate: e.target.value }))}
-                                                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-emerald-500 outline-none"
+                                                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none"
                                             />
                                         </div>
 
@@ -280,7 +280,7 @@ export default function AdmissionManagement() {
                                                     type="datetime-local"
                                                     value={formData.dischargeDate}
                                                     onChange={e => setFormData(prev => ({ ...prev, dischargeDate: e.target.value }))}
-                                                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-emerald-500 outline-none"
+                                                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none"
                                                 />
                                             </div>
                                         )}
@@ -288,7 +288,7 @@ export default function AdmissionManagement() {
 
                                     <div className="flex justify-end gap-4">
                                         <button type="button" onClick={() => setFormData(prev => ({ ...prev, visitId: '' }))} className="px-6 py-2 border rounded-lg font-bold text-gray-500">Cancel</button>
-                                        <button type="submit" disabled={loading} className="px-8 py-2 bg-emerald-600 text-white rounded-lg font-bold shadow-lg hover:bg-emerald-700">
+                                        <button type="submit" disabled={loading} className="btn-medical-primary">
                                             {loading ? 'Saving...' : (selectedAdmission ? 'Update Admission' : 'Confirm Admission')}
                                         </button>
                                     </div>

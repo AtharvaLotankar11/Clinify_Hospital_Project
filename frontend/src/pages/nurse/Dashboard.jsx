@@ -246,28 +246,21 @@ export default function NurseDashboard() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => handleOpenVitals(patient.id, patient.name, patient.patientId)}
-                        className={`px-3 py-2 font-semibold text-sm rounded-lg transition-colors ${patient.hasVitals ? 'bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'}`}
+                        className={`btn-medical-secondary px-3 py-2 font-semibold text-sm rounded-lg transition-colors ${patient.hasVitals ? 'bg-white border border-green-200 text-green-600 hover:bg-green-50' : ''}`}
                     >
                         {patient.hasVitals ? 'View / Edit' : 'Record Vitals'}
                     </button>
                     <button
                         onClick={() => {
-                            // Ensure structure matches what Modal expects
-                            // patient.visit_date is string, modal might expect data.
-                            // Modal uses: patient.name, patient.id, patient.patientData (for age/gender)
-                            // We construct a compatible object
                             setDetailsModalData({
-                                id: patient.id, // Visit ID
+                                id: patient.id,
                                 name: patient.name,
                                 patientData: {
                                     id: patient.patientId,
-                                    // Other fields might be missing in this current object structure
-                                    // ideally we fetch full details or pass what we have. 
-                                    // PatientDetailsModal fetches its own data based on visit ID mostly.
                                 }
                             });
                         }}
-                        className="px-3 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 transition-colors"
+                        className="btn-medical-primary px-3 py-2 font-semibold text-sm rounded-lg"
                     >
                         Add Progress Notes
                     </button>
@@ -281,7 +274,7 @@ export default function NurseDashboard() {
         const completed = patients.filter(p => p.hasVitals);
 
         return (
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-6">
+            <div className="card-medical p-6 mb-6">
                 <div className="flex items-center justify-between mb-5">
                     <h2 className="text-xl font-bold text-gray-900">{title} <span className="text-gray-400 text-sm font-normal">({patients.length})</span></h2>
                 </div>
@@ -326,7 +319,7 @@ export default function NurseDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="nurse" />
 
             <div className="ml-72 transition-all duration-300">
@@ -335,11 +328,11 @@ export default function NurseDashboard() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-6">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                        <img src="/icons/nurse.png" alt="Nurse" className="w-10 h-10 object-contain" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center p-2">
+                                        <img src="/icons/nurse.png" alt="Nurse" className="w-full h-full object-contain" />
                                     </div>
                                     <div>
                                         <h1 className="text-2xl font-bold text-gray-900">Nurse Dashboard</h1>
@@ -347,23 +340,28 @@ export default function NurseDashboard() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Today</p>
-                                    <p className="text-base font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                    <p className="text-xs text-gray-500 font-medium uppercase">Today</p>
+                                    <p className="text-sm font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Stats - Simplified */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="bg-white rounded-xl shadow-md border border-emerald-100 p-6">
+                            <div className="card-medical p-6 border-l-4 border-blue-500">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Active Patients</p>
-                                        <p className="text-4xl font-bold text-gray-900">{stats.assignedPatients}</p>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Active Patients</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.assignedPatients}</p>
+                                    </div>
+                                    <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
-                            {/* Detailed stats would require more complex queries */}
+                            {/* Additional stats cards can be added here */}
                         </div>
 
                         {/* Lists Sections */}
@@ -450,7 +448,7 @@ export default function NurseDashboard() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 mt-4">
-                                    <button type="submit" className={`px-4 py-2 text-white rounded-lg text-sm font-semibold transition-colors ${editingVitalId ? 'bg-amber-600 hover:bg-amber-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}>
+                                    <button type="submit" className={`btn-medical-secondary px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${editingVitalId ? 'btn-medical-primary' : ''}`}>
                                         {editingVitalId ? 'Update Vitals' : 'Save Vitals'}
                                     </button>
                                 </div>

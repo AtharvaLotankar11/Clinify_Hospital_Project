@@ -86,7 +86,7 @@ export default function PharmacyDashboard() {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="pharmacy" />
 
             <div className="ml-72 transition-all duration-300">
@@ -95,14 +95,14 @@ export default function PharmacyDashboard() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-6">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center p-2">
                                         <img
                                             src="/icons/pharmacy.png"
                                             alt="Pharmacy"
-                                            className="w-10 h-10 object-contain"
+                                            className="w-full h-full object-contain"
                                         />
                                     </div>
                                     <div>
@@ -111,64 +111,64 @@ export default function PharmacyDashboard() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Today</p>
-                                    <p className="text-base font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                    <p className="text-xs text-gray-500 font-medium uppercase">Today</p>
+                                    <p className="text-sm font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Quick Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-amber-100 p-6 transition-shadow">
+                            <div className="card-medical p-6 border-l-4 border-amber-500">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Pending Prescriptions</p>
-                                        <p className="text-4xl font-bold text-gray-900">{stats.pendingPrescriptions}</p>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Pending Prescriptions</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.pendingPrescriptions}</p>
                                     </div>
-                                    <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-md">
-                                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-green-100 p-6 transition-shadow">
+                            <div className="card-medical p-6 border-l-4 border-green-500">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Dispensed Today</p>
-                                        <p className="text-4xl font-bold text-gray-900">{stats.dispensedToday}</p>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Dispensed Today</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.dispensedToday}</p>
                                     </div>
-                                    <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-md">
-                                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-red-100 p-6 transition-shadow">
+                            <div className="card-medical p-6 border-l-4 border-red-500">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Low Stock Alerts</p>
-                                        <p className="text-4xl font-bold text-gray-900">{stats.lowStock}</p>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Low Stock Alerts</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.lowStock}</p>
                                     </div>
-                                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-md">
-                                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-blue-100 p-6 transition-shadow">
+                            <div className="card-medical p-6 border-l-4 border-blue-500">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Total Medicines</p>
-                                        <p className="text-4xl font-bold text-gray-900">{stats.totalMedicines}</p>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Total Medicines</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.totalMedicines}</p>
                                     </div>
-                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
-                                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                         </svg>
                                     </div>
@@ -178,10 +178,10 @@ export default function PharmacyDashboard() {
 
                         {/* Low Stock Alerts */}
                         {lowStockMedicines.length > 0 && (
-                            <div className="bg-white rounded-xl shadow-md border-l-4 border-red-500 p-6">
+                            <div className="card-medical border-l-4 border-red-500 p-6">
                                 <div className="flex items-center gap-3 mb-5">
-                                    <div className="w-11 h-11 bg-red-50 rounded-lg flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                         </svg>
                                     </div>
@@ -189,7 +189,7 @@ export default function PharmacyDashboard() {
                                 </div>
                                 <div className="space-y-3">
                                     {lowStockMedicines.map(medicine => (
-                                        <div key={medicine.medicine_id} className="p-4 bg-red-50 rounded-lg flex items-center justify-between border border-red-100">
+                                        <div key={medicine.medicine_id} className="p-4 bg-red-50 rounded-lg flex items-center justify-between border border-red-200">
                                             <div>
                                                 <p className="font-semibold text-red-900">{medicine.name}</p>
                                                 <p className="text-sm text-red-700">Current Stock: {medicine.stock_qty} units</p>

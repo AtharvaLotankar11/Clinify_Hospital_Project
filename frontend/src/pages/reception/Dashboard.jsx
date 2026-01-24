@@ -74,7 +74,7 @@ export default function Dashboard() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="reception" />
 
             <div className="ml-72 transition-all duration-300">
@@ -83,14 +83,14 @@ export default function Dashboard() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
-                            <div className="flex items-center gap-5">
-                                <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                    <img src="/icons/reception.png" alt="Reception" className="w-10 h-10 object-contain" />
+                        <div className="card-medical p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <img src="/icons/reception.png" alt="Reception" className="w-8 h-8 object-contain" />
                                 </div>
                                 <div>
                                     <h1 className="text-2xl font-bold text-gray-900">Reception Dashboard</h1>
-                                    <p className="text-sm text-gray-600 mt-1">Welcome back! Manage patient registrations and visits.</p>
+                                    <p className="text-sm text-gray-600 mt-1">Manage patient registrations and visits</p>
                                 </div>
                             </div>
                         </div>
@@ -98,18 +98,18 @@ export default function Dashboard() {
                         {/* Stats Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
-                                { label: "Today's Appointments", value: stats.todayAppointments, icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", color: "emerald" },
-                                { label: "Registered Patients", value: stats.registeredPatients, icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z", color: "teal" },
-                                { label: "Pending Visits", value: stats.pendingVisits, icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", color: "cyan" }
+                                { label: "Today's Appointments", value: stats.todayAppointments, icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", color: "blue" },
+                                { label: "Registered Patients", value: stats.registeredPatients, icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z", color: "indigo" },
+                                { label: "Pending Visits", value: stats.pendingVisits, icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", color: "amber" }
                             ].map((stat, i) => (
-                                <div key={i} className="bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-6 transition-all duration-300">
+                                <div key={i} className="card-medical p-6 border-l-4 border-blue-500">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">{stat.label}</p>
                                             <p className="text-3xl font-bold text-gray-800">{stat.value}</p>
                                         </div>
-                                        <div className={`w-12 h-12 bg-${stat.color}-50 rounded-lg flex items-center justify-center`}>
-                                            <svg className={`w-6 h-6 text-${stat.color}-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className={`w-12 h-12 bg-${stat.color}-600 rounded-lg flex items-center justify-center`}>
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} />
                                             </svg>
                                         </div>
@@ -122,11 +122,11 @@ export default function Dashboard() {
                         <div className="grid md:grid-cols-2 gap-6">
                             <Link
                                 to="/reception/register-patient"
-                                className="bg-emerald-600 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:scale-[1.01] text-white flex items-center justify-between group"
+                                className="gradient-medical-primary rounded-lg p-6 text-white flex items-center justify-between group hover:shadow-lg transition-all duration-200"
                             >
                                 <div>
                                     <h3 className="text-xl font-bold">Register New Patient</h3>
-                                    <p className="text-emerald-100 text-xs mt-1">Add a new patient to the system</p>
+                                    <p className="text-blue-100 text-sm mt-1">Add a new patient to the system</p>
                                 </div>
                                 <svg className="w-8 h-8 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -135,11 +135,11 @@ export default function Dashboard() {
 
                             <Link
                                 to="/reception/create-visit"
-                                className="bg-teal-600 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:scale-[1.01] text-white flex items-center justify-between group"
+                                className="gradient-medical-secondary rounded-lg p-6 text-white flex items-center justify-between group hover:shadow-lg transition-all duration-200"
                             >
                                 <div>
                                     <h3 className="text-xl font-bold">Create Visit</h3>
-                                    <p className="text-teal-100 text-xs mt-1">Schedule a new patient visit</p>
+                                    <p className="text-green-100 text-sm mt-1">Schedule a new patient visit</p>
                                 </div>
                                 <svg className="w-8 h-8 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -148,11 +148,11 @@ export default function Dashboard() {
 
                             <Link
                                 to="/reception/admissions"
-                                className="bg-blue-600 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:scale-[1.01] text-white flex items-center justify-between group"
+                                className="gradient-medical-accent rounded-lg p-6 text-white flex items-center justify-between group hover:shadow-lg transition-all duration-200"
                             >
                                 <div>
                                     <h3 className="text-xl font-bold">Create Admission</h3>
-                                    <p className="text-blue-100 text-xs mt-1">Admit a patient or manage beds</p>
+                                    <p className="text-purple-100 text-sm mt-1">Admit a patient or manage beds</p>
                                 </div>
                                 <svg className="w-8 h-8 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -162,26 +162,26 @@ export default function Dashboard() {
 
                         <div className="grid lg:grid-cols-2 gap-6">
                             {/* Recent Patients */}
-                            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                            <div className="card-medical p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-lg font-bold text-gray-800">Recent Patients</h2>
                                     <button
                                         onClick={() => setIsPatientsModalOpen(true)}
-                                        className="text-emerald-600 hover:text-emerald-700 font-bold text-xs uppercase tracking-wider"
+                                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                                     >
                                         View All →
                                     </button>
                                 </div>
                                 <div className="space-y-4">
                                     {recentPatients.map((patient) => (
-                                        <div key={patient.id} className="flex items-center justify-between p-4 border border-gray-50 rounded-lg hover:border-emerald-100 hover:bg-emerald-50/30 transition-all cursor-pointer">
+                                        <div key={patient.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50/30 transition-all cursor-pointer">
                                             <div>
                                                 <p className="text-sm font-bold text-gray-800">{patient.name}</p>
-                                                <p className="text-[10px] text-gray-500 font-medium uppercase mt-0.5">{patient.phone}</p>
+                                                <p className="text-xs text-gray-500 font-medium mt-0.5">{patient.phone}</p>
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-xs font-bold text-gray-600">{patient.age}Y • {patient.gender}</p>
-                                                <p className="text-[10px] text-gray-400 mt-0.5">{patient.lastVisit}</p>
+                                                <p className="text-xs text-gray-400 mt-0.5">{patient.lastVisit}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -192,28 +192,28 @@ export default function Dashboard() {
                             </div>
 
                             {/* Today's Appointments */}
-                            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                            <div className="card-medical p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-lg font-bold text-gray-800">Today's Appointments</h2>
                                     <button
                                         onClick={() => setIsAppointmentsModalOpen(true)}
-                                        className="text-emerald-600 hover:text-emerald-700 font-bold text-xs uppercase tracking-wider"
+                                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                                     >
                                         View All →
                                     </button>
                                 </div>
                                 <div className="space-y-3">
                                     {todayAppointments.map((appointment) => (
-                                        <div key={appointment.id} className="flex items-center gap-4 p-4 bg-gray-50/50 border border-gray-100 rounded-xl">
+                                        <div key={appointment.id} className="flex items-center gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
                                             <div className="w-16">
-                                                <p className="text-xs font-bold text-emerald-600">{appointment.time}</p>
+                                                <p className="text-xs font-bold text-blue-600">{appointment.time}</p>
                                             </div>
                                             <div className="flex-1">
                                                 <p className="text-sm font-bold text-gray-800">{appointment.patient}</p>
-                                                <p className="text-[10px] text-gray-500 font-medium">{appointment.doctor} • {appointment.department}</p>
+                                                <p className="text-xs text-gray-500 font-medium">{appointment.doctor} • {appointment.department}</p>
                                             </div>
-                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${appointment.status === 'ACTIVE'
-                                                ? 'bg-blue-100 text-blue-700'
+                                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase ${appointment.status === 'ACTIVE'
+                                                ? 'badge-info'
                                                 : 'bg-gray-100 text-gray-700'
                                                 }`}>
                                                 {appointment.status}

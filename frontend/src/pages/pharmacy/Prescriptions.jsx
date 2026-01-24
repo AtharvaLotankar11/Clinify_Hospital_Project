@@ -103,7 +103,7 @@ export default function Prescriptions() {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="pharmacy" />
 
             <div className="ml-72 transition-all duration-300">
@@ -112,11 +112,11 @@ export default function Prescriptions() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                        <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
                                     </div>
@@ -129,12 +129,12 @@ export default function Prescriptions() {
                         </div>
 
                         {/* Filters and Search */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                        <div className="card-medical p-6">
                             <div className="flex flex-wrap gap-4 items-center justify-between">
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => setFilter('all')}
-                                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all' ? 'btn-medical-primary' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                             }`}
                                     >
                                         All
@@ -160,7 +160,7 @@ export default function Prescriptions() {
                                         placeholder="Search by patient or ID..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all w-64"
+                                        className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all w-64"
                                     />
                                     <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -170,7 +170,7 @@ export default function Prescriptions() {
                         </div>
 
                         {/* Prescriptions Table */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                        <div className="card-medical p-6">
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead>
@@ -200,7 +200,7 @@ export default function Prescriptions() {
                                                 <td className="py-4 px-4">
                                                     <button
                                                         onClick={() => setSelectedPrescription(prescription)}
-                                                        className="px-4 py-1.5 text-sm bg-emerald-50 text-emerald-700 font-medium rounded-lg hover:bg-emerald-100 transition-colors mr-2"
+                                                        className="px-4 py-1.5 text-sm bg-blue-50 text-blue-700 font-medium rounded-lg hover:bg-blue-100 transition-colors mr-2"
                                                     >
                                                         View
                                                     </button>
@@ -225,11 +225,11 @@ export default function Prescriptions() {
                 <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setSelectedPrescription(null)}>
                     <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
                         {/* Modal Header */}
-                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6">
+                        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <h2 className="text-2xl font-bold">Prescription Details</h2>
-                                    <p className="text-emerald-100 mt-1">ID: {selectedPrescription.id}</p>
+                                    <p className="text-blue-100 mt-1">ID: {selectedPrescription.id}</p>
                                 </div>
                                 <button onClick={() => setSelectedPrescription(null)} className="w-10 h-10 bg-white rounded-lg flex items-center justify-center transition-all hover:bg-gray-100 hover:scale-110">
                                     <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -270,7 +270,7 @@ export default function Prescriptions() {
                                             <div className="p-4 border border-gray-200 rounded-lg">
                                                 <div className="flex justify-between items-start mb-2">
                                                     <h4 className="font-semibold text-gray-900">{selectedPrescription.medicine.name}</h4>
-                                                    <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-medium">
+                                                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">
                                                         Qty: {selectedPrescription.quantity}
                                                     </span>
                                                 </div>
@@ -288,7 +288,7 @@ export default function Prescriptions() {
                                     <div className="flex gap-3 pt-4">
                                         <button
                                             onClick={() => handleDispense(selectedPrescription.id)}
-                                            className="flex-1 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+                                            className="flex-1 py-3 btn-medical-primary"
                                         >
                                             Dispense Prescription
                                         </button>

@@ -166,7 +166,7 @@ export default function OTDashboard() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role={user.role?.toLowerCase() || 'reception'} />
             <div className="ml-72">
                 <Header userName={user.name} userRole={user.role} />
@@ -175,7 +175,7 @@ export default function OTDashboard() {
                         <h1 className="text-2xl font-bold text-gray-800">Operation Theater Schedule</h1>
                         <button
                             onClick={() => setShowScheduleModal(true)}
-                            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                            className="px-4 py-2 btn-medical-primary rounded-lg"
                         >
                             + Schedule Surgery
                         </button>
@@ -183,7 +183,7 @@ export default function OTDashboard() {
 
                     {/* Calendar/List View */}
                     {/* Calendar/List View - Premium Grid */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="card-medical overflow-hidden">
                         <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
                             <h2 className="font-bold text-gray-700">Today's Schedule</h2>
                             <span className="text-sm text-gray-500">{operations.length} Surgeries scheduled</span>
@@ -201,10 +201,10 @@ export default function OTDashboard() {
                             ) : (
                                 <div className="grid grid-cols-1 gap-4">
                                     {operations.map(op => (
-                                        <div key={op.operation_id} className="group flex items-center justify-between p-5 bg-white border border-gray-100 rounded-xl hover:shadow-lg hover:border-emerald-100 transition-all duration-300">
+                                        <div key={op.operation_id} className="group flex items-center justify-between p-5 bg-white border border-gray-100 rounded-xl hover:shadow-lg hover:border-blue-200 transition-all duration-300">
                                             <div className="flex items-start gap-5">
                                                 {/* Time Badge */}
-                                                <div className="flex flex-col items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-700 rounded-lg group-hover:bg-emerald-100 transition-colors">
+                                                <div className="flex flex-col items-center justify-center w-16 h-16 bg-blue-50 text-blue-700 rounded-lg group-hover:bg-blue-100 transition-colors">
                                                     <span className="text-lg font-bold">
                                                         {op.scheduled_time ? new Date(op.scheduled_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '--:--'}
                                                     </span>
@@ -224,7 +224,7 @@ export default function OTDashboard() {
                                                         </span>
                                                     </div>
 
-                                                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-emerald-700 transition-colors">
+                                                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-700 transition-colors">
                                                         {op.operation_name}
                                                     </h3>
 
@@ -234,7 +234,7 @@ export default function OTDashboard() {
                                                             <span>{op.patient_name || 'Unknown Patient'}</span>
                                                         </div>
                                                         <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                                        <div className="flex items-center gap-1 text-emerald-600">
+                                                        <div className="flex items-center gap-1 text-blue-600">
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                                                             <span className="font-medium">{op.doctor_name || 'Unassigned'}</span>
                                                         </div>
@@ -243,7 +243,7 @@ export default function OTDashboard() {
                                             </div>
 
                                             <button
-                                                className="flex items-center gap-2 px-4 py-2 text-emerald-600 bg-emerald-50 rounded-lg font-semibold hover:bg-emerald-600 hover:text-white transition-all transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+                                                className="flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
                                                 onClick={() => navigate(`/ot/surgery/${op.operation_id}`)}
                                             >
                                                 <span>Console</span>
@@ -264,19 +264,19 @@ export default function OTDashboard() {
                     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-all duration-300">
                         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all scale-100">
                             {/* Header */}
-                            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6">
+                            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
                                 <h2 className="text-xl font-bold text-white tracking-wide">Schedule Surgery</h2>
-                                <p className="text-emerald-100 text-sm mt-1">Book a new operation slot</p>
+                                <p className="text-blue-100 text-sm mt-1">Book a new operation slot</p>
                             </div>
 
                             <form onSubmit={handleSchedule} className="p-6 space-y-5">
                                 {/* Patient Search */}
-                                <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+                                <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">Find Patient</label>
                                     <div className="flex gap-2 relative">
                                         <input
                                             type="text"
-                                            className="flex-1 border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-sm"
+                                            className="flex-1 border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm shadow-sm"
                                             placeholder="Search by Name, Phone, or UHID..."
                                             value={patientPhone}
                                             onChange={e => setPatientPhone(e.target.value)}
@@ -284,17 +284,17 @@ export default function OTDashboard() {
                                         <button
                                             type="button"
                                             onClick={handleFindPatient}
-                                            className="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700 transition w-auto"
+                                            className="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition w-auto"
                                         >
                                             Search
                                         </button>
                                     </div>
                                     {foundPatient && (
-                                        <div className="mt-3 flex items-center gap-2 text-sm text-emerald-700 bg-white p-2 rounded-lg border border-emerald-100 shadow-sm animate-fadeIn">
-                                            <span className="bg-emerald-100 p-1 rounded-full">✅</span>
+                                        <div className="mt-3 flex items-center gap-2 text-sm text-blue-700 bg-white p-2 rounded-lg border border-blue-100 shadow-sm animate-fadeIn">
+                                            <span className="bg-blue-100 p-1 rounded-full">✅</span>
                                             <div>
                                                 <span className="font-bold">{foundPatient.name}</span>
-                                                <span className="text-emerald-600 mx-1">•</span>
+                                                <span className="text-blue-600 mx-1">•</span>
                                                 <span>Age: {foundPatient.age}</span>
                                             </div>
                                         </div>
@@ -305,7 +305,7 @@ export default function OTDashboard() {
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Operation Name</label>
                                     <input
-                                        className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow text-sm"
+                                        className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow text-sm"
                                         type="text"
                                         required
                                         placeholder="e.g. Laparoscopic Appendectomy"
@@ -318,7 +318,7 @@ export default function OTDashboard() {
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Surgeon</label>
                                     <div className="relative">
                                         <select
-                                            className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow text-sm appearance-none bg-white"
+                                            className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow text-sm appearance-none bg-white"
                                             value={formData.surgeon_id}
                                             onChange={e => setFormData({ ...formData, surgeon_id: e.target.value })}
                                         >
@@ -336,7 +336,7 @@ export default function OTDashboard() {
                                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date & Time</label>
                                         <input
                                             type="datetime-local"
-                                            className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow text-sm text-gray-600"
+                                            className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow text-sm text-gray-600"
                                             value={formData.scheduled_time}
                                             onChange={e => setFormData({ ...formData, scheduled_time: e.target.value })}
                                         />
@@ -345,7 +345,7 @@ export default function OTDashboard() {
                                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">OT Room</label>
                                         <div className="relative">
                                             <select
-                                                className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow text-sm appearance-none bg-white"
+                                                className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow text-sm appearance-none bg-white"
                                                 value={formData.ot_room}
                                                 onChange={e => setFormData({ ...formData, ot_room: e.target.value })}
                                                 required
@@ -371,7 +371,7 @@ export default function OTDashboard() {
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Surgery Cost (₹)</label>
                                     <input
                                         type="number"
-                                        className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-shadow text-sm"
+                                        className="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow text-sm"
                                         value={formData.price}
                                         onChange={e => setFormData({ ...formData, price: e.target.value })}
                                         placeholder="0.00"
@@ -388,7 +388,7 @@ export default function OTDashboard() {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:shadow-lg hover:shadow-emerald-500/30 font-medium transition-all transform hover:-translate-y-0.5 text-sm"
+                                        className="px-6 py-2.5 btn-medical-primary rounded-lg hover:shadow-lg hover:shadow-blue-500/30 font-medium transition-all transform hover:-translate-y-0.5 text-sm"
                                     >
                                         Confirm Schedule
                                     </button>

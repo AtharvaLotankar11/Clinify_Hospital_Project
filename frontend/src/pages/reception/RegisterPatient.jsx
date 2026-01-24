@@ -227,7 +227,7 @@ export default function RegisterPatient() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="reception" />
 
             <div className="ml-72 transition-all duration-300">
@@ -236,11 +236,11 @@ export default function RegisterPatient() {
                 <main className="p-6">
                     <div className="max-w-5xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center justify-between gap-5">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                        <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                                         </svg>
                                     </div>
@@ -257,14 +257,14 @@ export default function RegisterPatient() {
                                             value={searchQuery}
                                             onChange={handleSearch}
                                             placeholder="Search patient by Name or ID..."
-                                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm"
                                         />
                                         <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
                                         {isSearching && (
                                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                                                <svg className="animate-spin h-4 w-4 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <svg className="animate-spin h-4 w-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                 </svg>
@@ -279,7 +279,7 @@ export default function RegisterPatient() {
                                                 <div
                                                     key={patient.id}
                                                     onClick={() => selectPatient(patient)}
-                                                    className="p-3 hover:bg-emerald-50 cursor-pointer border-b border-gray-50 last:border-0 transition-colors"
+                                                    className="p-3 hover:bg-blue-50 cursor-pointer border-b border-gray-50 last:border-0 transition-colors"
                                                 >
                                                     <div className="flex justify-between items-start">
                                                         <div>
@@ -288,7 +288,7 @@ export default function RegisterPatient() {
                                                         </div>
                                                         <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-600 block text-right">
                                                             ID: {patient.id}<br />
-                                                            <span className="text-[10px] text-emerald-600 font-bold">{patient.uhid || ''}</span>
+                                                            <span className="text-[10px] text-blue-600 font-bold">{patient.uhid || ''}</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -301,11 +301,11 @@ export default function RegisterPatient() {
 
                         {/* Success Message */}
                         {success && (
-                            <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3 animate-fadeIn">
-                                <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-center gap-3 animate-fadeIn">
+                                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <p className="text-sm text-emerald-700 font-bold">
+                                <p className="text-sm text-blue-700 font-bold">
                                     {selectedPatientId
                                         ? 'Patient details updated successfully!'
                                         : 'Patient registered successfully! Redirecting...'}
@@ -324,11 +324,11 @@ export default function RegisterPatient() {
                         )}
 
                         {/* Form */}
-                        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md border border-gray-100 p-8 space-y-10">
+                        <form onSubmit={handleSubmit} className="card-medical p-8 space-y-10">
                             {/* Personal Information */}
                             <section>
-                                <h2 className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <span className="w-6 h-px bg-emerald-200"></span>
+                                <h2 className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <span className="w-6 h-px bg-blue-200"></span>
                                     Personal Information
                                 </h2>
                                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -340,7 +340,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.firstName}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter first name"
                                         />
                                     </div>
@@ -352,7 +352,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.lastName}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter last name"
                                         />
                                     </div>
@@ -364,7 +364,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.dateOfBirth}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                         />
                                     </div>
                                     <div className="space-y-1.5">
@@ -386,7 +386,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.gender}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                         >
                                             <option value="">Select Gender</option>
                                             <option value="Male">Male</option>
@@ -400,7 +400,7 @@ export default function RegisterPatient() {
                                             name="bloodGroup"
                                             value={formData.bloodGroup}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                         >
                                             <option value="">Select Blood Group</option>
                                             <option value="A+">A+</option>
@@ -420,7 +420,7 @@ export default function RegisterPatient() {
                                             name="aadhaar"
                                             value={formData.aadhaar}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter 12-digit Aadhar ID"
                                             maxLength="12"
                                         />
@@ -430,8 +430,8 @@ export default function RegisterPatient() {
 
                             {/* Contact Information */}
                             <section>
-                                <h2 className="text-xs font-bold text-teal-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <span className="w-6 h-px bg-teal-200"></span>
+                                <h2 className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <span className="w-6 h-px bg-blue-200"></span>
                                     Contact Information
                                 </h2>
                                 <div className="grid md:grid-cols-2 gap-6">
@@ -443,7 +443,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.phone}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter phone number"
                                         />
                                     </div>
@@ -454,7 +454,7 @@ export default function RegisterPatient() {
                                             name="email"
                                             value={formData.email}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter email address"
                                         />
                                     </div>
@@ -466,7 +466,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.address}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter full address"
                                         />
                                     </div>
@@ -479,7 +479,7 @@ export default function RegisterPatient() {
                                                 required
                                                 value={formData.city}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                                 placeholder="City"
                                             />
                                         </div>
@@ -491,7 +491,7 @@ export default function RegisterPatient() {
                                                 required
                                                 value={formData.state}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                                 placeholder="State"
                                             />
                                         </div>
@@ -503,7 +503,7 @@ export default function RegisterPatient() {
                                                 required
                                                 value={formData.pincode}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                                 placeholder="Pincode"
                                             />
                                         </div>
@@ -513,8 +513,8 @@ export default function RegisterPatient() {
 
                             {/* Emergency Contact */}
                             <section>
-                                <h2 className="text-xs font-bold text-cyan-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <span className="w-6 h-px bg-cyan-200"></span>
+                                <h2 className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <span className="w-6 h-px bg-blue-200"></span>
                                     Emergency Contact
                                 </h2>
                                 <div className="grid md:grid-cols-3 gap-6">
@@ -526,7 +526,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.emergencyContactName}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Contact name"
                                         />
                                     </div>
@@ -538,7 +538,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.emergencyContactPhone}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Contact phone"
                                         />
                                     </div>
@@ -550,7 +550,7 @@ export default function RegisterPatient() {
                                             required
                                             value={formData.emergencyContactRelation}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="e.g. Spouse"
                                         />
                                     </div>
@@ -559,8 +559,8 @@ export default function RegisterPatient() {
 
                             {/* Medical History */}
                             <section>
-                                <h2 className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <span className="w-6 h-px bg-amber-200"></span>
+                                <h2 className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <span className="w-6 h-px bg-blue-200"></span>
                                     Medical History
                                 </h2>
                                 <div className="grid md:grid-cols-2 gap-6">
@@ -571,7 +571,7 @@ export default function RegisterPatient() {
                                             value={formData.allergies}
                                             onChange={handleChange}
                                             rows="2"
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium resize-none"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium resize-none"
                                             placeholder="List any known allergies"
                                         />
                                     </div>
@@ -582,7 +582,7 @@ export default function RegisterPatient() {
                                             value={formData.chronicConditions}
                                             onChange={handleChange}
                                             rows="2"
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium resize-none"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium resize-none"
                                             placeholder="e.g. Diabetes, Hypertension"
                                         />
                                     </div>
@@ -593,7 +593,7 @@ export default function RegisterPatient() {
                                             value={formData.currentMedications}
                                             onChange={handleChange}
                                             rows="2"
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium resize-none"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium resize-none"
                                             placeholder="List any current medications"
                                         />
                                     </div>
@@ -622,7 +622,7 @@ export default function RegisterPatient() {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="px-8 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-md hover:bg-emerald-700 hover:shadow-lg transition-all uppercase tracking-wider disabled:opacity-50 flex items-center gap-2"
+                                        className="btn-medical-primary flex items-center gap-2"
                                     >
                                         {loading ? (
                                             <>

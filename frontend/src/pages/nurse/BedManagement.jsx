@@ -92,7 +92,7 @@ export default function BedManagement() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="nurse" />
 
             <div className="ml-72 transition-all duration-300">
@@ -101,12 +101,12 @@ export default function BedManagement() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header Section matching Dashboard */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
                                         {/* Bed Icon */}
-                                        <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M3 14h18m-2 0v5a1 1 0 01-1 1H6a1 1 0 01-1-1v-5m14-4V7a1 1 0 00-1-1H6a1 1 0 00-1 1v3" />
                                         </svg>
                                     </div>
@@ -140,7 +140,7 @@ export default function BedManagement() {
 
                             {loading ? (
                                 <div className="flex items-center justify-center py-12">
-                                    <svg className="animate-spin h-8 w-8 text-emerald-600" viewBox="0 0 24 24">
+                                    <svg className="animate-spin h-8 w-8 text-blue-600" viewBox="0 0 24 24">
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                     </svg>
@@ -184,7 +184,7 @@ export default function BedManagement() {
                                                             <select
                                                                 value={bed.status}
                                                                 onChange={(e) => handleStatusChange(bed.bed_id, e.target.value)}
-                                                                className={`appearance-none pl-3 pr-8 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border-0 cursor-pointer focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500/50 transition-all ${getStatusColor(bed.status)}`}
+                                                                className={`appearance-none pl-3 pr-8 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border-0 cursor-pointer focus:ring-2 focus:ring-offset-1 focus:ring-blue-500/50 transition-all ${getStatusColor(bed.status)}`}
                                                             >
                                                                 <option value="AVAILABLE">Available</option>
                                                                 <option value="OCCUPIED">Occupied</option>
@@ -200,7 +200,7 @@ export default function BedManagement() {
                                                             <select
                                                                 value={bed.cleaning_status}
                                                                 onChange={(e) => handleCleaningStatusChange(bed.bed_id, e.target.value)}
-                                                                className={`appearance-none pl-3 pr-8 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border-0 cursor-pointer focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500/50 transition-all ${getCleaningStatusColor(bed.cleaning_status)}`}
+                                                                className={`appearance-none pl-3 pr-8 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border-0 cursor-pointer focus:ring-2 focus:ring-offset-1 focus:ring-blue-500/50 transition-all ${getCleaningStatusColor(bed.cleaning_status)}`}
                                                             >
                                                                 <option value="CLEANED">Cleaned</option>
                                                                 <option value="NOT_CLEANED">Not Cleaned</option>

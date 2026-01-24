@@ -139,7 +139,7 @@ export default function LabDashboard() {
                                         </div>
                                         <button
                                             onClick={() => handleUploadClick(test)}
-                                            className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
+                                            className="btn-medical-secondary px-4 py-2 text-sm font-medium rounded-lg shadow-sm"
                                         >
                                             Upload Result
                                         </button>
@@ -201,7 +201,7 @@ export default function LabDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="lab_tech" />
 
             <div className="ml-72 transition-all duration-300">
@@ -210,11 +210,11 @@ export default function LabDashboard() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-6">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                        <img src="/icons/lab.png" alt="Lab" className="w-10 h-10 object-contain" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center p-2">
+                                        <img src="/icons/lab.png" alt="Lab" className="w-full h-full object-contain" />
                                     </div>
                                     <div>
                                         <h1 className="text-2xl font-bold text-gray-900">Lab Technician Dashboard</h1>
@@ -222,63 +222,69 @@ export default function LabDashboard() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Today</p>
-                                    <p className="text-base font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                    <p className="text-xs text-gray-500 font-medium uppercase">Today</p>
+                                    <p className="text-sm font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Stats Overview */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                                <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Pending Orders</p>
-                                    <p className="text-2xl font-bold text-gray-900">{stats.pendingTests}</p>
-                                </div>
-                            </div>
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Completed</p>
-                                    <p className="text-2xl font-bold text-gray-900">{stats.completedToday}</p>
+                            <div className="card-medical p-6 border-l-4 border-amber-500">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Pending Orders</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.pendingTests}</p>
+                                    </div>
+                                    <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                    </svg>
+                            <div className="card-medical p-6 border-l-4 border-green-500">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Completed</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.completedToday}</p>
+                                    </div>
+                                    <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Total Orders</p>
-                                    <p className="text-2xl font-bold text-gray-900">{stats.totalTests}</p>
+                            </div>
+                            <div className="card-medical p-6 border-l-4 border-blue-500">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-xs font-medium text-gray-500 uppercase mb-2">Total Orders</p>
+                                        <p className="text-3xl font-bold text-gray-900">{stats.totalTests}</p>
+                                    </div>
+                                    <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Main Content Area */}
-                        <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
+                        <div className="card-medical overflow-hidden">
                             {/* Tabs */}
                             <div className="flex border-b border-gray-200">
                                 <button
                                     onClick={() => setActiveTab('lab')}
                                     className={`flex-1 py-5 text-center font-semibold text-sm transition-colors relative ${activeTab === 'lab'
-                                        ? 'text-emerald-700 bg-emerald-50/50'
+                                        ? 'text-green-700 bg-green-50/50'
                                         : 'text-gray-500 hover:bg-gray-50'
                                         }`}
                                 >
                                     Lab Reports
                                     {activeTab === 'lab' && (
-                                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600"></div>
+                                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-600"></div>
                                     )}
                                 </button>
                                 <button
@@ -385,7 +391,7 @@ export default function LabDashboard() {
                             <button
                                 type="submit"
                                 disabled={uploading}
-                                className="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-200 mt-2"
+                                className="btn-medical-secondary w-full py-3 font-bold rounded-xl shadow-lg mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {uploading ? 'Uploading...' : 'Submit Result'}
                             </button>

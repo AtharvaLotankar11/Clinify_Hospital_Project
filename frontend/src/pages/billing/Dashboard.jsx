@@ -44,7 +44,7 @@ export default function BillingDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
       <Sidebar role="billing" />
 
       <div className="ml-72 transition-all duration-300">
@@ -53,14 +53,14 @@ export default function BillingDashboard() {
         <main className="p-6">
           <div className="max-w-7xl mx-auto space-y-6">
             {/* Header */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+            <div className="card-medical p-6">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center p-2">
                     <img
                       src="/icons/billing.png"
                       alt="Billing"
-                      className="w-10 h-10 object-contain"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                   <div>
@@ -73,12 +73,11 @@ export default function BillingDashboard() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-
                   <div className="text-right">
-                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                    <p className="text-xs text-gray-500 font-medium uppercase">
                       Today
                     </p>
-                    <p className="text-base font-semibold text-gray-900">
+                    <p className="text-sm font-semibold text-gray-900">
                       {new Date().toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
@@ -233,14 +232,14 @@ export default function BillingDashboard() {
                             </div>
                         </div> */}
 
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+            <div className="card-medical p-6">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-xl font-bold text-gray-900">
                   Pending Bills
                 </h2>
                 <button
                   onClick={() => navigate("/billing/bills")}
-                  className="px-6 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors"
+                  className="btn-medical-primary px-6 py-2 font-semibold rounded-lg"
                 >
                   View All
                 </button>
@@ -281,7 +280,7 @@ export default function BillingDashboard() {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold">
+                          <div className="w-12 h-12 gradient-medical-primary rounded-lg flex items-center justify-center text-white font-bold">
                             {patientBill.patientName.charAt(0)}
                           </div>
                           <div>
@@ -322,7 +321,7 @@ export default function BillingDashboard() {
                               `/billing/create?patientId=${patientBill.patientId}`,
                             )
                           }
-                          className="px-5 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors"
+                          className="btn-medical-secondary px-5 py-2 font-semibold rounded-lg"
                         >
                           Create Bill
                         </button>

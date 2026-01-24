@@ -151,7 +151,7 @@ export default function AdminDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="admin" />
 
             <div className="ml-72 transition-all duration-300">
@@ -160,27 +160,27 @@ export default function AdminDashboard() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-6">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm p-2">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center p-2">
                                         <img src="/icons/admin.png" alt="Admin" className="w-full h-full object-contain" />
                                     </div>
                                     <div>
-                                        <h1 className="text-2xl font-bold text-gray-900">Admin Command Center</h1>
-                                        <p className="text-sm text-gray-600 mt-1">Real-time hospital oversight & management</p>
+                                        <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+                                        <p className="text-sm text-gray-600 mt-1">Hospital management and oversight</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => navigate('/admin/register-user')}
-                                        className="px-5 py-2.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
+                                        className="btn-medical-primary px-4 py-2 rounded-lg font-medium"
                                     >
                                         + Register User
                                     </button>
                                     <div className="text-right">
-                                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Today</p>
-                                        <p className="text-base font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                        <p className="text-xs text-gray-500 font-medium uppercase">Today</p>
+                                        <p className="text-sm font-semibold text-gray-900">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                                     </div>
                                 </div>
                             </div>
@@ -189,20 +189,20 @@ export default function AdminDashboard() {
                         {/* 🏥 HOSPITAL METRICS */}
                         <div>
                             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-emerald-600 rounded"></span>
+                                <span className="w-1 h-6 bg-blue-600 rounded"></span>
                                 Hospital Metrics
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {/* Total Patients */}
-                                <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-6 transition-shadow">
+                                <div className="card-medical p-6">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Total Patients</p>
-                                            <p className="text-4xl font-bold text-gray-900">{hospitalMetrics.totalPatients}</p>
-                                            <p className="text-xs text-emerald-600 font-medium mt-1">↑ {hospitalMetrics.dailyInflow} today</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">Total Patients</p>
+                                            <p className="text-3xl font-bold text-gray-900">{hospitalMetrics.totalPatients}</p>
+                                            <p className="text-xs text-blue-600 font-medium mt-1">↑ {hospitalMetrics.dailyInflow} today</p>
                                         </div>
-                                        <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                             </svg>
                                         </div>
@@ -210,15 +210,15 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* OPD Patients */}
-                                <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-blue-100 p-6 transition-shadow">
+                                <div className="card-medical p-6 border-l-4 border-blue-500">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">OPD Patients</p>
-                                            <p className="text-4xl font-bold text-gray-900">{hospitalMetrics.opdPatients}</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">OPD Patients</p>
+                                            <p className="text-3xl font-bold text-gray-900">{hospitalMetrics.opdPatients}</p>
                                             <p className="text-xs text-gray-500 font-medium mt-1">Outpatient</p>
                                         </div>
-                                        <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
                                         </div>
@@ -226,15 +226,15 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* IPD Patients */}
-                                <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-purple-100 p-6 transition-shadow">
+                                <div className="card-medical p-6 border-l-4 border-indigo-500">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">IPD Patients</p>
-                                            <p className="text-4xl font-bold text-gray-900">{hospitalMetrics.ipdPatients}</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">IPD Patients</p>
+                                            <p className="text-3xl font-bold text-gray-900">{hospitalMetrics.ipdPatients}</p>
                                             <p className="text-xs text-gray-500 font-medium mt-1">Admitted</p>
                                         </div>
-                                        <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                             </svg>
                                         </div>
@@ -242,15 +242,15 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* Emergency Patients */}
-                                <div className="bg-white rounded-xl shadow-md hover:shadow-lg border border-red-100 p-6 transition-shadow">
+                                <div className="card-medical p-6 border-l-4 border-red-500">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Emergency</p>
-                                            <p className="text-4xl font-bold text-gray-900">{hospitalMetrics.emergencyPatients}</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">Emergency</p>
+                                            <p className="text-3xl font-bold text-gray-900">{hospitalMetrics.emergencyPatients}</p>
                                             <p className="text-xs text-red-600 font-medium mt-1">Critical cases</p>
                                         </div>
-                                        <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                             </svg>
                                         </div>
@@ -262,37 +262,37 @@ export default function AdminDashboard() {
                         {/* 💰 REVENUE OVERVIEW */}
                         <div>
                             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-amber-600 rounded"></span>
+                                <span className="w-1 h-6 bg-green-600 rounded"></span>
                                 Revenue Overview
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {/* Total Revenue */}
-                                <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white">
+                                <div className="bg-blue-600 rounded-lg p-6 text-white card-medical">
                                     <div className="flex items-center justify-between mb-4">
-                                        <p className="text-emerald-100 text-sm font-medium">Total Revenue</p>
-                                        <svg className="w-8 h-8 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <p className="text-blue-100 text-sm font-medium">Total Revenue</p>
+                                        <svg className="w-8 h-8 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
-                                    <p className="text-4xl font-bold mb-2">₹{(revenueData.totalRevenue / 1000).toFixed(0)}K</p>
+                                    <p className="text-3xl font-bold mb-2">₹{(revenueData.totalRevenue / 1000).toFixed(0)}K</p>
                                     <div className="flex items-center gap-4 text-sm">
                                         <div>
-                                            <p className="text-emerald-100">OPD: ₹{(revenueData.opdRevenue / 1000).toFixed(0)}K</p>
-                                            <p className="text-emerald-100">IPD: ₹{(revenueData.ipdRevenue / 1000).toFixed(0)}K</p>
+                                            <p className="text-blue-100">OPD: ₹{(revenueData.opdRevenue / 1000).toFixed(0)}K</p>
+                                            <p className="text-blue-100">IPD: ₹{(revenueData.ipdRevenue / 1000).toFixed(0)}K</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Collected Today */}
-                                <div className="bg-white rounded-xl shadow-md border border-green-100 p-6">
+                                <div className="card-medical p-6 border-l-4 border-green-500">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Collected Today</p>
-                                            <p className="text-4xl font-bold text-green-600">₹{(revenueData.collectedToday / 1000).toFixed(0)}K</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">Collected Today</p>
+                                            <p className="text-3xl font-bold text-green-600">₹{(revenueData.collectedToday / 1000).toFixed(0)}K</p>
                                             <p className="text-xs text-green-600 font-medium mt-1">{calculateRevenueCollectionRate()}% collection rate</p>
                                         </div>
-                                        <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
@@ -300,15 +300,15 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* Pending Payments */}
-                                <div className="bg-white rounded-xl shadow-md border border-amber-100 p-6">
+                                <div className="card-medical p-6 border-l-4 border-amber-500">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Pending Payments</p>
-                                            <p className="text-4xl font-bold text-amber-600">₹{(revenueData.pendingPayments / 1000).toFixed(0)}K</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">Pending Payments</p>
+                                            <p className="text-3xl font-bold text-amber-600">₹{(revenueData.pendingPayments / 1000).toFixed(0)}K</p>
                                             <p className="text-xs text-gray-500 font-medium mt-1">Outstanding</p>
                                         </div>
-                                        <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
@@ -320,14 +320,14 @@ export default function AdminDashboard() {
                         {/* 🛏️ BED OCCUPANCY */}
                         <div>
                             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <span className="w-1 h-6 bg-blue-600 rounded"></span>
+                                <span className="w-1 h-6 bg-indigo-600 rounded"></span>
                                 Bed Occupancy
                             </h2>
                             {/* Overall Occupancy */}
-                            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                            <div className="card-medical p-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-base font-bold text-gray-900">Overall Occupancy</h3>
-                                    <span className="text-2xl font-bold text-blue-600">{calculateOccupancyPercentage()}%</span>
+                                    <span className="text-2xl font-bold text-indigo-600">{calculateOccupancyPercentage()}%</span>
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex justify-between text-sm">
@@ -345,7 +345,7 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="mt-4 h-3 bg-gray-200 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-gradient-to-r from-blue-500 to-blue-600"
+                                        className="h-full bg-indigo-600"
                                         style={{ width: `${calculateOccupancyPercentage()}%` }}
                                     ></div>
                                 </div>
@@ -353,15 +353,15 @@ export default function AdminDashboard() {
                         </div>
 
                         {/* 👥 USER MANAGEMENT - STAFF OVERVIEW */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                        <div className="card-medical p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                                    <span className="w-1 h-5 bg-emerald-600 rounded"></span>
+                                    <span className="w-1 h-5 bg-blue-600 rounded"></span>
                                     Staff Overview
                                 </h2>
                                 <button
                                     onClick={() => navigate('/admin/users')}
-                                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                                 >
                                     View All →
                                 </button>
@@ -369,33 +369,33 @@ export default function AdminDashboard() {
                             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                                 <div className="p-4 bg-gray-50 rounded-lg">
                                     <p className="text-xs text-gray-600 mb-1">Admins</p>
-                                    <p className="text-3xl font-bold text-gray-600">{staffStats.totalAdmins}</p>
-                                </div>
-                                <div className="p-4 bg-emerald-50 rounded-lg">
-                                    <p className="text-xs text-gray-600 mb-1">Doctors</p>
-                                    <p className="text-3xl font-bold text-emerald-600">{staffStats.totalDoctors}</p>
-                                </div>
-                                <div className="p-4 bg-teal-50 rounded-lg">
-                                    <p className="text-xs text-gray-600 mb-1">Nurses</p>
-                                    <p className="text-3xl font-bold text-teal-600">{staffStats.totalNurses}</p>
+                                    <p className="text-2xl font-bold text-gray-600">{staffStats.totalAdmins}</p>
                                 </div>
                                 <div className="p-4 bg-blue-50 rounded-lg">
+                                    <p className="text-xs text-gray-600 mb-1">Doctors</p>
+                                    <p className="text-2xl font-bold text-blue-600">{staffStats.totalDoctors}</p>
+                                </div>
+                                <div className="p-4 bg-indigo-50 rounded-lg">
+                                    <p className="text-xs text-gray-600 mb-1">Nurses</p>
+                                    <p className="text-2xl font-bold text-indigo-600">{staffStats.totalNurses}</p>
+                                </div>
+                                <div className="p-4 bg-cyan-50 rounded-lg">
                                     <p className="text-xs text-gray-600 mb-1">Lab Staff</p>
-                                    <p className="text-3xl font-bold text-blue-600">{staffStats.totalLabStaff}</p>
+                                    <p className="text-2xl font-bold text-cyan-600">{staffStats.totalLabStaff}</p>
                                 </div>
                                 <div className="p-4 bg-amber-50 rounded-lg">
                                     <p className="text-xs text-gray-600 mb-1">Billing</p>
-                                    <p className="text-3xl font-bold text-amber-600">{staffStats.totalBillingStaff}</p>
+                                    <p className="text-2xl font-bold text-amber-600">{staffStats.totalBillingStaff}</p>
                                 </div>
                             </div>
                             <div className="mt-6 pt-4 border-t border-gray-200 grid grid-cols-2 gap-4 text-center">
                                 <div>
                                     <p className="text-sm text-gray-600 mb-1">Active Today</p>
-                                    <p className="text-2xl font-bold text-green-600">{staffStats.activeToday}</p>
+                                    <p className="text-xl font-bold text-green-600">{staffStats.activeToday}</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-600 mb-1">New This Week</p>
-                                    <p className="text-2xl font-bold text-blue-600">{staffStats.newThisWeek}</p>
+                                    <p className="text-xl font-bold text-blue-600">{staffStats.newThisWeek}</p>
                                 </div>
                             </div>
                         </div>

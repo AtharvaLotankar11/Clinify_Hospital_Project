@@ -224,7 +224,7 @@ export default function CreateVisit() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="reception" />
 
             <div className="ml-72 transition-all duration-300">
@@ -233,10 +233,10 @@ export default function CreateVisit() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center gap-5">
-                                <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                    <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                 </div>
@@ -249,11 +249,11 @@ export default function CreateVisit() {
 
                         {/* Success Message */}
                         {success && (
-                            <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3 animate-fadeIn">
-                                <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-center gap-3 animate-fadeIn">
+                                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <p className="text-sm text-emerald-700 font-bold">{success}</p>
+                                <p className="text-sm text-blue-700 font-bold">{success}</p>
                             </div>
                         )}
 
@@ -270,7 +270,7 @@ export default function CreateVisit() {
                         <div className="grid lg:grid-cols-3 gap-6">
                             {/* Patient Search */}
                             <div className="lg:col-span-1 space-y-6">
-                                <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                                <div className="card-medical p-6">
                                     <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Search Patient</h2>
                                     <div className="relative">
                                         <input
@@ -278,10 +278,10 @@ export default function CreateVisit() {
                                             value={searchTerm}
                                             onChange={handleSearch}
                                             placeholder="Name, ID, or Phone..."
-                                            className="w-full px-4 py-2.5 pr-10 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            className="w-full px-4 py-2.5 pr-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                         />
                                         <button
-                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-emerald-600 rounded-md transition-colors"
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-blue-600 rounded-md transition-colors"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -296,14 +296,14 @@ export default function CreateVisit() {
                                                 <button
                                                     key={patient.id}
                                                     onClick={() => handleSelectPatient(patient)}
-                                                    className="w-full p-4 text-left hover:bg-emerald-50/50 transition-colors"
+                                                    className="w-full p-4 text-left hover:bg-blue-50/50 transition-colors"
                                                 >
                                                     <div className="flex justify-between items-start">
                                                         <div>
                                                             <p className="text-sm font-bold text-gray-800">{patient.name}</p>
                                                             <p className="text-[10px] text-gray-500 font-medium uppercase mt-0.5">ID: {patient.id} • Age: {patient.age}</p>
                                                         </div>
-                                                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">{patient.uhid || 'No UHID'}</span>
+                                                        <span className="text-[10px] text-blue-600 font-bold bg-blue-50 px-1.5 py-0.5 rounded">{patient.uhid || 'No UHID'}</span>
                                                     </div>
                                                 </button>
                                             ))}
@@ -331,11 +331,11 @@ export default function CreateVisit() {
                                                         <button
                                                             key={patient.id}
                                                             onClick={() => handleSelectPatient(patient)}
-                                                            className="w-full p-4 text-left hover:bg-emerald-50/50 transition-colors border-b border-gray-50 last:border-b-0 group"
+                                                            className="w-full p-4 text-left hover:bg-blue-50/50 transition-colors border-b border-gray-50 last:border-b-0 group"
                                                         >
                                                             <div className="flex items-start justify-between">
                                                                 <div className="flex-1">
-                                                                    <p className="text-sm font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">
+                                                                    <p className="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                                                                         {patient.name}
                                                                     </p>
                                                                     <p className="text-[10px] text-gray-500 font-medium uppercase mt-1">
@@ -345,7 +345,7 @@ export default function CreateVisit() {
                                                                         📞 {patient.phone}
                                                                     </p>
                                                                 </div>
-                                                                <svg className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <svg className="w-4 h-4 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                                                                 </svg>
                                                             </div>
@@ -366,10 +366,10 @@ export default function CreateVisit() {
                                     {/* Selected Patient Card */}
                                     {selectedPatient && (
                                         <div className="mt-4 space-y-4">
-                                            <div className="bg-emerald-50/50 border border-emerald-100 rounded-lg p-4 flex justify-between">
+                                            <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4 flex justify-between">
                                                 <div>
                                                     <p className="text-sm font-bold text-gray-800">{selectedPatient.name}</p>
-                                                    <p className="text-[10px] text-emerald-600 font-bold uppercase mt-0.5">
+                                                    <p className="text-[10px] text-blue-600 font-bold uppercase mt-0.5">
                                                         ID: {selectedPatient.id} • UHID: {selectedPatient.uhid || 'N/A'}
                                                     </p>
                                                 </div>
@@ -405,9 +405,9 @@ export default function CreateVisit() {
 
                             {/* Visit Form */}
                             <div className="lg:col-span-2">
-                                <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md border border-gray-100 p-8 space-y-8">
-                                    <h2 className="text-xs font-bold text-emerald-600 uppercase tracking-widest flex items-center gap-2">
-                                        <span className="w-6 h-px bg-emerald-200"></span>
+                                <form onSubmit={handleSubmit} className="card-medical p-8 space-y-8">
+                                    <h2 className="text-xs font-bold text-blue-600 uppercase tracking-widest flex items-center gap-2">
+                                        <span className="w-6 h-px bg-blue-200"></span>
                                         Visit Details
                                     </h2>
 
@@ -419,7 +419,7 @@ export default function CreateVisit() {
                                                 required
                                                 value={formData.visitType}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             >
                                                 <option value="">Select Visit Type</option>
                                                 <option value="OPD">OPD - Outpatient</option>
@@ -435,7 +435,7 @@ export default function CreateVisit() {
                                                 required
                                                 value={formData.doctorId}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             >
                                                 <option value="">Select Doctor</option>
                                                 {doctors.map(doctor => (
@@ -455,7 +455,7 @@ export default function CreateVisit() {
                                                 value={formData.visitDate}
                                                 onChange={handleChange}
                                                 min={new Date().toISOString().split('T')[0]}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             />
                                         </div>
 
@@ -476,7 +476,7 @@ export default function CreateVisit() {
                                                     value={formData.visitTime}
                                                     onChange={handleChange}
                                                     disabled={!formData.doctorId || !formData.visitDate || loadingSlots}
-                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium disabled:bg-gray-50 disabled:text-gray-400"
+                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium disabled:bg-gray-50 disabled:text-gray-400"
                                                 >
                                                     <option value="">{loadingSlots ? 'Loading slots...' : 'Select a Time Slot'}</option>
                                                     {availableSlots.length > 0 ? (
@@ -499,15 +499,15 @@ export default function CreateVisit() {
                                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Referral (Optional)</label>
                                             <div className="flex gap-4">
                                                 <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                                    <input type="radio" name="referralType" value="NONE" checked={formData.referralType === 'NONE'} onChange={handleChange} className="text-emerald-600 focus:ring-emerald-500" />
+                                                    <input type="radio" name="referralType" value="NONE" checked={formData.referralType === 'NONE'} onChange={handleChange} className="text-blue-600 focus:ring-blue-500" />
                                                     None
                                                 </label>
                                                 <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                                    <input type="radio" name="referralType" value="INTERNAL" checked={formData.referralType === 'INTERNAL'} onChange={handleChange} className="text-emerald-600 focus:ring-emerald-500" />
+                                                    <input type="radio" name="referralType" value="INTERNAL" checked={formData.referralType === 'INTERNAL'} onChange={handleChange} className="text-blue-600 focus:ring-blue-500" />
                                                     Internal Doctor
                                                 </label>
                                                 <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                                                    <input type="radio" name="referralType" value="EXTERNAL" checked={formData.referralType === 'EXTERNAL'} onChange={handleChange} className="text-emerald-600 focus:ring-emerald-500" />
+                                                    <input type="radio" name="referralType" value="EXTERNAL" checked={formData.referralType === 'EXTERNAL'} onChange={handleChange} className="text-blue-600 focus:ring-blue-500" />
                                                     External / Other
                                                 </label>
                                             </div>
@@ -517,7 +517,7 @@ export default function CreateVisit() {
                                                     name="referralDoctorId"
                                                     value={formData.referralDoctorId}
                                                     onChange={handleChange}
-                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                                 >
                                                     <option value="">Select Referring Doctor</option>
                                                     {doctors.map(doctor => (
@@ -535,7 +535,7 @@ export default function CreateVisit() {
                                                     value={formData.referralExternalName}
                                                     onChange={handleChange}
                                                     placeholder="Enter doctor or hospital name..."
-                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                                 />
                                             )}
                                         </div>
@@ -548,7 +548,7 @@ export default function CreateVisit() {
                                                 value={formData.chiefComplaint}
                                                 onChange={handleChange}
                                                 rows="2"
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium resize-none"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium resize-none"
                                                 placeholder="Provide details of the complaint..."
                                             />
                                         </div>
@@ -579,7 +579,7 @@ export default function CreateVisit() {
                                         <button
                                             type="submit"
                                             disabled={loading || !selectedPatient}
-                                            className="px-8 py-2 bg-emerald-600 text-white text-[10px] font-bold rounded-xl shadow-md hover:bg-emerald-700 hover:shadow-lg transition-all uppercase tracking-widest disabled:opacity-50 flex items-center gap-2"
+                                            className="btn-medical-primary flex items-center gap-2"
                                         >
                                             {loading ? 'Saving...' : (selectedVisitId ? 'Update Visit' : 'Create Visit')}
                                         </button>

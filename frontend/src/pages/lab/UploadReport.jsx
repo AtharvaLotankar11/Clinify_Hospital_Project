@@ -111,7 +111,7 @@ export default function UploadReport() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="lab_tech" />
 
             <div className="ml-72 transition-all duration-300">
@@ -120,9 +120,9 @@ export default function UploadReport() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center gap-5">
-                                <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
                                     <img src="/icons/lab.png" alt="Lab" className="w-10 h-10 object-contain" />
                                 </div>
                                 <div>
@@ -133,7 +133,7 @@ export default function UploadReport() {
                         </div>
 
                         {/* Test Orders List */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                        <div className="card-medical overflow-hidden">
                             <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                                 <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Pending Test Orders</h2>
                                 <div className="flex items-center gap-6">
@@ -151,7 +151,7 @@ export default function UploadReport() {
                             <div className="p-8">
                                 {loading ? (
                                     <div className="flex items-center justify-center py-12">
-                                        <svg className="animate-spin h-6 w-6 text-emerald-600" viewBox="0 0 24 24">
+                                        <svg className="animate-spin h-6 w-6 text-blue-600" viewBox="0 0 24 24">
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                         </svg>
@@ -163,10 +163,10 @@ export default function UploadReport() {
                                 ) : (
                                     <div className="grid md:grid-cols-2 gap-6">
                                         {testOrders.map((test) => (
-                                            <div key={test.id} className="group bg-white border border-gray-100 rounded-xl p-6 hover:border-emerald-200 hover:shadow-lg transition-all duration-300">
+                                            <div key={test.id} className="group bg-white border border-gray-100 rounded-xl p-6 hover:border-blue-200 hover:shadow-lg transition-all duration-300">
                                                 <div className="flex items-start justify-between mb-4">
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center text-emerald-600 font-bold text-sm border border-gray-100 group-hover:bg-emerald-50 transition-colors">
+                                                        <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center text-blue-600 font-bold text-sm border border-gray-100 group-hover:bg-blue-50 transition-colors">
                                                             {test.patientName.split(' ').map(n => n.charAt(0)).join('')}
                                                         </div>
                                                         <div>
@@ -184,7 +184,7 @@ export default function UploadReport() {
 
                                                 <div className="space-y-3 mb-6">
                                                     <div className="flex items-center gap-3 text-gray-500">
-                                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                         </svg>
                                                         <span className="text-xs font-bold text-gray-700">{test.testType}</span>
@@ -201,7 +201,7 @@ export default function UploadReport() {
 
                                                 <button
                                                     onClick={() => handleUploadClick(test)}
-                                                    className="w-full py-2.5 bg-gray-50 group-hover:bg-emerald-600 group-hover:text-white text-emerald-600 text-xs font-bold rounded-lg border border-emerald-100 group-hover:border-emerald-600 shadow-sm transition-all duration-300 flex items-center justify-center gap-2"
+                                                    className="w-full py-2.5 bg-gray-50 group-hover:bg-blue-600 group-hover:text-white text-blue-600 text-xs font-bold rounded-lg border border-blue-100 group-hover:border-blue-600 shadow-sm transition-all duration-300 flex items-center justify-center gap-2"
                                                 >
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -225,7 +225,7 @@ export default function UploadReport() {
                         <div className="flex items-center justify-between mb-8">
                             <div>
                                 <h2 className="text-xl font-bold text-gray-900">Upload Test Report</h2>
-                                <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mt-1">
+                                <p className="text-[10px] text-blue-600 font-bold uppercase tracking-widest mt-1">
                                     {selectedTest.patientName} • {selectedTest.testType}
                                 </p>
                             </div>
@@ -253,7 +253,7 @@ export default function UploadReport() {
                                         id="file-upload"
                                     />
                                     <div className="space-y-2">
-                                        <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-600 group-hover:scale-110 transition-transform">
+                                        <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto text-blue-600 group-hover:scale-110 transition-transform">
                                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                             </svg>
@@ -264,7 +264,7 @@ export default function UploadReport() {
                                         </div>
                                     </div>
                                     {uploadFile && (
-                                        <div className="mt-4 p-2 bg-emerald-600 rounded-lg border border-emerald-500 shadow-sm animate-in slide-in-from-bottom-2">
+                                        <div className="mt-4 p-2 bg-blue-600 rounded-lg border border-blue-500 shadow-sm animate-in slide-in-from-bottom-2">
                                             <p className="text-[10px] font-bold text-white flex items-center justify-center gap-2">
                                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -284,7 +284,7 @@ export default function UploadReport() {
                                     value={uploadNotes}
                                     onChange={(e) => setUploadNotes(e.target.value)}
                                     rows="3"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium resize-none"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium resize-none"
                                     placeholder="Enter observations..."
                                 />
                             </div>
@@ -300,7 +300,7 @@ export default function UploadReport() {
                                 <button
                                     onClick={handleUploadReport}
                                     disabled={uploading || !uploadFile}
-                                    className="flex-1 py-2.5 bg-emerald-600 text-white text-[10px] font-bold rounded-xl shadow-md hover:bg-emerald-700 hover:shadow-lg transition-all uppercase tracking-widest disabled:opacity-50 flex items-center justify-center gap-2"
+                                    className="flex-1 py-2.5 btn-medical-primary disabled:opacity-50 flex items-center justify-center gap-2"
                                 >
                                     {uploading ? (
                                         <>

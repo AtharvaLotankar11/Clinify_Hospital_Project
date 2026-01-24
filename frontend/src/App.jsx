@@ -36,9 +36,10 @@ import './App.css'
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
+    <div className="medical-theme">
+      <AuthProvider>
+        <Router>
+          <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/patients-login" element={<PatientLogin />} />
@@ -340,6 +341,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+    </div>
   );
 }
 

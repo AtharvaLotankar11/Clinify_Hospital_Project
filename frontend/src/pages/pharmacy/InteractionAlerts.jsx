@@ -104,7 +104,7 @@ export default function InteractionAlerts() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="pharmacy" />
 
             <div className="ml-72 transition-all duration-300">
@@ -113,7 +113,7 @@ export default function InteractionAlerts() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center gap-5">
                                 <div className="w-14 h-14 bg-gradient-to-br from-red-100 to-orange-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
                                     <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@ export default function InteractionAlerts() {
                                             placeholder="Search Patient (Name, UHID, Phone)..."
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            className="w-full pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
                                         />
                                         <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -161,16 +161,16 @@ export default function InteractionAlerts() {
                                     </div>
 
                                     {selectedPatient && (
-                                        <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
+                                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                                             <div className="flex justify-between items-start">
                                                 <div>
-                                                    <p className="font-bold text-emerald-900">{selectedPatient.name}</p>
-                                                    <p className="text-xs text-emerald-700">UHID: {selectedPatient.uhid}</p>
-                                                    <p className="text-xs text-emerald-700">Age/Gender: {selectedPatient.age}/{selectedPatient.gender}</p>
+                                                    <p className="font-bold text-blue-900">{selectedPatient.name}</p>
+                                                    <p className="text-xs text-blue-700">UHID: {selectedPatient.uhid}</p>
+                                                    <p className="text-xs text-blue-700">Age/Gender: {selectedPatient.age}/{selectedPatient.gender}</p>
                                                 </div>
                                                 <button
                                                     onClick={() => setSelectedPatient(null)}
-                                                    className="text-emerald-700 hover:text-emerald-900"
+                                                    className="text-blue-700 hover:text-blue-900"
                                                 >
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -231,7 +231,7 @@ export default function InteractionAlerts() {
                                             />
                                             <button
                                                 type="submit"
-                                                className="w-full py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+                                                className="w-full py-2 btn-medical-primary text-sm"
                                             >
                                                 Add Allergy
                                             </button>
@@ -250,11 +250,11 @@ export default function InteractionAlerts() {
                                             placeholder="Enter Medicine Name (e.g. Aspirin, Warfarin)..."
                                             value={currentMedicine}
                                             onChange={(e) => setCurrentMedicine(e.target.value)}
-                                            className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-emerald-500 outline-none"
+                                            className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none"
                                         />
                                         <button
                                             type="submit"
-                                            className="px-6 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+                                            className="btn-medical-secondary"
                                         >
                                             Add
                                         </button>

@@ -1,0 +1,205 @@
+/* Professional Medical Theme - Clean & Attractive */
+:root {
+  /* Primary Medical Colors - Clean and Professional */
+  --medical-primary: #2563eb;        /* Clean blue */
+  --medical-primary-light: #3b82f6;   /* Light blue */
+  --medical-primary-dark: #1d4ed8;    /* Dark blue */
+  
+  /* Secondary Colors - Soft and Welcoming */
+  --medical-secondary: #059669;       /* Medical green */
+  --medical-secondary-light: #10b981; /* Light green */
+  --medical-accent: #7c3aed;          /* Professional purple */
+  
+  /* Sidebar Colors - Clean and Modern */
+  --sidebar-bg: #ffffff;              /* Clean white sidebar */
+  --sidebar-border: #e5e7eb;          /* Light border */
+  --sidebar-text: #374151;            /* Dark gray text */
+  --sidebar-text-active: #2563eb;     /* Blue for active items */
+  --sidebar-hover: #f3f4f6;           /* Light gray hover */
+  --sidebar-active: #eff6ff;          /* Light blue active background */
+  
+  /* Dashboard Background - Fresh and Clean */
+  --dashboard-bg: #f8fafc;            /* Very light blue-gray */
+  --dashboard-card-bg: #ffffff;       /* Pure white cards */
+  
+  /* Status Colors - Clear and Intuitive */
+  --status-success: #059669;          /* Green for success */
+  --status-warning: #d97706;          /* Amber for warnings */
+  --status-error: #dc2626;            /* Red for errors */
+  --status-info: #2563eb;             /* Blue for info */
+  --status-pending: #7c3aed;          /* Purple for pending */
+  
+  /* Text Colors - High Contrast and Readable */
+  --text-primary: #111827;            /* Very dark gray */
+  --text-secondary: #4b5563;          /* Medium gray */
+  --text-muted: #6b7280;              /* Light gray */
+  
+  /* Border Colors - Subtle and Clean */
+  --border-light: #e5e7eb;            /* Light border */
+  --border-medium: #d1d5db;           /* Medium border */
+  --border-accent: #2563eb;           /* Blue accent border */
+}
+
+/* Global theme application */
+.medical-theme {
+  background-color: var(--dashboard-bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Professional button styles */
+.btn-medical-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.btn-medical-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-medical-secondary {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: white;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+}
+
+.btn-medical-secondary:hover {
+  background: linear-gradient(135deg, #047857 0%, #059669 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+/* Professional card styles */
+.card-medical {
+  background-color: var(--dashboard-card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.card-medical:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+}
+
+/* Clean sidebar styles */
+.sidebar-medical {
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  color: var(--sidebar-text);
+}
+
+.sidebar-medical .sidebar-item {
+  color: var(--sidebar-text);
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin: 2px 0;
+}
+
+.sidebar-medical .sidebar-item:hover {
+  background-color: var(--sidebar-hover);
+  color: var(--sidebar-text-active);
+}
+
+.sidebar-medical .sidebar-item.active {
+  background-color: var(--sidebar-active);
+  color: var(--sidebar-text-active);
+  border-left: 3px solid var(--medical-primary);
+  font-weight: 600;
+}
+
+/* Professional status badges */
+.badge-success {
+  background-color: rgba(5, 150, 105, 0.1);
+  color: var(--status-success);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  font-weight: 500;
+}
+
+.badge-warning {
+  background-color: rgba(217, 119, 6, 0.1);
+  color: var(--status-warning);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  font-weight: 500;
+}
+
+.badge-error {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: var(--status-error);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  font-weight: 500;
+}
+
+.badge-info {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--status-info);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  font-weight: 500;
+}
+
+.badge-pending {
+  background-color: rgba(124, 58, 237, 0.1);
+  color: var(--status-pending);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  font-weight: 500;
+}
+
+/* Gradient overlays for visual appeal */
+.gradient-medical-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+}
+
+.gradient-medical-secondary {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+.gradient-medical-accent {
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+}
+
+/* Clean input styles */
+.input-medical {
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.input-medical:focus {
+  border-color: var(--medical-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+/* Professional table styles */
+.table-medical {
+  background-color: var(--dashboard-card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.table-medical th {
+  background-color: #f8fafc;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.table-medical tr:hover {
+  background-color: rgba(37, 99, 235, 0.02);
+}
+
+/* Remove all old gradients */
+.no-gradient {
+  background-image: none !important;
+}

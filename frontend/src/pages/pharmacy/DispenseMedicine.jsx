@@ -63,7 +63,7 @@ export default function DispenseMedicine() {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Initializing Dispenser...</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="pharmacy" />
             <div className="ml-72 transition-all duration-300">
                 <Header userName={user.name || 'Pharmacist'} userRole="Pharmacy" />
@@ -71,10 +71,10 @@ export default function DispenseMedicine() {
                 <main className="p-4 sm:p-6">
                     <div className="max-w-7xl mx-auto space-y-4">
                         {/* Status Header */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6 text-sm">
+                        <div className="card-medical p-5 sm:p-6 text-sm">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                    <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                     </svg>
                                 </div>
@@ -94,7 +94,7 @@ export default function DispenseMedicine() {
                                         <input
                                             type="text"
                                             placeholder="Search by name or ID..."
-                                            className="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            className="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
@@ -109,14 +109,14 @@ export default function DispenseMedicine() {
                                         <div
                                             key={p.prescription_id}
                                             onClick={() => handleSelectPrescription(p)}
-                                            className={`p-4 rounded-xl border-2 transition-all cursor-pointer group ${selectedPrescription?.prescription_id === p.prescription_id ? 'bg-emerald-50 border-emerald-500 shadow-sm' : 'bg-white border-gray-50 hover:border-emerald-100 shadow-sm'}`}
+                                            className={`p-4 rounded-xl border-2 transition-all cursor-pointer group ${selectedPrescription?.prescription_id === p.prescription_id ? 'bg-blue-50 border-blue-500 shadow-sm' : 'bg-white border-gray-50 hover:border-blue-100 shadow-sm'}`}
                                         >
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
                                                     <h3 className="font-bold text-gray-900 text-sm">{p.patient_name}</h3>
                                                     <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest leading-none">PRESC #{p.prescription_id}</p>
                                                 </div>
-                                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${selectedPrescription?.prescription_id === p.prescription_id ? 'bg-emerald-200 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
+                                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${selectedPrescription?.prescription_id === p.prescription_id ? 'bg-blue-200 text-blue-800' : 'bg-gray-100 text-gray-500'}`}>
                                                     {p.medicine.name}
                                                 </span>
                                             </div>
@@ -144,13 +144,13 @@ export default function DispenseMedicine() {
                             <div className="col-span-12 lg:col-span-7 xl:col-span-8">
                                 {selectedPrescription ? (
                                     <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-in slide-in-from-right-4 duration-300">
-                                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-5 text-white flex justify-between items-center">
+                                        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-5 text-white flex justify-between items-center">
                                             <div>
                                                 <h2 className="text-xl font-bold">{selectedPrescription.medicine.name}</h2>
-                                                <p className="text-emerald-50 text-xs font-medium opacity-90">Dispensing for {selectedPrescription.patient_name}</p>
+                                                <p className="text-blue-50 text-xs font-medium opacity-90">Dispensing for {selectedPrescription.patient_name}</p>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest">Required</div>
+                                                <div className="text-[10px] font-bold text-blue-100 uppercase tracking-widest">Required</div>
                                                 <div className="text-xl font-bold">{selectedPrescription.quantity} Units</div>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@ export default function DispenseMedicine() {
                                         <div className="p-5 space-y-6">
                                             <div>
                                                 <h4 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider flex items-center gap-2">
-                                                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                                     </svg>
                                                     Select Batch
@@ -168,10 +168,10 @@ export default function DispenseMedicine() {
                                                         <div
                                                             key={batch.batch_id}
                                                             onClick={() => setSelectedBatch(batch)}
-                                                            className={`p-3 rounded-lg border transition-all cursor-pointer flex items-center justify-between ${selectedBatch?.batch_id === batch.batch_id ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-emerald-200'}`}
+                                                            className={`p-3 rounded-lg border transition-all cursor-pointer flex items-center justify-between ${selectedBatch?.batch_id === batch.batch_id ? 'border-blue-500 bg-blue-50' : 'border-gray-100 hover:border-blue-200'}`}
                                                         >
                                                             <div className="flex items-center gap-2">
-                                                                <div className={`w-8 h-8 rounded flex items-center justify-center ${batch.days_to_expiry < 30 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                                                                <div className={`w-8 h-8 rounded flex items-center justify-center ${batch.days_to_expiry < 30 ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
                                                                     <span className="font-bold text-[10px]">B</span>
                                                                 </div>
                                                                 <div>
@@ -191,7 +191,7 @@ export default function DispenseMedicine() {
                                             <div className="bg-gray-50 rounded-lg p-5 space-y-4 border border-gray-200/50">
                                                 <div className="flex justify-between items-center text-sm font-bold">
                                                     <label className="text-gray-700">Dispense Amount</label>
-                                                    <span className="px-2 py-0.5 bg-white rounded border border-gray-200 text-emerald-600">{dispensedQty} / {selectedPrescription.quantity}</span>
+                                                    <span className="px-2 py-0.5 bg-white rounded border border-gray-200 text-blue-600">{dispensedQty} / {selectedPrescription.quantity}</span>
                                                 </div>
                                                 <input
                                                     type="range"
@@ -199,7 +199,7 @@ export default function DispenseMedicine() {
                                                     max={Math.min(selectedPrescription.quantity, selectedBatch?.stock_qty || 0)}
                                                     value={dispensedQty}
                                                     onChange={(e) => setDispensedQty(parseInt(e.target.value))}
-                                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                                                 />
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm">
@@ -208,7 +208,7 @@ export default function DispenseMedicine() {
                                                     </div>
                                                     <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm">
                                                         <span className="text-[9px] font-bold text-gray-400 uppercase block mb-0.5">Total Bill</span>
-                                                        <span className="text-lg font-bold text-emerald-600">₹{((selectedBatch?.unit_price || 0) * dispensedQty).toFixed(2)}</span>
+                                                        <span className="text-lg font-bold text-blue-600">₹{((selectedBatch?.unit_price || 0) * dispensedQty).toFixed(2)}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -216,7 +216,7 @@ export default function DispenseMedicine() {
                                             <button
                                                 onClick={handleDispense}
                                                 disabled={!selectedBatch}
-                                                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-bold rounded-lg shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2"
+                                                className="w-full py-3.5 btn-medical-primary disabled:bg-gray-300 shadow-lg shadow-blue-100 flex items-center justify-center gap-2"
                                             >
                                                 FINALIZE & DISPENSE
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

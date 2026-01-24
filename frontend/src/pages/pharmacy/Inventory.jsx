@@ -100,7 +100,7 @@ export default function Inventory() {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading Inventory...</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme">
             <Sidebar role="pharmacy" />
             <div className="ml-72 transition-all duration-300">
                 <Header userName={user.name || 'Pharmacist'} userRole="Pharmacy" />
@@ -108,11 +108,11 @@ export default function Inventory() {
                 <main className="p-6">
                     <div className="max-w-7xl mx-auto space-y-6">
                         {/* Header Card */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                        <div className="card-medical p-8">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                        <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 17v-6.666L12 14v10" />
                                         </svg>
                                     </div>
@@ -123,7 +123,7 @@ export default function Inventory() {
                                 </div>
                                 <button
                                     onClick={() => setShowAddModal(true)}
-                                    className="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-semibold shadow-md hover:bg-emerald-700 transition-all flex items-center gap-2"
+                                    className="btn-medical-primary flex items-center gap-2"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
@@ -134,14 +134,14 @@ export default function Inventory() {
                         </div>
 
                         {/* Search and Filters */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                        <div className="card-medical p-6">
                             <div className="flex flex-wrap gap-4 items-center justify-between">
                                 <div className="flex gap-2">
                                     {['all', 'Antibiotic', 'Analgesic', 'Antipyretic'].map((cat) => (
                                         <button
                                             key={cat}
                                             onClick={() => setFilter(cat)}
-                                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === cat ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === cat ? 'btn-medical-primary' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                                         >
                                             {cat.charAt(0).toUpperCase() + cat.slice(1)}
                                         </button>
@@ -153,7 +153,7 @@ export default function Inventory() {
                                         placeholder="Search medicines..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all w-64"
+                                        className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all w-64"
                                     />
                                     <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -163,7 +163,7 @@ export default function Inventory() {
                         </div>
 
                         {/* Inventory Table Card */}
-                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                        <div className="card-medical p-6">
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead>
@@ -209,7 +209,7 @@ export default function Inventory() {
                                                             setSelectedMedicine(med);
                                                             setShowBatchModal(true);
                                                         }}
-                                                        className="px-4 py-1.5 text-sm bg-emerald-50 text-emerald-700 font-medium rounded-lg hover:bg-emerald-100 transition-colors"
+                                                        className="px-4 py-1.5 text-sm bg-blue-50 text-blue-700 font-medium rounded-lg hover:bg-blue-100 transition-colors"
                                                     >
                                                         Add Batch
                                                     </button>
@@ -265,7 +265,7 @@ export default function Inventory() {
                                     <input required type="number" value={medicineData.reorder_level} onChange={e => setMedicineData({ ...medicineData, reorder_level: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" />
                                 </div>
                             </div>
-                            <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-lg transition-all mt-4">
+                            <button type="submit" className="w-full py-3 btn-medical-primary mt-4">
                                 CREATE MEDICINE MASTER
                             </button>
                         </form>
@@ -311,7 +311,7 @@ export default function Inventory() {
                                     <input required type="number" step="0.01" value={batchData.unit_price} onChange={e => setBatchData({ ...batchData, unit_price: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" placeholder="0.00" />
                                 </div>
                             </div>
-                            <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-lg transition-all mt-4">
+                            <button type="submit" className="w-full py-3 btn-medical-primary mt-4">
                                 CONFIRM & UPDATE STOCK
                             </button>
                         </form>
