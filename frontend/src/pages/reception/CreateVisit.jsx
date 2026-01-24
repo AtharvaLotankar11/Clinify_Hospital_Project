@@ -56,6 +56,9 @@ export default function CreateVisit() {
         visitTime: '',
         chiefComplaint: '',
         notes: '',
+        referralType: 'NONE',
+        referralDoctorId: '',
+        referralExternalName: '',
     };
 
     const [formData, setFormData] = useState(defaultForm);
@@ -139,7 +142,10 @@ export default function CreateVisit() {
             visitDate: visit.visit_date,
             visitTime: visit.slot_booked, // Or time field
             chiefComplaint: visit.chief_complaint,
-            notes: visit.notes || ''
+            notes: visit.notes || '',
+            referralType: visit.referral_doctor ? 'INTERNAL' : (visit.referral_external ? 'EXTERNAL' : 'NONE'),
+            referralDoctorId: visit.referral_doctor?.user_id || visit.referral_doctor || '',
+            referralExternalName: visit.referral_external || ''
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -181,7 +187,9 @@ export default function CreateVisit() {
             slot_booked: formData.visitTime, // sending raw time for now
             status: 'ACTIVE',
             chief_complaint: formData.chiefComplaint,
-            notes: formData.notes
+            notes: formData.notes,
+            referral_doctor_id: formData.referralType === 'INTERNAL' ? formData.referralDoctorId : null,
+            referral_external: formData.referralType === 'EXTERNAL' ? formData.referralExternalName : null
         };
 
         try {
@@ -487,6 +495,51 @@ export default function CreateVisit() {
                                             )}
                                         </div>
 
+                                        <div className="md:col-span-2 space-y-3 pt-2 border-t border-gray-100">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Referral (Optional)</label>
+                                            <div className="flex gap-4">
+                                                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                                    <input type="radio" name="referralType" value="NONE" checked={formData.referralType === 'NONE'} onChange={handleChange} className="text-emerald-600 focus:ring-emerald-500" />
+                                                    None
+                                                </label>
+                                                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                                    <input type="radio" name="referralType" value="INTERNAL" checked={formData.referralType === 'INTERNAL'} onChange={handleChange} className="text-emerald-600 focus:ring-emerald-500" />
+                                                    Internal Doctor
+                                                </label>
+                                                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                                    <input type="radio" name="referralType" value="EXTERNAL" checked={formData.referralType === 'EXTERNAL'} onChange={handleChange} className="text-emerald-600 focus:ring-emerald-500" />
+                                                    External / Other
+                                                </label>
+                                            </div>
+
+                                            {formData.referralType === 'INTERNAL' && (
+                                                <select
+                                                    name="referralDoctorId"
+                                                    value={formData.referralDoctorId}
+                                                    onChange={handleChange}
+                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                >
+                                                    <option value="">Select Referring Doctor</option>
+                                                    {doctors.map(doctor => (
+                                                        <option key={doctor.user_id} value={doctor.user_id}>
+                                                            {doctor.name} - {doctor.department}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            )}
+
+                                            {formData.referralType === 'EXTERNAL' && (
+                                                <input
+                                                    type="text"
+                                                    name="referralExternalName"
+                                                    value={formData.referralExternalName}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter doctor or hospital name..."
+                                                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                                />
+                                            )}
+                                        </div>
+
                                         <div className="md:col-span-2 space-y-1.5">
                                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Chief Complaint *</label>
                                             <textarea
@@ -513,6 +566,9 @@ export default function CreateVisit() {
                                                     visitTime: '',
                                                     chiefComplaint: '',
                                                     notes: '',
+                                                    referralType: 'NONE',
+                                                    referralDoctorId: '',
+                                                    referralExternalName: '',
                                                 });
                                                 setSelectedVisitId(null);
                                             }}

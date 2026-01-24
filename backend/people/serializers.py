@@ -147,6 +147,10 @@ class VisitSerializer(serializers.ModelSerializer):
     doctor_id = serializers.PrimaryKeyRelatedField(
         queryset=Staff.objects.all(), source='doctor', write_only=True, required=False
     )
+    referral_doctor = StaffSerializer(read_only=True)
+    referral_doctor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Staff.objects.all(), source='referral_doctor', write_only=True, required=False, allow_null=True
+    )
     has_vitals_today = serializers.SerializerMethodField()
 
     class Meta:

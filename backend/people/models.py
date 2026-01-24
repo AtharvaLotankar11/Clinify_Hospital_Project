@@ -46,6 +46,24 @@ class Visit(models.Model):
     slot_booked = models.CharField(max_length=20, null=True, blank=True, help_text="Time slot booked (e.g. '10:00 - 10:30')")
     chief_complaint = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
+    
+    # Referral Fields
+    referral_doctor = models.ForeignKey(
+        "people.Staff",
+        on_delete=models.SET_NULL,
+        related_name="referral_visits",
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'DOCTOR'},
+        help_text="Internal doctor referral"
+    )
+    referral_external = models.CharField(
+        max_length=255, 
+        blank=True, 
+        null=True,
+        help_text="External doctor/hospital referral"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
