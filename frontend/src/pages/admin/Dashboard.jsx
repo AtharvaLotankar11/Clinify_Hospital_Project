@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
-import { staffAPI } from '../../services/api';
+import { staffAPI, adminAPI } from '../../services/api';
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
@@ -83,32 +83,42 @@ export default function AdminDashboard() {
                 newThisWeek
             });
 
-            // Mock data for other sections - replace with actual API calls later
-            setHospitalMetrics({
-                totalPatients: 342,
-                opdPatients: 156,
-                ipdPatients: 98,
-                emergencyPatients: 12,
-                dailyInflow: 47,
-                weeklyInflow: 289
-            });
+            // Fetch Real Stats from Backend
+            const statsRes = await adminAPI.getDashboardStats();
+            const stats = statsRes.data;
 
-            setRevenueData({
-                opdRevenue: 125000,
-                ipdRevenue: 450000,
-                procedureCharges: 280000,
-                totalRevenue: 855000,
-                collectedToday: 67000,
-                pendingPayments: 145000
-            });
+            // Update Metrics (using real data where available, fallback to mock if structure differs or missing)
+            if (stats.hospital) {
+                setHospitalMetrics({
+                    totalPatients: stats.hospital.totalPatients || 0,
+                    opdPatients: stats.hospital.opdPatients || 0,
+                    ipdPatients: stats.hospital.ipdPatients || 0,
+                    emergencyPatients: stats.hospital.emergencyPatients || 0,
+                    dailyInflow: stats.hospital.dailyInflow || 0,
+                    weeklyInflow: 289 // Stats API doesn't calculate this yet
+                });
+            }
 
-            setBedOccupancy({
-                totalBeds: 150,
-                occupiedBeds: 98,
-                availableBeds: 52,
-                icuBeds: { total: 20, occupied: 16 },
-                generalBeds: { total: 130, occupied: 82 }
-            });
+            if (stats.revenue) {
+                setRevenueData({
+                    opdRevenue: stats.revenue.opdRevenue || 0,
+                    ipdRevenue: stats.revenue.ipdRevenue || 0,
+                    procedureCharges: stats.revenue.procedureCharges || 0,
+                    totalRevenue: stats.revenue.totalRevenue || 0,
+                    collectedToday: stats.revenue.collectedToday || 0,
+                    pendingPayments: stats.revenue.pendingPayments || 0
+                });
+            }
+
+            if (stats.beds) {
+                setBedOccupancy({
+                    totalBeds: stats.beds.totalBeds,
+                    occupiedBeds: stats.beds.occupiedBeds,
+                    availableBeds: stats.beds.availableBeds,
+                    icuBeds: stats.beds.icuBeds,
+                    generalBeds: stats.beds.generalBeds
+                });
+            }
 
             setDepartmentWorkload([
                 { department: 'Cardiology', patients: 45, doctors: 3, avgTime: '25 min' },

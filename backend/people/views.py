@@ -108,6 +108,85 @@ class PatientAuthView(APIView):
         
         return Response({'error': 'Invalid action'}, status=400)
 
+class AdminDashboardStatsView(APIView):
+    # permission_classes = [permissions.IsAdminUser] # Uncomment if needed
+    
+    def get(self, request):
+        today = timezone.now().date()
+        
+        # 1. Revenue Metrics
+        # Total Revenue (All time PAID bills)
+        total_revenue = Bill.objects.filter(status='PAID').aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        
+        # Segmented Revenue
+        opd_revenue = Bill.objects.filter(status='PAID', visit__visit_type='OPD').aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        ipd_revenue = Bill.objects.filter(status='PAID', visit__visit_type='IPD').aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        
+        # Pending Payments (Not Paid + Partially Paid)
+        pending_payments = Bill.objects.filter(status__in=['NOT_PAID', 'PARTIALLY_PAID']).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        
+        # Today's Collection (Approximation using created_at of PAID bills for simplicity, 
+        # ideally should track payment transactions, but Bill update time or created_at is next best proxy if no transaction table)
+        # Assuming bills paid today have updated_at or we just count bills 'created' today that are paid. 
+        # For better accuracy, we'd need a PaymentTransaction model. 
+        # Let's use Bill.created_at for bills that are PAID and created today as a simple proxy for "New Revenue Today".
+        # OR: All bills with status='PAID' created today.
+        collected_today = Bill.objects.filter(status='PAID', created_at__date=today).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        
+        # Procedure Charges (Operation + Lab + Radiology items in PAID bills)
+        # This is expensive to aggregate via BillItem join on large datasets, keep it simple for now. 
+        # Or estimate: Total - (Consultation + Bed + Pharmacy)
+        # Let's just mock Procedure Charges as a portion or calculate correctly if vital:
+        procedure_charges = BillItem.objects.filter(
+            bill__status='PAID', 
+            service_type__in=['OPERATION', 'LAB_TEST', 'RADIOLOGY_TEST', 'OT_CONSUMABLE']
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+        # 2. Patient Metrics (Mocked in frontend, let's provide real data)
+        total_patients = Patient.objects.count()
+        opd_patients = Visit.objects.filter(visit_type='OPD').values('patient').distinct().count()
+        ipd_patients = Visit.objects.filter(visit_type='IPD').values('patient').distinct().count()
+        emergency_patients = Visit.objects.filter(visit_type='EMERGENCY').values('patient').distinct().count()
+        
+        daily_inflow = Visit.objects.filter(created_at__date=today).count()
+        
+        # 3. Bed Metrics
+        total_beds = Bed.objects.count()
+        occupied_beds = Bed.objects.filter(status='OCCUPIED').count()
+        available_beds = Bed.objects.filter(status='AVAILABLE').count()
+        
+        icu_total = Bed.objects.filter(bed_type='ICU').count()
+        icu_occupied = Bed.objects.filter(bed_type='ICU', status='OCCUPIED').count()
+        
+        general_total = Bed.objects.filter(bed_type='GENERAL').count()
+        general_occupied = Bed.objects.filter(bed_type='GENERAL', status='OCCUPIED').count()
+
+        return Response({
+            'revenue': {
+                'totalRevenue': total_revenue,
+                'opdRevenue': opd_revenue,
+                'ipdRevenue': ipd_revenue,
+                'procedureCharges': procedure_charges,
+                'collectedToday': collected_today,
+                'pendingPayments': pending_payments,
+            },
+            'hospital': {
+                'totalPatients': total_patients,
+                'opdPatients': opd_patients,
+                'ipdPatients': ipd_patients,
+                'emergencyPatients': emergency_patients,
+                'dailyInflow': daily_inflow,
+                # 'weeklyInflow': ... expensive query, skip or implement later
+            },
+            'beds': {
+                'totalBeds': total_beds,
+                'occupiedBeds': occupied_beds,
+                'availableBeds': available_beds,
+                'icuBeds': {'total': icu_total, 'occupied': icu_occupied},
+                'generalBeds': {'total': general_total, 'occupied': general_occupied}
+            }
+        })
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
