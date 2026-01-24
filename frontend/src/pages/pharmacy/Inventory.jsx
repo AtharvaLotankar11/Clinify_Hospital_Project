@@ -100,137 +100,130 @@ export default function Inventory() {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading Inventory...</div>;
 
     return (
-        <div className="min-h-screen bg-[#f8fafc]">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
             <Sidebar role="pharmacy" />
             <div className="ml-72 transition-all duration-300">
                 <Header userName={user.name || 'Pharmacist'} userRole="Pharmacy" />
 
-                <main className="p-8">
-                    <div className="max-w-7xl mx-auto space-y-8">
-                        {/* Header Section */}
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div>
-                                <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Batch Intelligence Dashboard</h1>
-                                <p className="text-slate-500 mt-1 font-medium">Advanced inventory tracking & FEFO management</p>
-                            </div>
-                            <button
-                                onClick={() => setShowAddModal(true)}
-                                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 transition-all flex items-center gap-2 group"
-                            >
-                                <svg className="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                                Add New Medicine
-                            </button>
-                        </div>
-
-                        {/* Search & Actions */}
-                        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex gap-4 items-center">
-                            <div className="relative flex-1">
-                                <input
-                                    type="text"
-                                    placeholder="Search medicine master database..."
-                                    className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-400"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                                <svg className="w-6 h-6 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        {/* Medicine Master Grid */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {filteredMedicines.map(med => (
-                                <div key={med.medicine_id} className="bg-white rounded-3xl p-6 border border-slate-100 hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-50/50 transition-all group overflow-hidden relative">
-                                    {/* Highlighting FEFO Risk */}
-                                    {med.batches?.some(b => b.days_to_expiry < 30) && (
-                                        <div className="absolute top-0 right-0 bg-rose-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-widest animate-pulse">
-                                            Expiry Risk
-                                        </div>
-                                    )}
-
-                                    <div className="flex items-start justify-between mb-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-600 transition-colors">
-                                                <svg className="w-7 h-7 text-indigo-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h3 className="text-xl font-bold text-slate-800">{med.name}</h3>
-                                                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{med.generic_name || 'No Generic Name'}</span>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className="text-2xl font-black text-slate-900">{med.total_stock}</div>
-                                            <div className="text-[10px] font-bold text-slate-400 uppercase">Current Stock</div>
-                                        </div>
+                <main className="p-6">
+                    <div className="max-w-7xl mx-auto space-y-6">
+                        {/* Header Card */}
+                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-5">
+                                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                                        <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 17v-6.666L12 14v10" />
+                                        </svg>
                                     </div>
-
-                                    {/* Batch Timeline View */}
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase px-1">
-                                            <span>Active Batches</span>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedMedicine(med);
-                                                    setBatchData({
-                                                        batch_number: '',
-                                                        expiry_date: '',
-                                                        stock_qty: '',
-                                                        purchase_price: '',
-                                                        unit_price: ''
-                                                    });
-                                                    setShowBatchModal(true);
-                                                }}
-                                                className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
-                                            >
-                                                Add Batch +
-                                            </button>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 gap-3">
-                                            {(med.batches || []).slice(0, 3).map((batch, idx) => (
-                                                <div key={batch.batch_id} className={`flex items-center justify-between p-3 rounded-xl border ${idx === 0 ? 'bg-indigo-50/30 border-indigo-100 ring-1 ring-indigo-200' : 'bg-slate-50 border-slate-100'} transition-all`}>
-                                                    <div className="flex items-center gap-3">
-                                                        <div className={`w-2 h-2 rounded-full ${batch.days_to_expiry < 30 ? 'bg-rose-500' : 'bg-emerald-500'}`}></div>
-                                                        <div>
-                                                            <div className="text-sm font-bold text-slate-700">Batch {batch.batch_number}</div>
-                                                            <div className="text-[10px] font-medium text-slate-500 tracking-tight">Exp: {batch.expiry_date} ({batch.days_to_expiry} days)</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`px-2 py-1 rounded-md text-[10px] font-bold ${getHealthColor(batch.health_score)}`}>
-                                                            Health: {batch.health_score}%
-                                                        </div>
-                                                        <div className="text-sm font-black text-slate-700">{batch.stock_qty}</div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            {med.batches?.length > 3 && (
-                                                <div className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-2">
-                                                    + {med.batches.length - 3} more batches
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Action Footers */}
-                                    <div className="mt-6 pt-6 border-t border-slate-100 flex items-center justify-between">
-                                        <div className="flex gap-2">
-                                            <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] font-bold uppercase">{med.category}</span>
-                                            {med.total_stock < med.reorder_level && (
-                                                <span className="px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-[10px] font-bold uppercase ring-1 ring-rose-100">Low Stock</span>
-                                            )}
-                                        </div>
-                                        <button className="px-4 py-2 text-sm font-bold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-                                            Full Traceability Audit →
-                                        </button>
+                                    <div>
+                                        <h1 className="text-2xl font-bold text-gray-900">Inventory Management</h1>
+                                        <p className="text-sm text-gray-600 mt-1">Track and manage medicine stocks and batches</p>
                                     </div>
                                 </div>
-                            ))}
+                                <button
+                                    onClick={() => setShowAddModal(true)}
+                                    className="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-semibold shadow-md hover:bg-emerald-700 transition-all flex items-center gap-2"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Add New Medicine
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Search and Filters */}
+                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                            <div className="flex flex-wrap gap-4 items-center justify-between">
+                                <div className="flex gap-2">
+                                    {['all', 'Antibiotic', 'Analgesic', 'Antipyretic'].map((cat) => (
+                                        <button
+                                            key={cat}
+                                            onClick={() => setFilter(cat)}
+                                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === cat ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                        >
+                                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Search medicines..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all w-64"
+                                    />
+                                    <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Inventory Table Card */}
+                        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-gray-200">
+                                            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Medicine Name</th>
+                                            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Generic Name</th>
+                                            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Category</th>
+                                            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Stock</th>
+                                            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Status</th>
+                                            <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredMedicines.map(med => (
+                                            <tr key={med.medicine_id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                                <td className="py-4 px-4">
+                                                    <div className="font-medium text-gray-900">{med.name}</div>
+                                                    {med.batches?.some(b => b.days_to_expiry < 30) && (
+                                                        <span className="text-[10px] text-red-500 font-bold uppercase tracking-wider">Expiry Risk</span>
+                                                    )}
+                                                </td>
+                                                <td className="py-4 px-4 text-gray-600">{med.generic_name || 'N/A'}</td>
+                                                <td className="py-4 px-4">
+                                                    <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-medium">
+                                                        {med.category}
+                                                    </span>
+                                                </td>
+                                                <td className="py-4 px-4 font-bold text-gray-900">{med.total_stock}</td>
+                                                <td className="py-4 px-4">
+                                                    {med.total_stock < med.reorder_level ? (
+                                                        <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
+                                                            LOW STOCK
+                                                        </span>
+                                                    ) : (
+                                                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                                                            IN STOCK
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="py-4 px-4">
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedMedicine(med);
+                                                            setShowBatchModal(true);
+                                                        }}
+                                                        className="px-4 py-1.5 text-sm bg-emerald-50 text-emerald-700 font-medium rounded-lg hover:bg-emerald-100 transition-colors"
+                                                    >
+                                                        Add Batch
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {filteredMedicines.length === 0 && (
+                                            <tr>
+                                                <td colSpan="6" className="py-8 text-center text-gray-500">No medicines found</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -238,27 +231,29 @@ export default function Inventory() {
 
             {/* Add Medicine Modal */}
             {showAddModal && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[100] p-4">
-                    <div className="bg-white rounded-[2rem] shadow-2xl max-w-xl w-full p-8 animate-in fade-in zoom-in duration-200">
-                        <div className="flex justify-between items-center mb-8">
-                            <h2 className="text-3xl font-black text-slate-900">New Medicine Master</h2>
-                            <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-                                <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
+                <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowAddModal(false)}>
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-2xl font-bold">New Medicine Master</h2>
+                                <button onClick={() => setShowAddModal(false)} className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center transition-all hover:bg-white/30">
+                                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
                         </div>
-                        <form onSubmit={handleAddMedicine} className="space-y-6">
+                        <form onSubmit={handleAddMedicine} className="p-6 space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="col-span-2">
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Medicine Name</label>
-                                    <input required value={medicineData.name} onChange={e => setMedicineData({ ...medicineData, name: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="e.g. Paracetamol 500mg" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Medicine Name</label>
+                                    <input required value={medicineData.name} onChange={e => setMedicineData({ ...medicineData, name: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" placeholder="e.g. Paracetamol 500mg" />
                                 </div>
                                 <div className="col-span-2">
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Generic Composition</label>
-                                    <input value={medicineData.generic_name} onChange={e => setMedicineData({ ...medicineData, generic_name: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="e.g. Acetaminophen" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Generic Composition</label>
+                                    <input value={medicineData.generic_name} onChange={e => setMedicineData({ ...medicineData, generic_name: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" placeholder="e.g. Acetaminophen" />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Category</label>
-                                    <select value={medicineData.category} onChange={e => setMedicineData({ ...medicineData, category: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium appearance-none">
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+                                    <select value={medicineData.category} onChange={e => setMedicineData({ ...medicineData, category: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all">
                                         <option>Antibiotic</option>
                                         <option>Analgesic</option>
                                         <option>Antipyretic</option>
@@ -266,12 +261,12 @@ export default function Inventory() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Reorder Level</label>
-                                    <input required type="number" value={medicineData.reorder_level} onChange={e => setMedicineData({ ...medicineData, reorder_level: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Reorder Level</label>
+                                    <input required type="number" value={medicineData.reorder_level} onChange={e => setMedicineData({ ...medicineData, reorder_level: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" />
                                 </div>
                             </div>
-                            <button type="submit" className="w-full py-4 bg-slate-900 hover:bg-black text-white font-black rounded-2xl shadow-xl transition-all uppercase tracking-widest mt-4">
-                                Initialize Master Entry
+                            <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-lg transition-all mt-4">
+                                CREATE MEDICINE MASTER
                             </button>
                         </form>
                     </div>
@@ -280,44 +275,44 @@ export default function Inventory() {
 
             {/* Add Batch Modal */}
             {showBatchModal && selectedMedicine && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[100] p-4">
-                    <div className="bg-white rounded-[2rem] shadow-2xl max-w-xl w-full p-8 animate-in fade-in zoom-in duration-200">
-                        <div className="flex justify-between items-center mb-6">
-                            <div>
-                                <h2 className="text-3xl font-black text-slate-900">Inventory Entry</h2>
-                                <p className="text-indigo-600 font-bold text-sm tracking-tight inline-flex items-center gap-1 mt-1 uppercase">
-                                    Adding Batch to: {selectedMedicine.name}
-                                </p>
+                <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowBatchModal(false)}>
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-2xl font-bold">Add Inventory Batch</h2>
+                                    <p className="text-emerald-100 text-sm">{selectedMedicine.name}</p>
+                                </div>
+                                <button onClick={() => setShowBatchModal(false)} className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center transition-all hover:bg-white/30">
+                                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
                             </div>
-                            <button onClick={() => setShowBatchModal(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-                                <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
                         </div>
-                        <form onSubmit={handleAddBatch} className="space-y-6">
+                        <form onSubmit={handleAddBatch} className="p-6 space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Batch Number</label>
-                                    <input required value={batchData.batch_number} onChange={e => setBatchData({ ...batchData, batch_number: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold placeholder:font-normal" placeholder="BP-1029" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Batch Number</label>
+                                    <input required value={batchData.batch_number} onChange={e => setBatchData({ ...batchData, batch_number: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" placeholder="BP-1029" />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Expiry Date</label>
-                                    <input required type="date" value={batchData.expiry_date} onChange={e => setBatchData({ ...batchData, expiry_date: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Expiry Date</label>
+                                    <input required type="date" value={batchData.expiry_date} onChange={e => setBatchData({ ...batchData, expiry_date: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" />
                                 </div>
                                 <div className="col-span-2">
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Quantity Received</label>
-                                    <input required type="number" value={batchData.stock_qty} onChange={e => setBatchData({ ...batchData, stock_qty: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-black text-xl" placeholder="0" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Quantity Received</label>
+                                    <input required type="number" value={batchData.stock_qty} onChange={e => setBatchData({ ...batchData, stock_qty: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-xl font-bold" placeholder="0" />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Purchase Cost (Unit)</label>
-                                    <input required type="number" step="0.01" value={batchData.purchase_price} onChange={e => setBatchData({ ...batchData, purchase_price: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="0.00" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Purchase Cost (Unit)</label>
+                                    <input required type="number" step="0.01" value={batchData.purchase_price} onChange={e => setBatchData({ ...batchData, purchase_price: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" placeholder="0.00" />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 px-1">Selling Price (Unit)</label>
-                                    <input required type="number" step="0.01" value={batchData.unit_price} onChange={e => setBatchData({ ...batchData, unit_price: e.target.value })} className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="0.00" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Selling Price (Unit)</label>
+                                    <input required type="number" step="0.01" value={batchData.unit_price} onChange={e => setBatchData({ ...batchData, unit_price: e.target.value })} className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all" placeholder="0.00" />
                                 </div>
                             </div>
-                            <button type="submit" className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-2xl shadow-xl shadow-indigo-200 transition-all uppercase tracking-widest mt-4">
-                                Confirm & Update Stock
+                            <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-lg transition-all mt-4">
+                                CONFIRM & UPDATE STOCK
                             </button>
                         </form>
                     </div>
