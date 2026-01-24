@@ -23,13 +23,13 @@ export default function Sidebar({ role = 'doctor' }) {
         ],
         nurse: [
             { path: '/nurse/dashboard', icon: 'dashboard', label: 'Dashboard' },
-            { path: '/nurse/vitals', icon: 'vitals', label: 'Record Vitals' },
+
             { path: '/nurse/beds', icon: 'beds', label: 'Bed Management' },
             { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' }
         ],
         lab_tech: [
             { path: '/lab_tech/dashboard', icon: 'dashboard', label: 'Lab Details' },
-            { path: '/lab_tech/upload', icon: 'upload', label: 'Upload' }
+
         ],
         billing: [
             { path: '/billing/dashboard', icon: 'dashboard', label: 'Dashboard' },
