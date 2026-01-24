@@ -225,3 +225,39 @@ class CheckInteractionsView(APIView):
 
         except Exception as e:
              return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class FixGrammarView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        text = request.data.get('text')
+
+        if not text:
+             return Response({"error": "text is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Log
+            log_entry = AIRequestLog.objects.create(
+                user=request.user,
+                filename="GrammarCheck",
+                status='processing'
+            )
+
+            try:
+                fixed_text = GeminiService.fix_grammar(text)
+                
+                log_entry.status = 'success'
+                log_entry.summary_generated = fixed_text
+                log_entry.save()
+                
+                return Response({"fixed_text": fixed_text}, status=status.HTTP_200_OK)
+
+            except Exception as e:
+                logger.error(f"Error fixing grammar: {e}")
+                log_entry.status = 'failed'
+                log_entry.error_message = str(e)
+                log_entry.save()
+                return Response({"error": f"AI Grammar Fix Failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except Exception as e:
+             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

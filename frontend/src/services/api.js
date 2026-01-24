@@ -249,6 +249,7 @@ export const aiAPI = {
     summarizeReport: (type, id) => api.post('/ai/summarize-report/', { report_type: type, report_id: id }),
     summarizeClinicalNotes: (patientId) => api.post('/ai/summarize-clinical-notes/', { patient_id: patientId }),
     checkInteractions: (patientId, medicines) => api.post('/ai/check-interactions/', { patient_id: patientId, medicines }),
+    fixGrammar: (text) => api.post('/ai/fix-grammar/', { text }),
 };
 
 export default api;

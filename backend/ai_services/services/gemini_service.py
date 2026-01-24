@@ -293,3 +293,65 @@ Rules:
             logger.error(f"Gemini API Error in check_interactions: {e}")
             raise Exception(f"AI Interaction Check Failed: {str(e)}")
 
+
+    @staticmethod
+    def fix_grammar(text):
+        """
+        Fix grammar and format clinical text
+        """
+        if not text:
+            raise ValueError("No text provided.")
+
+        # Force reload Env to be absolutely sure
+        from dotenv import load_dotenv
+        load_dotenv(override=True)
+        
+        api_key = GeminiService.get_api_key()
+        try:
+            client = genai.Client(api_key=api_key)
+            
+            prompt = f"""You are a medical scribe perfectionist.
+            
+Fix the grammar, spelling, and punctuation of the following clinical note.
+Format it nicely (e.g., bullet points if multiple items are listed, clear paragraphs).
+Do NOT change the medical meaning or facts.
+Do NOT add any introductory or concluding conversational text (like 'Here is the fixed text'). Just output the cleaned final text.
+
+Text to fix:
+{text}
+"""
+            
+            models_to_try = [
+                "gemini-2.0-flash",
+                "gemini-flash-latest",
+                "gemini-pro-latest",
+                "gemini-exp-1206",
+                "gemini-3-flash-preview",
+                "models/gemini-2.0-flash",
+                "models/gemini-flash-latest"
+            ]
+            
+            response = None
+            errors = []
+            for model_name in models_to_try:
+                try:
+                    logger.info(f"Fix Grammar: Attempting {model_name}")
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt
+                    )
+                    break
+                except Exception as e:
+                    logger.warning(f"Model {model_name} failed: {e}")
+                    errors.append(f"{model_name}: {str(e)}")
+                    continue
+            
+            if not response:
+                error_summary = "; ".join(errors)
+                raise Exception(f"Gemini API call failed: {error_summary}")
+
+            return response.text.strip()
+
+        except Exception as e:
+            logger.error(f"Gemini API Error in fix_grammar: {e}")
+            raise Exception(f"AI Grammar Fix Failed: {str(e)}")
