@@ -1,0 +1,26 @@
+# Django Core
+Django==6.0.1
+
+# Database
+psycopg2-binary==2.9.10
+
+# Django REST Framework
+djangorestframework==3.15.2
+
+# JWT Authentication
+djangorestframework-simplejwt==5.4.0
+
+# CORS Headers
+django-cors-headers==4.6.0
+
+# Environment Variables
+python-dotenv==1.0.1
+
+# Google Gemini AI
+google-genai==1.0.0
+
+# PDF Processing
+PyPDF2==3.0.1
+
+# Additional utilities (optional but recommended)
+pillow==11.0.0
