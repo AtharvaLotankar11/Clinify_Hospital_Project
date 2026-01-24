@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { doctorAPI, clinicalNoteAPI, prescriptionAPI, medicineAPI, vitalAPI, aiAPI, operationAPI } from '../../services/api';
 import VoiceRecorder from '../../components/VoiceRecorder';
+import { LineChart, Line, ResponsiveContainer, Tooltip } from 'recharts';
 
 export default function PatientDetailsModal({ patient: selectedPatient, onClose, initialTab }) {
     const [activeTab, setActiveTab] = useState(initialTab || 'details');
@@ -67,6 +68,7 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
 
     // Vitals State
     const [vitals, setVitals] = useState([]);
+    const [allPatientVitals, setAllPatientVitals] = useState([]); // For trend graphs
 
     // AI Summary State
     const [generatingId, setGeneratingId] = useState(null);
@@ -122,8 +124,16 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
 
     const fetchVitals = async () => {
         try {
+            // Fetch vitals for current visit
             const response = await vitalAPI.getAll({ visit: selectedPatient.id });
             setVitals(Array.isArray(response.data) ? response.data : []);
+
+            // Fetch all vitals for this patient (for trend graphs)
+            const patientId = selectedPatient.patientData?.id || selectedPatient.patient;
+            if (patientId) {
+                const allVitalsResponse = await vitalAPI.getAll({ patient: patientId });
+                setAllPatientVitals(Array.isArray(allVitalsResponse.data) ? allVitalsResponse.data : []);
+            }
         } catch (err) {
             console.error("Failed to fetch vitals", err);
         }
@@ -550,42 +560,248 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                     {activeTab === 'vitals' && (
                         <div className="space-y-6">
                             <h3 className="font-semibold text-lg text-gray-900">Recorded Vitals</h3>
+
                             <div className="space-y-4">
                                 {vitals.length > 0 ? (
-                                    vitals.map((vital) => (
-                                        <div key={vital.id} className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                            <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-                                                <span className="text-sm font-medium text-gray-500">Recorded at {new Date(vital.recorded_at).toLocaleString()}</span>
-                                                <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-medium">Recorded by {vital.recorded_by_name || 'Nurse'}</span>
+                                    vitals.map((vital) => {
+                                        // Calculate Health Score (0-100)
+                                        const calculateHealthScore = () => {
+                                            let score = 100;
+
+                                            // BP Score (30 points) - Ideal: 120/80
+                                            const bpSys = vital.bp_systolic;
+                                            const bpDia = vital.bp_diastolic;
+                                            if (bpSys < 90 || bpSys > 180 || bpDia < 60 || bpDia > 120) {
+                                                score -= 30; // Critical
+                                            } else if (bpSys < 100 || bpSys > 140 || bpDia < 65 || bpDia > 90) {
+                                                score -= 15; // Concerning
+                                            } else if (bpSys > 130 || bpDia > 85) {
+                                                score -= 10; // Elevated
+                                            }
+
+                                            // Pulse Score (25 points) - Ideal: 60-100 bpm
+                                            const pulse = vital.pulse;
+                                            if (pulse < 40 || pulse > 130) {
+                                                score -= 25; // Critical
+                                            } else if (pulse < 50 || pulse > 110) {
+                                                score -= 12; // Concerning
+                                            } else if (pulse < 60 || pulse > 100) {
+                                                score -= 5; // Slightly off
+                                            }
+
+                                            // Temperature Score (20 points) - Ideal: 98.6°F
+                                            const temp = vital.temperature;
+                                            if (temp < 95 || temp >= 104) {
+                                                score -= 20; // Critical
+                                            } else if (temp < 97 || temp > 100) {
+                                                score -= 10; // Fever/Low
+                                            } else if (temp > 99) {
+                                                score -= 5; // Mild fever
+                                            }
+
+                                            // SpO2 Score (25 points) - Ideal: >95%
+                                            const spo2 = vital.spo2;
+                                            if (spo2 < 90) {
+                                                score -= 25; // Critical
+                                            } else if (spo2 < 94) {
+                                                score -= 15; // Low
+                                            } else if (spo2 < 95) {
+                                                score -= 5; // Borderline
+                                            }
+
+                                            return Math.max(0, score);
+                                        };
+
+                                        const healthScore = calculateHealthScore();
+                                        const getScoreColor = (score) => {
+                                            if (score >= 90) return 'text-green-600 bg-green-50 border-green-200';
+                                            if (score >= 75) return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+                                            if (score >= 60) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+                                            if (score >= 40) return 'text-orange-600 bg-orange-50 border-orange-200';
+                                            return 'text-red-600 bg-red-50 border-red-200';
+                                        };
+
+                                        const getScoreLabel = (score) => {
+                                            if (score >= 90) return 'Excellent';
+                                            if (score >= 75) return 'Good';
+                                            if (score >= 60) return 'Fair';
+                                            if (score >= 40) return 'Poor';
+                                            return 'Critical';
+                                        };
+
+                                        // Prepare trend data for charts
+                                        const sortedVitals = [...allPatientVitals].sort((a, b) =>
+                                            new Date(a.recorded_at) - new Date(b.recorded_at)
+                                        ).slice(-10);
+
+                                        const bpData = sortedVitals.map(v => ({
+                                            date: new Date(v.recorded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                                            systolic: v.bp_systolic,
+                                            diastolic: v.bp_diastolic
+                                        }));
+
+                                        const pulseData = sortedVitals.map(v => ({
+                                            date: new Date(v.recorded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                                            value: v.pulse
+                                        }));
+
+                                        const tempData = sortedVitals.map(v => ({
+                                            date: new Date(v.recorded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                                            value: v.temperature
+                                        }));
+
+                                        const spo2Data = sortedVitals.map(v => ({
+                                            date: new Date(v.recorded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                                            value: v.spo2
+                                        }));
+
+                                        return (
+                                            <div key={vital.id} className="space-y-6">
+                                                {/* Health Score Banner */}
+                                                <div className={`p-5 rounded-xl border-2 ${getScoreColor(healthScore)}`}>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="relative">
+                                                                <svg className="w-20 h-20 transform -rotate-90">
+                                                                    <circle cx="40" cy="40" r="32" stroke="currentColor" strokeWidth="6" fill="none" opacity="0.2" />
+                                                                    <circle
+                                                                        cx="40" cy="40" r="32"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="6"
+                                                                        fill="none"
+                                                                        strokeDasharray={`${healthScore * 2.01} 201`}
+                                                                        strokeLinecap="round"
+                                                                    />
+                                                                </svg>
+                                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                                    <span className="text-2xl font-bold">{healthScore}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="text-lg font-bold">Health Score</h4>
+                                                                <p className="text-sm opacity-80">{getScoreLabel(healthScore)} - Overall vital signs assessment</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-xs opacity-70 uppercase tracking-wide">Recorded at</p>
+                                                            <p className="font-semibold">{new Date(vital.recorded_at).toLocaleString()}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Vital Cards */}
+                                                <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                                                    <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
+                                                        <span className="text-sm font-medium text-gray-700">Current Vitals</span>
+                                                        <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-medium">
+                                                            Recorded by {vital.recorded_by_name || 'Nurse'}
+                                                        </span>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-6">
+                                                        <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('BP', vital.bp_systolic, vital.bp_diastolic) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
+                                                            <div className="text-sm text-gray-500 mb-1">Blood Pressure</div>
+                                                            <div className={`text-2xl font-bold ${isCritical('BP', vital.bp_systolic, vital.bp_diastolic) ? 'text-red-700' : 'text-gray-900'}`}>
+                                                                {vital.bp_systolic}/{vital.bp_diastolic} <span className="text-sm font-normal text-gray-500">mmHg</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('HR', vital.pulse) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
+                                                            <div className="text-sm text-gray-500 mb-1">Pulse Rate</div>
+                                                            <div className={`text-2xl font-bold ${isCritical('HR', vital.pulse) ? 'text-red-700' : 'text-gray-900'}`}>
+                                                                {vital.pulse} <span className="text-sm font-normal text-gray-500">bpm</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('TEMP', vital.temperature) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
+                                                            <div className="text-sm text-gray-500 mb-1">Temperature</div>
+                                                            <div className={`text-2xl font-bold ${isCritical('TEMP', vital.temperature) ? 'text-red-700' : 'text-gray-900'}`}>
+                                                                {vital.temperature} <span className="text-sm font-normal text-gray-500">°F</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('SPO2', vital.spo2) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
+                                                            <div className="text-sm text-gray-500 mb-1">SpO2</div>
+                                                            <div className={`text-2xl font-bold ${isCritical('SPO2', vital.spo2) ? 'text-red-700' : 'text-gray-900'}`}>
+                                                                {vital.spo2} <span className="text-sm font-normal text-gray-500">%</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Vitals Trend Graphs Section */}
+                                                {sortedVitals.length > 1 && (
+                                                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+                                                        <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                            </svg>
+                                                            Vitals Trends - Last {sortedVitals.length} Readings
+                                                        </h4>
+
+                                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                                            {/* Blood Pressure Chart */}
+                                                            <div className="bg-white p-4 rounded-lg shadow-sm">
+                                                                <h5 className="text-sm font-semibold text-gray-700 mb-3">Blood Pressure Trend</h5>
+                                                                <ResponsiveContainer width="100%" height={180}>
+                                                                    <LineChart data={bpData}>
+                                                                        <Tooltip
+                                                                            contentStyle={{ fontSize: '12px', padding: '6px 10px', borderRadius: '6px' }}
+                                                                            formatter={(value, name) => [value + ' mmHg', name === 'systolic' ? 'Systolic' : 'Diastolic']}
+                                                                        />
+                                                                        <Line type="monotone" dataKey="systolic" stroke="#ef4444" strokeWidth={3} dot={{ r: 4 }} name="Systolic" />
+                                                                        <Line type="monotone" dataKey="diastolic" stroke="#f97316" strokeWidth={3} dot={{ r: 4 }} name="Diastolic" />
+                                                                    </LineChart>
+                                                                </ResponsiveContainer>
+                                                                <div className="flex justify-center gap-4 mt-2 text-xs">
+                                                                    <span className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded"></div> Systolic</span>
+                                                                    <span className="flex items-center gap-1"><div className="w-3 h-3 bg-orange-500 rounded"></div> Diastolic</span>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Pulse Rate Chart */}
+                                                            <div className="bg-white p-4 rounded-lg shadow-sm">
+                                                                <h5 className="text-sm font-semibold text-gray-700 mb-3">Pulse Rate Trend</h5>
+                                                                <ResponsiveContainer width="100%" height={180}>
+                                                                    <LineChart data={pulseData}>
+                                                                        <Tooltip
+                                                                            contentStyle={{ fontSize: '12px', padding: '6px 10px', borderRadius: '6px' }}
+                                                                            formatter={(value) => [value + ' bpm', 'Pulse']}
+                                                                        />
+                                                                        <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
+                                                                    </LineChart>
+                                                                </ResponsiveContainer>
+                                                            </div>
+
+                                                            {/* Temperature Chart */}
+                                                            <div className="bg-white p-4 rounded-lg shadow-sm">
+                                                                <h5 className="text-sm font-semibold text-gray-700 mb-3">Temperature Trend</h5>
+                                                                <ResponsiveContainer width="100%" height={180}>
+                                                                    <LineChart data={tempData}>
+                                                                        <Tooltip
+                                                                            contentStyle={{ fontSize: '12px', padding: '6px 10px', borderRadius: '6px' }}
+                                                                            formatter={(value) => [value + ' °F', 'Temperature']}
+                                                                        />
+                                                                        <Line type="monotone" dataKey="value" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} />
+                                                                    </LineChart>
+                                                                </ResponsiveContainer>
+                                                            </div>
+
+                                                            {/* SpO2 Chart */}
+                                                            <div className="bg-white p-4 rounded-lg shadow-sm">
+                                                                <h5 className="text-sm font-semibold text-gray-700 mb-3">SpO2 Trend</h5>
+                                                                <ResponsiveContainer width="100%" height={180}>
+                                                                    <LineChart data={spo2Data}>
+                                                                        <Tooltip
+                                                                            contentStyle={{ fontSize: '12px', padding: '6px 10px', borderRadius: '6px' }}
+                                                                            formatter={(value) => [value + ' %', 'SpO2']}
+                                                                        />
+                                                                        <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} />
+                                                                    </LineChart>
+                                                                </ResponsiveContainer>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="grid grid-cols-2 gap-6">
-                                                <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('BP', vital.bp_systolic, vital.bp_diastolic) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
-                                                    <div className="text-sm text-gray-500 mb-1">Blood Pressure</div>
-                                                    <div className={`text-xl font-bold ${isCritical('BP', vital.bp_systolic, vital.bp_diastolic) ? 'text-red-700' : 'text-gray-900'}`}>
-                                                        {vital.bp_systolic}/{vital.bp_diastolic} <span className="text-sm font-normal text-gray-500">mmHg</span>
-                                                    </div>
-                                                </div>
-                                                <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('HR', vital.pulse) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
-                                                    <div className="text-sm text-gray-500 mb-1">Pulse Rate</div>
-                                                    <div className={`text-xl font-bold ${isCritical('HR', vital.pulse) ? 'text-red-700' : 'text-gray-900'}`}>
-                                                        {vital.pulse} <span className="text-sm font-normal text-gray-500">bpm</span>
-                                                    </div>
-                                                </div>
-                                                <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('TEMP', vital.temperature) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
-                                                    <div className="text-sm text-gray-500 mb-1">Temperature</div>
-                                                    <div className={`text-xl font-bold ${isCritical('TEMP', vital.temperature) ? 'text-red-700' : 'text-gray-900'}`}>
-                                                        {vital.temperature} <span className="text-sm font-normal text-gray-500">°F</span>
-                                                    </div>
-                                                </div>
-                                                <div className={`bg-gray-50 p-4 rounded-lg ${isCritical('SPO2', vital.spo2) ? 'ring-2 ring-red-500 bg-red-50' : ''}`}>
-                                                    <div className="text-sm text-gray-500 mb-1">SpO2</div>
-                                                    <div className={`text-xl font-bold ${isCritical('SPO2', vital.spo2) ? 'text-red-700' : 'text-gray-900'}`}>
-                                                        {vital.spo2} <span className="text-sm font-normal text-gray-500">%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
+                                        );
+                                    })
                                 ) : (
                                     <div className="p-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-300">
                                         <p className="italic">No vitals recorded for this visit yet.</p>

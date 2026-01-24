@@ -35,12 +35,8 @@ export default function DoctorDashboard() {
                 setVisits(Array.isArray(visitsRes.data) ? visitsRes.data : []);
                 setAdmissions(Array.isArray(admissionsRes.data) ? admissionsRes.data : []);
                 setBeds(Array.isArray(bedsRes.data) ? bedsRes.data : []);
-            } catch (error) {
-                console.error("Error fetching dashboard data:", error);
-            } finally {
-                setLoading(false);
 
-                // Calculate Stats
+                // Calculate Stats (moved here from finally block)
                 if (visitsRes && Array.isArray(visitsRes.data)) {
                     // Use local date for stats
                     const d = new Date();
@@ -54,6 +50,10 @@ export default function DoctorDashboard() {
                         totalPatients: new Set(visitsRes.data.map(v => v.patient?.id || v.patient)).size
                     });
                 }
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchData();
