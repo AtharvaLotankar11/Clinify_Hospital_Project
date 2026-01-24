@@ -916,3 +916,128 @@ class AllergyViewSet(ModelViewSet):
             queryset = queryset.filter(patient_id=patient_id)
         return queryset
 
+
+from ai_services.services.gemini_service import GeminiService
+from datetime import datetime, timedelta
+import random
+
+class AutoBookVisitView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        patient_id = request.data.get('patient_id')
+        chief_complaint = request.data.get('chief_complaint')
+        severity = request.data.get('severity') # Expect CRITICAL, MODERATE, or NORMAL
+        
+        if not patient_id or not chief_complaint:
+            return Response({'error': 'Patient ID and Chief Complaint required'}, status=400)
+            
+        if not severity:
+            # Default to NORMAL if not provided, but ideally frontend sends it
+            severity = 'NORMAL' 
+            
+        # 1. Get Recommendation (Doctor Type)
+        valid_types = [t[0] for t in Staff.DOCTOR_TYPE_CHOICES]
+        try:
+            ai_data = GeminiService.recommend_doctor(chief_complaint, valid_types)
+            doctor_type = ai_data.get('doctor_type')
+        except Exception as e:
+            return Response({'error': f'AI Service Unavailable: {str(e)}'}, status=503)
+             
+        # 2. Map Severity to Experience & Color Code
+        color_coding = 'GREEN'
+        if severity == 'CRITICAL':
+            exp_required = ['MORE_10']
+            color_coding = 'RED'
+        elif severity == 'MODERATE':
+            exp_required = ['5_10']
+            color_coding = 'YELLOW' # or ORANGE
+        else:
+            exp_required = ['LESS_5']
+            color_coding = 'GREEN'
+            
+        # 3. Find Doctor
+        doctors = Staff.objects.filter(
+            role='DOCTOR',
+            doctor_type=doctor_type,
+            experience_years__in=exp_required,
+            is_active=True
+        )
+        
+        # Fallback 1: If Critical and no >10yr, try 5-10
+        if not doctors.exists() and severity == 'CRITICAL':
+             doctors = Staff.objects.filter(role='DOCTOR', doctor_type=doctor_type, experience_years='5_10', is_active=True)
+             
+        # Fallback 2: Any doctor of that type
+        if not doctors.exists():
+            doctors = Staff.objects.filter(role='DOCTOR', doctor_type=doctor_type, is_active=True)
+            
+        if not doctors.exists():
+             return Response({'error': f'No {doctor_type} available'}, status=404)
+        
+        # Pick a doctor (randomly from pool)
+        doctor = random.choice(list(doctors))
+        
+        # 4. Find Slot (Next 30 days)
+        from django.utils import timezone
+        today = timezone.now().date()
+        booked_slot = None
+        booked_date = None
+        
+        for i in range(30):
+            check_date = today + timedelta(days=i)
+            available_slots = doctor.available_slots or []
+            
+            existing_bookings = Visit.objects.filter(
+                doctor=doctor, 
+                visit_date=check_date
+            ).exclude(status='CANCELLED').values_list('slot_booked', flat=True)
+            
+            for slot in available_slots:
+                # Check time if today
+                if i == 0:
+                     try:
+                         slot_time = datetime.strptime(slot.split(' - ')[0], '%H:%M').time()
+                         if datetime.combine(today, slot_time) <= datetime.now():
+                             continue
+                     except: continue
+                         
+                if slot not in existing_bookings:
+                    booked_slot = slot
+                    booked_date = check_date
+                    break
+            
+            if booked_slot:
+                break
+                
+        if not booked_slot:
+            return Response({'error': f'No available slots found for Dr. {doctor.name} ({doctor.doctor_type}) over next 30 days.'}, status=404)
+            
+        # 5. Create Visit
+        try:
+            visit = Visit.objects.create(
+                patient_id=patient_id,
+                doctor=doctor,
+                visit_type='OPD',
+                visit_date=booked_date,
+                slot_booked=booked_slot,
+                chief_complaint=chief_complaint,
+                color_coding=color_coding,
+                notes=f"Auto-booked by AI. Severity: {severity}. Recommended Doc Type: {doctor_type}",
+                status='ACTIVE'
+            )
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+        
+        return Response({
+            'message': 'Visit auto-booked successfully',
+            'visit_id': visit.id,
+            'doctor': doctor.name,
+            'specialization': doctor.doctor_type,
+            'experience': doctor.get_experience_years_display(),
+            'date': booked_date,
+            'time': booked_slot,
+            'severity': severity,
+            'ai_reasoning': f"Analyzed complaint: '{chief_complaint}' -> {doctor_type}. Severity {severity} requires {doctor.get_experience_years_display()}."
+        })
+

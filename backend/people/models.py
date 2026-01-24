@@ -316,11 +316,7 @@ class Staff(models.Model):
         null=True,
         help_text="Type of doctor (Doctors only)"
     )
-    specialization = models.TextField(
-        blank=True, 
-        null=True,
-        help_text="Detailed specialization (Doctors only)"
-    )
+
     experience_years = models.CharField(
         max_length=20, 
         choices=EXPERIENCE_CHOICES, 
@@ -359,8 +355,8 @@ class Staff(models.Model):
                 raise ValidationError({'fee': 'Only doctors can have a fee.'})
             if any([self.shift_start, self.shift_end, self.break_start, self.break_end]):
                  raise ValidationError("Shift times are for doctors only.")
-            if any([self.doctor_type, self.specialization, self.experience_years]):
-                raise ValidationError("Doctor details (type, specialization, experience) are for doctors only.")
+            if any([self.doctor_type, self.experience_years]):
+                raise ValidationError("Doctor details (type, experience) are for doctors only.")
 
     def save(self, *args, **kwargs):
         self.full_clean()

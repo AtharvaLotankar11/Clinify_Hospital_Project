@@ -74,6 +74,7 @@ export const visitAPI = {
     update: (id, data) => api.patch(`/visits/${id}/`, data),
     delete: (id) => api.delete(`/visits/${id}/`),
     getBookedSlots: (doctorId, date) => api.get('/visits/booked_slots/', { params: { doctor_id: doctorId, date } }),
+    autoBook: (data) => api.post('/visits/auto-book/', data),
 };
 
 // Admission endpoints

@@ -6,7 +6,7 @@ from .views import (
     VitalViewSet, ClinicalNoteViewSet, OrderViewSet, LabTestViewSet, RadiologyTestViewSet, 
     MedicineViewSet, MedicineBatchViewSet, StockTransactionViewSet, PrescriptionViewSet, 
     PrescriptionDispenseViewSet, OperationViewSet, DoctorPatientProfileView, PatientAuthView,
-    AdminDashboardStatsView
+    AdminDashboardStatsView, AutoBookVisitView
 )
 
 router = DefaultRouter()
@@ -39,4 +39,5 @@ urlpatterns = [
     path('admin-dashboard/stats/', AdminDashboardStatsView.as_view(), name='admin-dashboard-stats'),
     path('admin-reset-password/', AdminResetPasswordView.as_view(), name='admin-reset-password'),
     path('patient-auth/<str:action>/', PatientAuthView.as_view(), name='patient-auth'),
+    path('visits/auto-book/', AutoBookVisitView.as_view(), name='auto-book-visit'),
 ] + router.urls

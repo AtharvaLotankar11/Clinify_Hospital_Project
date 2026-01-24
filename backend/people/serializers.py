@@ -42,20 +42,25 @@ class StaffRegistrationSerializer(serializers.ModelSerializer):
     shift_end = serializers.TimeField(required=False, allow_null=True)
     break_start = serializers.TimeField(required=False, allow_null=True)
     break_end = serializers.TimeField(required=False, allow_null=True)
+
     fee = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, allow_null=True)
+    doctor_type = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    experience_years = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     
     class Meta:
         model = Staff
         fields = [
             'user_id', 'employeeId', 'name', 'user_email', 'role', 'department', 
             'phone', 'address', 'gender', 'date_of_birth',
-            'fee', 'shift_start', 'shift_end', 'break_start', 'break_end', 'is_active', 'password'
+            'fee', 'shift_start', 'shift_end', 'break_start', 'break_end', 
+            'doctor_type', 'experience_years',
+            'is_active', 'password'
         ]
     
     def to_internal_value(self, data):
         # Convert empty strings to None for optional fields before validation
         optional_fields = ['date_of_birth', 'shift_start', 'shift_end', 'break_start', 'break_end', 
-                          'fee', 'phone', 'address', 'gender']
+                          'fee', 'phone', 'address', 'gender', 'doctor_type', 'experience_years']
         for field in optional_fields:
             if field in data and data[field] == '':
                 data[field] = None
@@ -69,9 +74,11 @@ class StaffRegistrationSerializer(serializers.ModelSerializer):
         email = validated_data.get('user_email')
         name = validated_data.get('name')
         
+
         # Clean empty strings - convert to None for optional fields
         for field in ['phone', 'address', 'gender', 'date_of_birth', 'fee', 
-                      'shift_start', 'shift_end', 'break_start', 'break_end']:
+                      'shift_start', 'shift_end', 'break_start', 'break_end',
+                      'doctor_type', 'experience_years']:
             if field in validated_data and validated_data[field] == '':
                 validated_data[field] = None
         

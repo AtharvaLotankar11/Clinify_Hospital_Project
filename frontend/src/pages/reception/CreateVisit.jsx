@@ -59,6 +59,7 @@ export default function CreateVisit() {
         referralType: 'NONE',
         referralDoctorId: '',
         referralExternalName: '',
+        severity: 'NORMAL',
     };
 
     const [formData, setFormData] = useState(defaultForm);
@@ -101,9 +102,42 @@ export default function CreateVisit() {
                 setLoadingSlots(false);
             }
         };
-
         fetchSlots();
     }, [formData.doctorId, formData.visitDate, formData.visitType, doctors]);
+
+    const handleAutoBook = async () => {
+        if (!selectedPatient) {
+            alert("Please select a patient first.");
+            return;
+        }
+        if (!formData.chiefComplaint) {
+            alert("Please enter a Chief Complaint for AI triage.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await visitAPI.autoBook({
+                patient_id: selectedPatient.id,
+                chief_complaint: formData.chiefComplaint,
+                severity: formData.severity || 'NORMAL'
+            });
+
+            const d = response.data;
+            alert(`Auto-Booking Successful!\n\nPatient: ${selectedPatient.name}\nSeverity: ${d.severity}\nDoctor: Dr. ${d.doctor} (${d.specialization})\nTime: ${d.date} ${d.time}\n\nReasoning: ${d.ai_reasoning}`);
+
+            const res = await visitAPI.getAll({ patient: selectedPatient.id });
+            setPatientVisits(res.data || []);
+            setFormData(prev => ({ ...defaultForm, patientId: selectedPatient.id }));
+            setSelectedPatient(null);
+
+        } catch (error) {
+            console.error("Auto book error", error);
+            alert(error.response?.data?.error || "Auto-booking failed. Please check backend.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSearch = async (e) => {
         const term = e.target.value;
@@ -552,6 +586,20 @@ export default function CreateVisit() {
                                                 placeholder="Provide details of the complaint..."
                                             />
                                         </div>
+
+                                        <div className="md:col-span-2 space-y-1.5">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Severity (For AI Triage)</label>
+                                            <select
+                                                name="severity"
+                                                value={formData.severity || 'NORMAL'}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all text-sm font-medium"
+                                            >
+                                                <option value="NORMAL">Normal (Mild Symptoms)</option>
+                                                <option value="MODERATE">Moderate (Discomfort)</option>
+                                                <option value="CRITICAL">Critical (Severe Pain/Emergency)</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-100">
@@ -575,6 +623,15 @@ export default function CreateVisit() {
                                             className="px-6 py-2 border border-gray-200 text-gray-600 text-[10px] font-bold rounded-xl hover:bg-gray-50 transition-all uppercase tracking-widest"
                                         >
                                             Reset
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={handleAutoBook}
+                                            disabled={loading || !selectedPatient}
+                                            className="px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-[10px] font-bold rounded-xl shadow-md hover:from-purple-600 hover:to-indigo-700 hover:shadow-lg transition-all uppercase tracking-widest disabled:opacity-50 flex items-center gap-2"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                            Auto-Book with AI
                                         </button>
                                         <button
                                             type="submit"

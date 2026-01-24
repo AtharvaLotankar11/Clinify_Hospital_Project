@@ -15,14 +15,13 @@ class StaffDoctorFieldsTest(TestCase):
             shift_start="09:00",
             shift_end="17:00",
             doctor_type="CARDIOLOGIST",
-            specialization="Interventional Cardiology",
+
             experience_years="MORE_10"
         )
         # Verify fields are saved (create does save, but full_clean validates)
         doctor.full_clean()
         self.assertEqual(doctor.doctor_type, "CARDIOLOGIST")
         self.assertEqual(doctor.experience_years, "MORE_10")
-        self.assertEqual(doctor.specialization, "Interventional Cardiology")
 
     def test_non_doctor_validation(self):
         """Test that non-doctors cannot have doctor fields."""

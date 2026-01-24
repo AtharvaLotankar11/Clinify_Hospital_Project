@@ -23,7 +23,10 @@ export default function RegisterUser() {
         shift_start: '',
         shift_end: '',
         break_start: '',
+
         break_end: '',
+        doctor_type: '',
+        experience_years: '',
 
         // Credentials
         password: '',
@@ -53,7 +56,39 @@ export default function RegisterUser() {
         'LAB',
         'BILLING',
         'PHARMACY',
+
         'SUPPORT'
+    ];
+
+    const doctorTypes = [
+        { value: 'GENERAL_PHYSICIAN', label: 'General Physician' },
+        { value: 'CARDIOLOGIST', label: 'Cardiologist' },
+        { value: 'DERMATOLOGIST', label: 'Dermatologist' },
+        { value: 'ENT', label: 'ENT Specialist' },
+        { value: 'NEUROLOGIST', label: 'Neurologist' },
+        { value: 'GYNECOLOGIST', label: 'Gynecologist' },
+        { value: 'ORTHOPEDIC', label: 'Orthopedic Surgeon' },
+        { value: 'PEDIATRICIAN', label: 'Pediatrician' },
+        { value: 'PSYCHIATRIST', label: 'Psychiatrist' },
+        { value: 'SURGEON', label: 'General Surgeon' },
+        { value: 'UROLOGIST', label: 'Urologist' },
+        { value: 'OPHTHALMOLOGIST', label: 'Ophthalmologist' },
+        { value: 'DENTIST', label: 'Dentist' },
+        { value: 'ENDOCRINOLOGIST', label: 'Endocrinologist' },
+        { value: 'GASTROENTEROLOGIST', label: 'Gastroenterologist' },
+        { value: 'ONCOLOGIST', label: 'Oncologist' },
+        { value: 'PULMONOLOGIST', label: 'Pulmonologist' },
+        { value: 'NEPHROLOGIST', label: 'Nephrologist' },
+        { value: 'RHEUMATOLOGIST', label: 'Rheumatologist' },
+        { value: 'ANESTHESIOLOGIST', label: 'Anesthesiologist' },
+        { value: 'RADIOLOGIST', label: 'Radiologist' },
+        { value: 'PATHOLOGIST', label: 'Pathologist' },
+    ];
+
+    const experienceChoices = [
+        { value: 'LESS_5', label: '<5 years' },
+        { value: '5_10', label: '5-10 years' },
+        { value: 'MORE_10', label: '10+ years' },
     ];
 
     const handleInputChange = (e) => {
@@ -137,7 +172,10 @@ export default function RegisterUser() {
             shift_start: '',
             shift_end: '',
             break_start: '',
+
             break_end: '',
+            doctor_type: '',
+            experience_years: '',
             password: '',
             is_active: true
         });
@@ -324,6 +362,40 @@ export default function RegisterUser() {
                                                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                                         placeholder="500"
                                                     />
+                                                </div>
+                                            </div>
+                                            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                        Doctor Type
+                                                    </label>
+                                                    <select
+                                                        name="doctor_type"
+                                                        value={formData.doctor_type}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                                    >
+                                                        <option value="">Select Specialization</option>
+                                                        {doctorTypes.map(type => (
+                                                            <option key={type.value} value={type.value}>{type.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                        Experience
+                                                    </label>
+                                                    <select
+                                                        name="experience_years"
+                                                        value={formData.experience_years}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                                    >
+                                                        <option value="">Select Experience</option>
+                                                        {experienceChoices.map(exp => (
+                                                            <option key={exp.value} value={exp.value}>{exp.label}</option>
+                                                        ))}
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">

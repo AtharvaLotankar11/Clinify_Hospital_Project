@@ -36,6 +36,10 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
     const [availableSlots, setAvailableSlots] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState('');
     const [bookingLoading, setBookingLoading] = useState(false);
+    const [isAutoBook, setIsAutoBook] = useState(false);
+    const [chiefComplaint, setChiefComplaint] = useState('');
+    const [severity, setSeverity] = useState('NORMAL');
+
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -128,6 +132,26 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
         }
     };
 
+    const handleAutoBook = async () => {
+        if (!chiefComplaint) return alert("Please explain your symptoms");
+        setBookingLoading(true);
+        try {
+            const res = await visitAPI.autoBook({
+                patient_id: user.id,
+                chief_complaint: chiefComplaint,
+                severity: severity
+            });
+            const d = res.data;
+            alert(`Appointment Booked!\nDr. ${d.doctor} (${d.specialization})\nTime: ${d.date} ${d.time}\nReason: ${d.ai_reasoning}`);
+            setBookingMode(false);
+            fetchDashboardData();
+        } catch (e) {
+            alert("Failed: " + (e.response?.data?.error || e.message));
+        } finally {
+            setBookingLoading(false);
+        }
+    };
+
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading portal...</div>;
 
     const getStatusBadge = (status) => {
@@ -174,69 +198,112 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                         </div>
 
                         {bookingMode ? (
-                            <div className="card-medical border-blue-100 p-8 animate-fadeIn">
-                                <h2 className="text-xl font-bold text-gray-900 mb-6">Schedule Appointment</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="space-y-4">
-                                        <label className="text-sm font-bold text-gray-700">Select Doctor</label>
-                                        <div className="grid grid-cols-1 gap-2">
-                                            {doctors.map(doc => (
-                                                <button
-                                                    key={doc.user_id}
-                                                    onClick={() => setSelectedDoctor(doc)}
-                                                    className={`p-4 rounded-xl border-2 text-left transition-all flex items-center gap-4 ${selectedDoctor?.user_id === doc.user_id
-                                                        ? 'border-blue-500 bg-blue-50'
-                                                        : 'border-gray-100 hover:bg-gray-50'
-                                                        }`}
-                                                >
-                                                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">👨‍⚕️</div>
-                                                    <div>
-                                                        <div className="font-bold text-gray-900">Dr. {doc.name}</div>
-                                                        <div className="text-[10px] text-blue-600 font-bold uppercase">{doc.department}</div>
-                                                    </div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="space-y-6">
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-700">Date</label>
-                                            <input
-                                                type="date"
-                                                value={selectedDate}
-                                                onChange={(e) => setSelectedDate(e.target.value)}
-                                                min={new Date().toISOString().split('T')[0]}
-                                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:border-blue-500"
-                                            />
-                                        </div>
-                                        {selectedDoctor && (
-                                            <div className="space-y-2">
-                                                <label className="text-sm font-bold text-gray-700">Available Slots</label>
-                                                <div className="grid grid-cols-4 gap-2">
-                                                    {availableSlots.map(slot => (
-                                                        <button
-                                                            key={slot}
-                                                            onClick={() => setSelectedSlot(slot)}
-                                                            className={`p-2 rounded-lg text-xs font-bold border transition-all ${selectedSlot === slot
-                                                                ? 'bg-blue-600 text-white border-blue-600'
-                                                                : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400'
-                                                                }`}
-                                                        >
-                                                            {slot}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                        <button
-                                            disabled={!selectedSlot || bookingLoading}
-                                            onClick={handleCreateAppointment}
-                                            className="w-full py-4 btn-medical-primary font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all"
-                                        >
-                                            {bookingLoading ? 'Confirming...' : 'Confirm Appointment'}
-                                        </button>
+                            <div className="bg-white rounded-xl shadow-md border border-emerald-100 p-8 animate-fadeIn">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-xl font-bold text-gray-900">Schedule Appointment</h2>
+                                    <div className="flex bg-gray-100 p-1 rounded-lg">
+                                        <button onClick={() => setIsAutoBook(false)} className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${!isAutoBook ? 'bg-white shadow text-emerald-700' : 'text-gray-500'}`}>Manual Select</button>
+                                        <button onClick={() => setIsAutoBook(true)} className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${isAutoBook ? 'bg-white shadow text-purple-700' : 'text-gray-500'}`}>🤖 AI Match</button>
                                     </div>
                                 </div>
+                                {isAutoBook ? (
+                                    <div className="max-w-2xl mx-auto space-y-6 py-8">
+                                        <div className="text-center space-y-2">
+                                            <div className="text-4xl">🤖</div>
+                                            <h3 className="text-lg font-bold text-gray-900">AI Doctor Matching</h3>
+                                            <p className="text-sm text-gray-500">Describe your symptoms, and our AI will find the best specialist and earliest slot for you.</p>
+                                        </div>
+                                        <textarea
+                                            value={chiefComplaint}
+                                            onChange={(e) => setChiefComplaint(e.target.value)}
+                                            placeholder="e.g. Severe ear pain since last night, slightly dizzy..."
+                                            className="w-full p-4 border border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none h-32 resize-none"
+                                        />
+                                        <div className="flex gap-4 items-center">
+                                            <div className="w-1/3">
+                                                <label className="text-xs font-bold text-gray-500 uppercase ml-1 block mb-1">Severity Condition</label>
+                                                <select
+                                                    value={severity}
+                                                    onChange={(e) => setSeverity(e.target.value)}
+                                                    className="w-full p-3 border border-gray-200 rounded-xl focus:border-purple-500 outline-none text-sm font-bold"
+                                                >
+                                                    <option value="NORMAL">Normal</option>
+                                                    <option value="MODERATE">Moderate</option>
+                                                    <option value="CRITICAL">Critical</option>
+                                                </select>
+                                            </div>
+                                            <button
+                                                onClick={handleAutoBook}
+                                                disabled={bookingLoading || !chiefComplaint}
+                                                className="flex-1 py-4 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 shadow-lg disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                                            >
+                                                {bookingLoading ? 'Analyzing & Booking...' : 'Find Best Doctor & Book Now'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="space-y-4">
+                                            <label className="text-sm font-bold text-gray-700">Select Doctor</label>
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {doctors.map(doc => (
+                                                    <button
+                                                        key={doc.user_id}
+                                                        onClick={() => setSelectedDoctor(doc)}
+                                                        className={`p-4 rounded-xl border-2 text-left transition-all flex items-center gap-4 ${selectedDoctor?.user_id === doc.user_id
+                                                            ? 'border-emerald-500 bg-emerald-50'
+                                                            : 'border-gray-100 hover:bg-gray-50'
+                                                            }`}
+                                                    >
+                                                        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">👨‍⚕️</div>
+                                                        <div>
+                                                            <div className="font-bold text-gray-900">Dr. {doc.name}</div>
+                                                            <div className="text-[10px] text-emerald-600 font-bold uppercase">{doc.department}</div>
+                                                        </div>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="space-y-6">
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700">Date</label>
+                                                <input
+                                                    type="date"
+                                                    value={selectedDate}
+                                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                                    min={new Date().toISOString().split('T')[0]}
+                                                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:border-emerald-500"
+                                                />
+                                            </div>
+                                            {selectedDoctor && (
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-700">Available Slots</label>
+                                                    <div className="grid grid-cols-4 gap-2">
+                                                        {availableSlots.map(slot => (
+                                                            <button
+                                                                key={slot}
+                                                                onClick={() => setSelectedSlot(slot)}
+                                                                className={`p-2 rounded-lg text-xs font-bold border transition-all ${selectedSlot === slot
+                                                                    ? 'bg-emerald-600 text-white border-emerald-600'
+                                                                    : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-400'
+                                                                    }`}
+                                                            >
+                                                                {slot}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <button
+                                                disabled={!selectedSlot || bookingLoading}
+                                                onClick={handleCreateAppointment}
+                                                className="w-full py-4 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 shadow-lg disabled:opacity-50 transition-all"
+                                            >
+                                                {bookingLoading ? 'Confirming...' : 'Confirm Appointment'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <>
@@ -428,7 +495,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                         )}
                     </div>
                 </main>
-            </div>
+            </div >
 
             <style jsx>{`
                 @keyframes fadeIn {
@@ -439,6 +506,6 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                     animation: fadeIn 0.4s ease-out forwards;
                 }
             `}</style>
-        </div>
+        </div >
     );
 }

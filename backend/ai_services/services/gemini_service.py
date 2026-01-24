@@ -355,3 +355,81 @@ Text to fix:
         except Exception as e:
             logger.error(f"Gemini API Error in fix_grammar: {e}")
             raise Exception(f"AI Grammar Fix Failed: {str(e)}")
+
+    @staticmethod
+    def recommend_doctor(complaint, valid_types):
+        """
+        Recommend doctor type based on complaint.
+        Note: Severity is now largely handled by user input, but we ask Gemini for a second opinion or type confirmation.
+        """
+        # Force reload Env
+        from dotenv import load_dotenv
+        load_dotenv(override=True)
+        
+        api_key = GeminiService.get_api_key()
+        try:
+            client = genai.Client(api_key=api_key)
+            
+            # Format types for prompt
+            types_str = ", ".join(valid_types)
+            
+            prompt = f"""You are an intelligent medical triage assistant.
+Patient Complaint: "{complaint}"
+
+Available Specialist Types:
+{types_str}
+
+Task:
+1. Identify the BEST matching specialist from the list above.
+   - Example: "Ear pain" -> ENT
+   - Example: "Skin rash" -> DERMATOLOGIST
+   - Example: "Chest pain" -> CARDIOLOGIST
+   - Example: "General weakness" -> GENERAL_PHYSICIAN
+2. If the complaint is specific, choose the Specialist. Do NOT default to General Physician unless it is general.
+
+Output JSON ONLY:
+{{
+    "doctor_type": "EXACT_TYPE_FROM_LIST"
+}}
+"""
+            
+            # Use the same models that work for summary generation
+            models_to_try = [
+                "gemini-2.0-flash",
+                "gemini-flash-latest",
+                "gemini-pro-latest",
+                "gemini-exp-1206",
+                "models/gemini-2.0-flash",
+                "models/gemini-flash-latest"
+            ]
+            
+            response = None
+            errors = []
+            for model_name in models_to_try:
+                try:
+                    logger.info(f"Attempting doctor recommendation with model: {model_name}")
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt,
+                        config={'response_mime_type': 'application/json'}
+                    )
+                    logger.info(f"Successfully got doctor recommendation with model: {model_name}")
+                    break 
+                except Exception as e:
+                    logger.warning(f"Model {model_name} failed: {e}")
+                    errors.append(f"{model_name}: {str(e)}")
+                    continue
+            
+            if not response:
+                logger.error(f"All Gemini models failed. Errors: {'; '.join(errors)}")
+                # Fallback to General Physician if really broken? No, raise.
+                raise Exception(f"AI Service Unavailable: {errors[0] if errors else 'Unknown error'}")
+                
+            import json
+            text = response.text.replace('```json', '').replace('```', '').strip()
+            return json.loads(text)
+            
+        except Exception as e:
+            logger.error(f"Gemini Triage Error: {e}")
+            raise Exception(f"AI Triage Failed: {str(e)}")
+
