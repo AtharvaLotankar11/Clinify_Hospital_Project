@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { doctorAPI, clinicalNoteAPI, prescriptionAPI, medicineAPI, vitalAPI, aiAPI, operationAPI } from '../../services/api';
+import VoiceRecorder from '../../components/VoiceRecorder';
 
 export default function PatientDetailsModal({ patient: selectedPatient, onClose, initialTab }) {
     const [activeTab, setActiveTab] = useState(initialTab || 'details');
@@ -626,19 +627,17 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                             <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
                                 <h4 className="font-medium text-gray-900 mb-3">Add Progress Note</h4>
                                 <form onSubmit={handleProgressNoteSubmit}>
-                                    <textarea
-                                        required
-                                        value={progressNoteForm}
-                                        onChange={(e) => setProgressNoteForm(e.target.value)}
-                                        className="w-full h-24 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm mb-3"
-                                        placeholder="Enter progress note details..."
-                                    ></textarea>
-                                    <div className="flex justify-end">
+                                    <VoiceRecorder
+                                        onTranscriptChange={setProgressNoteForm}
+                                        initialValue={progressNoteForm}
+                                    />
+                                    <div className="flex justify-end mt-3">
                                         <button
                                             type="submit"
-                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors shadow-sm"
+                                            disabled={!progressNoteForm.trim()}
+                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors shadow-sm disabled:bg-gray-300 disabled:cursor-not-allowed"
                                         >
-                                            Add Note
+                                            Save Progress Note
                                         </button>
                                     </div>
                                 </form>
