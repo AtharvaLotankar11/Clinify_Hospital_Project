@@ -786,7 +786,6 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                                             >
                                                 <option value="LAB">Lab Test</option>
                                                 <option value="RADIOLOGY">Radiology</option>
-                                                <option value="OPERATION">Operation/Surgery</option>
                                             </select>
                                         </div>
 
