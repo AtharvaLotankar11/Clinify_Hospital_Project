@@ -385,7 +385,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                             { id: 'vitals', label: 'Vitals' },
                                             { id: 'reports', label: 'Lab' },
                                             { id: 'notes', label: 'Doctor Notes' },
-                                            { id: 'notes', label: 'Doctor Notes' },
+
                                             { id: 'meds', label: 'Meds' },
                                             { id: 'bills', label: 'Bills' }
                                         ].map(tab => (
