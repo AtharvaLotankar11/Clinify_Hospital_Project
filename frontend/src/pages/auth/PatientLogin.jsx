@@ -79,11 +79,13 @@ export default function PatientLogin() {
                     <div className="relative z-10 text-center space-y-8">
                         {/* Logo */}
                         <div className="inline-flex items-center justify-center w-40 h-40 bg-white rounded-3xl shadow-xl transform hover:scale-110 transition-transform duration-300 p-4">
-                            <img
-                                src="/clinify-logo.png"
-                                alt="CLINIFY Logo"
-                                className="w-full h-full object-contain"
-                            />
+                            <div className="w-full h-full gradient-medical-primary rounded-2xl flex items-center justify-center p-3 shadow-lg">
+                                <img
+                                    src="/clinify-logo.png"
+                                    alt="CLINIFY Logo"
+                                    className="w-full h-full object-contain brightness-0 invert"
+                                />
+                            </div>
                         </div>
 
                         <h1 className="text-3xl font-bold">Patient Portal</h1>
