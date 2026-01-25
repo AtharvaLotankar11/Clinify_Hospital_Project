@@ -317,6 +317,30 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
+                        {/* Revenue Breakdown by Department */}
+                        <div className="mt-6 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                            <h3 className="text-base font-bold text-gray-900 mb-4">Revenue Breakdown by Department</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                                {[
+                                    { key: 'consultation', label: 'Consultation', color: 'bg-blue-50 text-blue-700' },
+                                    { key: 'radiology', label: 'Radiology', color: 'bg-purple-50 text-purple-700' },
+                                    { key: 'labs', label: 'Laboratory', color: 'bg-cyan-50 text-cyan-700' },
+                                    { key: 'surgery', label: 'Surgery', color: 'bg-red-50 text-red-700' },
+                                    { key: 'pharmacy', label: 'Pharmacy', color: 'bg-emerald-50 text-emerald-700' },
+                                    { key: 'beds', label: 'Bed Charges', color: 'bg-orange-50 text-orange-700' },
+                                    { key: 'consumables', label: 'Consumables', color: 'bg-gray-50 text-gray-700' },
+                                ].map((item) => (
+                                    <div key={item.key} className={`p-3 rounded-lg border border-opacity-50 ${item.color.replace('text', 'border')}`}>
+                                        <p className={`text-[10px] font-bold uppercase tracking-wider opacity-70 mb-1`}>{item.label}</p>
+                                        <p className={`text-lg font-bold ${item.color.split(' ')[1]}`}>
+                                            ₹{((revenueData.breakdown?.[item.key] || 0) / 1000).toFixed(1)}K
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+
                         {/* 🛏️ BED OCCUPANCY */}
                         <div>
                             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -401,7 +425,7 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 </main>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
