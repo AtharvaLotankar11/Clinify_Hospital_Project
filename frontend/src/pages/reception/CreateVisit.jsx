@@ -636,7 +636,7 @@ export default function CreateVisit() {
                                         <button
                                             type="submit"
                                             disabled={loading || !selectedPatient}
-                                            className="btn-medical-primary flex items-center gap-2"
+                                            className="px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[10px] font-bold rounded-xl shadow-md hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg transition-all uppercase tracking-widest disabled:opacity-50 flex items-center gap-2"
                                         >
                                             {loading ? 'Saving...' : (selectedVisitId ? 'Update Visit' : 'Create Visit')}
                                         </button>

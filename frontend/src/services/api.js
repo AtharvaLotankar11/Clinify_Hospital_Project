@@ -64,6 +64,7 @@ export const patientAPI = {
     create: (data) => api.post('/patients/', data),
     update: (id, data) => api.put(`/patients/${id}/`, data),
     delete: (id) => api.delete(`/patients/${id}/`),
+    exportEHR: (id) => api.get(`/patients/${id}/export-ehr/`, { responseType: 'blob' }),
 };
 
 // Visit endpoints

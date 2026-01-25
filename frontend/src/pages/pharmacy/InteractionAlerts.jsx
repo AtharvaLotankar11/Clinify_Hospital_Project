@@ -254,7 +254,7 @@ export default function InteractionAlerts() {
                                         />
                                         <button
                                             type="submit"
-                                            className="btn-medical-secondary"
+                                            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all shadow-sm"
                                         >
                                             Add
                                         </button>

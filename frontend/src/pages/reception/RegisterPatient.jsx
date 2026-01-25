@@ -622,7 +622,7 @@ export default function RegisterPatient() {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="btn-medical-primary flex items-center gap-2"
+                                        className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[10px] font-bold rounded-xl shadow-md hover:from-emerald-600 hover:to-teal-700 hover:shadow-lg transition-all uppercase tracking-widest disabled:opacity-50 flex items-center gap-2"
                                     >
                                         {loading ? (
                                             <>
@@ -633,7 +633,10 @@ export default function RegisterPatient() {
                                                 {selectedPatientId ? 'Updating...' : 'Registering...'}
                                             </>
                                         ) : (
-                                            selectedPatientId ? 'Update Patient' : 'Register Patient'
+                                            <>
+                                                {selectedPatientId ? 'Update Patient' : 'Register Patient'}
+                                                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                            </>
                                         )}
                                     </button>
                                 </div>
