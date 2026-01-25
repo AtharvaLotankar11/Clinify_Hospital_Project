@@ -315,7 +315,6 @@ Rules:
 Fix the grammar, spelling, and punctuation of the following clinical note.
 Format it nicely (e.g., bullet points if multiple items are listed, clear paragraphs).
 Do NOT change the medical meaning or facts.
-IMPORTANT: Maintain the original language of the text. Do NOT translate it. If the text is in Hindi, keep it in Hindi. If it is in Marathi, keep it in Marathi.
 Do NOT add any introductory or concluding conversational text (like 'Here is the fixed text'). Just output the cleaned final text.
 
 Text to fix:
@@ -433,63 +432,4 @@ Output JSON ONLY:
         except Exception as e:
             logger.error(f"Gemini Triage Error: {e}")
             raise Exception(f"AI Triage Failed: {str(e)}")
-
-    @staticmethod
-    def translate_text(text, target_lang='English'):
-        """
-        Translate clinical text to English (or other target).
-        """
-        if not text:
-            raise ValueError("No text provided.")
-
-        from dotenv import load_dotenv
-        load_dotenv(override=True)
-        
-        api_key = GeminiService.get_api_key()
-        try:
-            client = genai.Client(api_key=api_key)
-            
-            prompt = f"""You are a medical translator.
-            
-Translate the following medical/clinical text into professional English.
-Preserve all medical terminology accuracy.
-Output ONLY the translated text. Do not add conversational filler.
-
-Text to translate:
-{text}
-"""
-            
-            models_to_try = [
-                "gemini-2.0-flash",
-                "gemini-flash-latest",
-                "gemini-pro-latest",
-                "gemini-exp-1206",
-                "models/gemini-2.0-flash",
-                "models/gemini-flash-latest"
-            ]
-            
-            response = None
-            errors = []
-            for model_name in models_to_try:
-                try:
-                    logger.info(f"Translate: Attempting {model_name}")
-                    response = client.models.generate_content(
-                        model=model_name,
-                        contents=prompt
-                    )
-                    break
-                except Exception as e:
-                    logger.warning(f"Model {model_name} failed: {e}")
-                    errors.append(f"{model_name}: {str(e)}")
-                    continue
-            
-            if not response:
-                error_summary = "; ".join(errors)
-                raise Exception(f"Gemini API call failed: {error_summary}")
-
-            return response.text.strip()
-
-        except Exception as e:
-            logger.error(f"Gemini API Error in translate_text: {e}")
-            raise Exception(f"AI Translation Failed: {str(e)}")
 
