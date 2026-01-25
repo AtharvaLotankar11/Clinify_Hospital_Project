@@ -1037,28 +1037,48 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                                         {orderFormInfo.order_type === 'LAB' && (
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-1">Test Name</label>
-                                                <input
-                                                    type="text"
+                                                <select
                                                     required
-                                                    placeholder="e.g. CBC, Liver Function Test"
                                                     value={orderFormInfo.test_name}
                                                     onChange={(e) => setOrderFormInfo({ ...orderFormInfo, test_name: e.target.value })}
-                                                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                                                />
+                                                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 bg-white"
+                                                >
+                                                    <option value="">Select Lab Test</option>
+                                                    <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                                                    <option value="Hemoglobin (Hb)">Hemoglobin (Hb)</option>
+                                                    <option value="Random Blood Sugar (RBS)">Random Blood Sugar (RBS)</option>
+                                                    <option value="HbA1c">HbA1c</option>
+                                                    <option value="Serum Creatinine">Serum Creatinine</option>
+                                                    <option value="Blood Urea">Blood Urea</option>
+                                                    <option value="Liver Function Test (LFT)">Liver Function Test (LFT)</option>
+                                                    <option value="C-Reactive Protein (CRP)">C-Reactive Protein (CRP)</option>
+                                                    <option value="Thyroid Stimulating Hormone (TSH)">Thyroid Stimulating Hormone (TSH)</option>
+                                                    <option value="Urine Routine Examination">Urine Routine Examination</option>
+                                                </select>
                                             </div>
                                         )}
 
                                         {orderFormInfo.order_type === 'RADIOLOGY' && (
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-1">Scan Type</label>
-                                                <input
-                                                    type="text"
+                                                <select
                                                     required
-                                                    placeholder="e.g. X-Ray Chest, MRI Brain"
                                                     value={orderFormInfo.scan_type}
                                                     onChange={(e) => setOrderFormInfo({ ...orderFormInfo, scan_type: e.target.value })}
-                                                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                                                />
+                                                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 bg-white"
+                                                >
+                                                    <option value="">Select Radiology Scan</option>
+                                                    <option value="X-Ray Chest">X-Ray Chest</option>
+                                                    <option value="X-Ray Abdomen">X-Ray Abdomen</option>
+                                                    <option value="Ultrasound Abdomen (USG)">Ultrasound Abdomen (USG)</option>
+                                                    <option value="CT Scan Brain">CT Scan Brain</option>
+                                                    <option value="CT Scan Abdomen">CT Scan Abdomen</option>
+                                                    <option value="MRI Brain">MRI Brain</option>
+                                                    <option value="MRI Spine">MRI Spine</option>
+                                                    <option value="ECG">ECG</option>
+                                                    <option value="2D Echo">2D Echo</option>
+                                                    <option value="Doppler Ultrasound">Doppler Ultrasound</option>
+                                                </select>
                                             </div>
                                         )}
 
