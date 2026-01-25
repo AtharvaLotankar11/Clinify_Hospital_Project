@@ -71,7 +71,7 @@ export default function PatientLogin() {
             <div className="relative w-full max-w-5xl grid md:grid-cols-2 gap-0 bg-white rounded-3xl shadow-2xl overflow-hidden animate-fadeIn">
 
                 {/* Left Side - Branding */}
-                <div className="relative gradient-medical-secondary p-12 flex flex-col justify-center items-center text-white overflow-hidden">
+                <div className="relative gradient-medical-primary p-12 flex flex-col justify-center items-center text-white overflow-hidden">
                     {/* Decorative Elements */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
@@ -96,7 +96,7 @@ export default function PatientLogin() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
-                                <span className="text-green-50">Access Your EMR Anytime</span>
+                                <span className="text-blue-50">Access Your EMR Anytime</span>
                             </div>
                             <div className="flex items-center gap-3 text-left">
                                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -104,7 +104,7 @@ export default function PatientLogin() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                     </svg>
                                 </div>
-                                <span className="text-green-50">Secure OTP Login</span>
+                                <span className="text-blue-50">Secure OTP Login</span>
                             </div>
                             <div className="flex items-center gap-3 text-left">
                                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -112,7 +112,7 @@ export default function PatientLogin() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
                                 </div>
-                                <span className="text-green-50">Real-time Lab Reports</span>
+                                <span className="text-blue-50">Real-time Lab Reports</span>
                             </div>
                         </div>
                     </div>
@@ -144,7 +144,7 @@ export default function PatientLogin() {
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 outline-none transition-all duration-200 input-medical"
+                                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 input-medical"
                                         placeholder="Enter your registered email"
                                     />
                                 </div>
@@ -158,7 +158,7 @@ export default function PatientLogin() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full py-4 px-6 btn-medical-secondary font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full py-4 px-6 btn-medical-primary font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {loading ? 'Sending OTP...' : 'Send OTP'}
                                 </button>
@@ -167,7 +167,7 @@ export default function PatientLogin() {
                                     <button
                                         type="button"
                                         onClick={() => navigate('/login')}
-                                        className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                                        className="text-sm font-medium text-blue-600 hover:text-blue-700"
                                     >
                                         Back to Staff Login
                                     </button>
@@ -186,14 +186,14 @@ export default function PatientLogin() {
                                         maxLength="6"
                                         value={otp}
                                         onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 tracking-[1em] text-center text-2xl font-bold focus:border-green-500 focus:ring-4 focus:ring-green-500/10 outline-none transition-all duration-200 input-medical"
+                                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 tracking-[1em] text-center text-2xl font-bold focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 input-medical"
                                         placeholder="------"
                                     />
                                 </div>
 
                                 {message && (
-                                    <div className="p-4 bg-green-50 border-l-4 border-green-500 rounded-lg animate-slideIn">
-                                        <p className="text-green-700 text-sm">{message}</p>
+                                    <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg animate-slideIn">
+                                        <p className="text-blue-700 text-sm">{message}</p>
                                     </div>
                                 )}
 
@@ -206,7 +206,7 @@ export default function PatientLogin() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full py-4 px-6 btn-medical-secondary font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full py-4 px-6 btn-medical-primary font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {loading ? 'Verifying...' : 'Verify & Login'}
                                 </button>
@@ -215,14 +215,14 @@ export default function PatientLogin() {
                                     <button
                                         type="button"
                                         onClick={() => setStep('email')}
-                                        className="text-sm font-medium text-gray-500 hover:text-green-600"
+                                        className="text-sm font-medium text-gray-500 hover:text-blue-600"
                                     >
                                         Change Email
                                     </button>
                                     <button
                                         type="button"
                                         onClick={handleSendOtp}
-                                        className="text-sm font-medium text-green-600 hover:text-green-700"
+                                        className="text-sm font-medium text-blue-600 hover:text-blue-700"
                                     >
                                         Resend OTP
                                     </button>
