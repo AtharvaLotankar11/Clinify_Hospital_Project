@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LabSummaryView, SummarizeReportView, SummarizeClinicalNotesView, CheckInteractionsView, FixGrammarView
+from .views import LabSummaryView, SummarizeReportView, SummarizeClinicalNotesView, CheckInteractionsView, FixGrammarView, TranslateView
 
 urlpatterns = [
     path('lab-summary/', LabSummaryView.as_view(), name='lab-summary'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('summarize-clinical-notes/', SummarizeClinicalNotesView.as_view(), name='summarize-clinical-notes'),
     path('check-interactions/', CheckInteractionsView.as_view(), name='check-interactions'),
     path('fix-grammar/', FixGrammarView.as_view(), name='fix-grammar'),
+    path('translate/', TranslateView.as_view(), name='translate'),
 ]

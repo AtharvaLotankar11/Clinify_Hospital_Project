@@ -261,3 +261,40 @@ class FixGrammarView(APIView):
 
         except Exception as e:
              return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class TranslateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        text = request.data.get('text')
+        target_lang = request.data.get('target_lang', 'English')
+
+        if not text:
+             return Response({"error": "text is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Log
+            log_entry = AIRequestLog.objects.create(
+                user=request.user,
+                filename="TranslationRequest",
+                status='processing'
+            )
+
+            try:
+                translated_text = GeminiService.translate_text(text, target_lang)
+                
+                log_entry.status = 'success'
+                log_entry.summary_generated = translated_text
+                log_entry.save()
+                
+                return Response({"translated_text": translated_text}, status=status.HTTP_200_OK)
+
+            except Exception as e:
+                logger.error(f"Error translating text: {e}")
+                log_entry.status = 'failed'
+                log_entry.error_message = str(e)
+                log_entry.save()
+                return Response({"error": f"AI Translation Failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except Exception as e:
+             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -273,6 +273,7 @@ export const aiAPI = {
     checkInteractions: (patientId, medicines) => api.post('/ai/check-interactions/', { patient_id: patientId, medicines }),
     checkInteractions: (patientId, medicines) => api.post('/ai/check-interactions/', { patient_id: patientId, medicines }),
     fixGrammar: (text) => api.post('/ai/fix-grammar/', { text }),
+    translate: (text, targetLang) => api.post('/ai/translate/', { text, target_lang: targetLang }),
 };
 
 // Admin endpoints
