@@ -12,8 +12,8 @@ from django.core.cache import cache
 from django.conf import settings
 import random
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation
-from .serializers import AllergySerializer, BillSerializer, BillItemSerializer, InsuranceClaimSerializer, PatientSerializer, StaffSerializer, StaffRegistrationSerializer, VisitSerializer, AdmissionSerializer, BedSerializer, VitalSerializer, ClinicalNoteSerializer,OrderSerializer, LabTestSerializer, RadiologyTestSerializer, MedicineSerializer, MedicineBatchSerializer, StockTransactionSerializer, PrescriptionSerializer, PrescriptionDispenseSerializer, OperationSerializer, CreateOrderSerializer
+from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation, Notification
+from .serializers import AllergySerializer, BillSerializer, BillItemSerializer, InsuranceClaimSerializer, PatientSerializer, StaffSerializer, StaffRegistrationSerializer, VisitSerializer, AdmissionSerializer, BedSerializer, VitalSerializer, ClinicalNoteSerializer,OrderSerializer, LabTestSerializer, RadiologyTestSerializer, MedicineSerializer, MedicineBatchSerializer, StockTransactionSerializer, PrescriptionSerializer, PrescriptionDispenseSerializer, OperationSerializer, CreateOrderSerializer, NotificationSerializer
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from django.http import HttpResponse
@@ -135,11 +135,14 @@ class AdminDashboardStatsView(APIView):
             service_type__in=['OPERATION', 'LAB_TEST', 'RADIOLOGY_TEST', 'OT_CONSUMABLE']
         ).aggregate(Sum('amount'))['amount__sum'] or 0
 
-        # 2. Patient Metrics (Mocked in frontend, let's provide real data)
-        total_patients = Patient.objects.count()
-        opd_patients = Visit.objects.filter(visit_type='OPD').values('patient').distinct().count()
-        ipd_patients = Visit.objects.filter(visit_type='IPD').values('patient').distinct().count()
-        emergency_patients = Visit.objects.filter(visit_type='EMERGENCY').values('patient').distinct().count()
+        # 2. Patient Metrics (Visits/Footfall for consistency)
+        # Using Visits count ensures Total = OPD + IPD + Emergency
+        opd_patients = Visit.objects.filter(visit_type='OPD').count()
+        ipd_patients = Visit.objects.filter(visit_type='IPD').count()
+        emergency_patients = Visit.objects.filter(visit_type='EMERGENCY').count()
+        
+        # Total Patients here represents Total Footfall/Visits to match the breakdown sum
+        total_patients = opd_patients + ipd_patients + emergency_patients
         
         daily_inflow = Visit.objects.filter(created_at__date=today).count()
         
@@ -351,6 +354,41 @@ class VisitViewSet(ModelViewSet):
         ).exclude(status='CANCELLED').values_list('slot_booked', flat=True)
         
         return Response(list(booked))
+
+    def perform_update(self, serializer):
+        # Notify if rescheduling
+        instance = self.get_object()
+        old_date = instance.visit_date
+        old_slot = instance.slot_booked
+        
+        # Save updates
+        visit = serializer.save()
+        
+        # Check changes
+        new_date = visit.visit_date
+        new_slot = visit.slot_booked
+        
+        if old_date != new_date or old_slot != new_slot:
+            # Create Notification for Reception
+            msg = f"Doctor {visit.doctor.name} rescheduled appointment for {visit.patient.name} from {old_date} {old_slot} to {new_date} {new_slot}."
+            
+            # Find all receptionists
+            receptionists = Staff.objects.filter(role__iexact='RECEPTION')
+            for r in receptionists:
+                Notification.objects.create(
+                    recipient=r,
+                    title="Appointment Rescheduled",
+                    message=msg,
+                    type='RESCHEDULE'
+                )
+            
+            # Also notify Patient (if linked)
+            Notification.objects.create(
+                patient=visit.patient,
+                title="Appointment Rescheduled",
+                message=f"Your appointment with Dr. {visit.doctor.name} has been rescheduled to {new_date} at {new_slot}.",
+                type='RESCHEDULE'
+            )
 
 class AdmissionViewSet(ModelViewSet):
     queryset = Admission.objects.all()
@@ -1206,5 +1244,41 @@ class ExportPatientEHRView(APIView):
             
         except Patient.DoesNotExist:
             return Response({'error': 'Patient not found'}, status=404)
-        except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+class NotificationViewSet(ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Notification.objects.all()
+        
+        # Filter by recipient (Staff) or Patient
+        try:
+            staff = Staff.objects.get(user_email=user.username)
+            queryset = queryset.filter(recipient=staff)
+        except Staff.DoesNotExist:
+             try:
+                 patient = Patient.objects.filter(email=user.email).first()
+                 if patient:
+                    queryset = queryset.filter(patient=patient)
+                 else:
+                    return Notification.objects.none()
+             except Exception:
+                 return Notification.objects.none()
+                 
+        return queryset
+
+    @action(detail=True, methods=['post'])
+    def mark_read(self, request, pk=None):
+        notification = self.get_object()
+        notification.is_read = True
+        notification.save()
+        return Response({'status': 'marked as read'})
+    
+    @action(detail=False, methods=['post'])
+    def mark_all_read(self, request):
+        self.get_queryset().update(is_read=True)
+        return Response({'status': 'all marked as read'})

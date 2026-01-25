@@ -6,12 +6,14 @@ from .views import (
     VitalViewSet, ClinicalNoteViewSet, OrderViewSet, LabTestViewSet, RadiologyTestViewSet, 
     MedicineViewSet, MedicineBatchViewSet, StockTransactionViewSet, PrescriptionViewSet, 
     PrescriptionDispenseViewSet, OperationViewSet, DoctorPatientProfileView, PatientAuthView,
-    AdminDashboardStatsView, AutoBookVisitView, ExportPatientEHRView
+    PrescriptionDispenseViewSet, OperationViewSet, DoctorPatientProfileView, PatientAuthView,
+    AdminDashboardStatsView, AutoBookVisitView, ExportPatientEHRView, NotificationViewSet
 )
 from .search_views import global_search
 
 router = DefaultRouter()
 router.register('patients', PatientViewSet)
+router.register('notifications', NotificationViewSet)
 router.register('allergies', AllergyViewSet)
 router.register('staff', StaffViewSet)
 router.register('visits', VisitViewSet, basename='visit')

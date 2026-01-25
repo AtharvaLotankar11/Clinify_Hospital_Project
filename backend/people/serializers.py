@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation
+from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation, Notification
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.utils.dateparse import parse_datetime
 from datetime import timedelta
@@ -442,5 +442,13 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             )
         
         return order
+
+class NotificationSerializer(serializers.ModelSerializer):
+    recipient_name = serializers.CharField(source='recipient.name', read_only=True)
+    patient_name = serializers.CharField(source='patient.name', read_only=True)
+
+    class Meta:
+        model = Notification
+        fields = '__all__'
 
 

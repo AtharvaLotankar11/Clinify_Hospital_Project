@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { searchAPI } from '../services/api';
+import NotificationBell from './NotificationBell';
 
 export default function Header({ userName, userRole }) {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -63,8 +64,7 @@ export default function Header({ userName, userRole }) {
 
         // Navigate based on result type
         if (type === 'patient') {
-            // For now, just clear - you can add navigation logic
-            console.log('Patient clicked:', item);
+            navigate(`/doctor/patients/${item.id}`);
         } else if (type === 'visit') {
             console.log('Visit clicked:', item);
         } else if (type === 'staff') {
@@ -152,8 +152,8 @@ export default function Header({ userName, userRole }) {
                                                                 </p>
                                                             </div>
                                                             <span className={`text-xs px-2 py-1 rounded-full ${visit.status === 'ACTIVE' ? 'bg-blue-100 text-blue-700' :
-                                                                    visit.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
-                                                                        'bg-gray-100 text-gray-700'
+                                                                visit.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
+                                                                    'bg-gray-100 text-gray-700'
                                                                 }`}>
                                                                 {visit.status}
                                                             </span>
@@ -194,6 +194,9 @@ export default function Header({ userName, userRole }) {
 
                     {/* Right Section */}
                     <div className="flex items-center gap-4 ml-6">
+                        {/* Notification Bell */}
+                        <NotificationBell />
+
                         {/* Profile Menu */}
                         <div className="relative">
                             <button

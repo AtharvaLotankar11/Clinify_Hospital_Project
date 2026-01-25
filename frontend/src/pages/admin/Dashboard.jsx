@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                                 <div className="card-medical p-6">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">Total Patients</p>
+                                            <p className="text-xs font-medium text-gray-500 uppercase mb-2">Total Visits</p>
                                             <p className="text-3xl font-bold text-gray-900">{hospitalMetrics.totalPatients}</p>
                                             <p className="text-xs text-blue-600 font-medium mt-1">↑ {hospitalMetrics.dailyInflow} today</p>
                                         </div>

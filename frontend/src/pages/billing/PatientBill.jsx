@@ -245,10 +245,59 @@ export default function PatientBill() {
                                                 ₹{billDetails.total.toLocaleString()}
                                             </span>
                                         </div>
-                                        <div className="text-right mt-2">
-                                            <span className={`inline-block px-2 py-1 rounded text-xs font-bold ${statusColors[selectedBill.status]}`}>
-                                                Status: {selectedBill.status}
-                                            </span>
+                                        <div className="mt-3 pt-3 border-t border-gray-100">
+                                            <label className="block text-xs font-semibold text-gray-600 mb-1">Update Status</label>
+                                            <div className="flex flex-col gap-2">
+                                                <select
+                                                    value={selectedBill.status}
+                                                    onChange={(e) => {
+                                                        const newStatus = e.target.value;
+                                                        // Update local state immediately for UI, but don't save yet
+                                                        setSelectedBill(prev => ({
+                                                            ...prev,
+                                                            status: newStatus,
+                                                            // Reset paid amount if moving away from partial (optional, or keep generic)
+                                                        }));
+                                                    }}
+                                                    className="w-full text-sm p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                                >
+                                                    {statusOptions.map(opt => (
+                                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                                    ))}
+                                                </select>
+
+                                                {/* Input for Amount if Partial */}
+                                                {selectedBill.status === 'PARTIALLY_PAID' && (
+                                                    <div>
+                                                        <label className="block text-xs text-gray-500 mb-1">Amount Paid (₹)</label>
+                                                        <input
+                                                            type="number"
+                                                            value={selectedBill.paid_amount || ''}
+                                                            onChange={(e) => setSelectedBill(prev => ({ ...prev, paid_amount: parseFloat(e.target.value) }))}
+                                                            className="w-full text-sm p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
+                                                            placeholder="Enter amount paid"
+                                                        />
+                                                        <p className="text-xs text-amber-600 mt-1 font-semibold">
+                                                            Due: ₹{(selectedBill.total_amount - (selectedBill.paid_amount || 0)).toLocaleString()}
+                                                        </p>
+                                                    </div>
+                                                )}
+
+                                                <button
+                                                    onClick={() => {
+                                                        billingAPI.updateBill(selectedBill.id, {
+                                                            status: selectedBill.status,
+                                                            paid_amount: selectedBill.status === 'PARTIALLY_PAID' ? selectedBill.paid_amount : undefined
+                                                        });
+                                                        // Update list view
+                                                        setBills(prev => prev.map(b => b.id === selectedBill.id ? { ...b, status: selectedBill.status } : b));
+                                                        alert("Status Updated!");
+                                                    }}
+                                                    className="mt-1 w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+                                                >
+                                                    Update Status
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

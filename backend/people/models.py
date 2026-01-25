@@ -786,6 +786,7 @@ class Bill(models.Model):
     )
 
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    paid_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     insurance_applied = models.BooleanField(default=False)
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="DRAFT")
@@ -863,3 +864,25 @@ class InsuranceClaim(models.Model):
 
     def __str__(self):
         return f"Claim {self.id} - {self.provider_name}"
+
+class Notification(models.Model):
+    TYPE_CHOICES = [
+        ('RESCHEDULE', 'Reschedule'),
+        ('ALERT', 'Alert'),
+        ('INFO', 'Info'),
+    ]
+
+    recipient = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="notifications", null=True, blank=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="notifications", null=True, blank=True)
+    
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='INFO')
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.type}: {self.title}"
