@@ -151,6 +151,31 @@ class AdminDashboardStatsView(APIView):
         general_total = Bed.objects.filter(bed_type='GENERAL').count()
         general_occupied = Bed.objects.filter(bed_type='GENERAL', status='OCCUPIED').count()
 
+        # 4. Analytics Graphs (Last 7 Days)
+        revenue_trend = []
+        patient_inflow_trend = []
+        
+        for i in range(6, -1, -1):
+            date_obj = today - timezone.timedelta(days=i)
+            day_str = date_obj.strftime('%a')
+            
+            # Revenue
+            opd_rev = Bill.objects.filter(status='PAID', visit__visit_type='OPD', created_at__date=date_obj).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+            ipd_rev = Bill.objects.filter(status='PAID', visit__visit_type='IPD', created_at__date=date_obj).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+            
+            revenue_trend.append({
+                'name': day_str,
+                'OPD': opd_rev,
+                'IPD': ipd_rev
+            })
+            
+            # Inflow
+            inflow = Visit.objects.filter(created_at__date=date_obj).count()
+            patient_inflow_trend.append({
+                'name': day_str,
+                'patients': inflow
+            })
+
         return Response({
             'revenue': {
                 'totalRevenue': total_revenue,
@@ -166,7 +191,6 @@ class AdminDashboardStatsView(APIView):
                 'ipdPatients': ipd_patients,
                 'emergencyPatients': emergency_patients,
                 'dailyInflow': daily_inflow,
-                # 'weeklyInflow': ... expensive query, skip or implement later
             },
             'beds': {
                 'totalBeds': total_beds,
@@ -174,6 +198,10 @@ class AdminDashboardStatsView(APIView):
                 'availableBeds': available_beds,
                 'icuBeds': {'total': icu_total, 'occupied': icu_occupied},
                 'generalBeds': {'total': general_total, 'occupied': general_occupied}
+            },
+            'analytics': {
+                'revenueTrend': revenue_trend,
+                'patientInflow': patient_inflow_trend
             }
         })
 

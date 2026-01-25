@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 import { staffAPI, adminAPI } from '../../services/api';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
@@ -46,6 +47,10 @@ export default function AdminDashboard() {
 
     const [departmentWorkload, setDepartmentWorkload] = useState([]);
     const [recentActivity, setRecentActivity] = useState([]);
+    const [analyticsData, setAnalyticsData] = useState({
+        revenueTrend: [],
+        patientInflow: []
+    });
     const [loading, setLoading] = useState(true);
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -117,6 +122,13 @@ export default function AdminDashboard() {
                     availableBeds: stats.beds.availableBeds,
                     icuBeds: stats.beds.icuBeds,
                     generalBeds: stats.beds.generalBeds
+                });
+            }
+
+            if (stats.analytics) {
+                setAnalyticsData({
+                    revenueTrend: stats.analytics.revenueTrend || [],
+                    patientInflow: stats.analytics.patientInflow || []
                 });
             }
 
@@ -312,6 +324,60 @@ export default function AdminDashboard() {
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 📊 ANALYTICS & TRENDS */}
+                        <div>
+                            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <span className="w-1 h-6 bg-purple-600 rounded"></span>
+                                Analytics & Trends
+                            </h2>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                {/* Revenue Trend Chart */}
+                                <div className="card-medical p-6">
+                                    <h3 className="text-sm font-bold text-gray-700 mb-4">Revenue Trends (Last 7 Days)</h3>
+                                    <div className="h-64">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart data={analyticsData.revenueTrend}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dy={10} />
+                                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} tickFormatter={(value) => `₹${value / 1000}k`} />
+                                                <Tooltip
+                                                    cursor={{ fill: '#F3F4F6' }}
+                                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                                                />
+                                                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
+                                                <Bar dataKey="OPD" stackId="a" fill="#3B82F6" radius={[0, 0, 4, 4]} barSize={20} />
+                                                <Bar dataKey="IPD" stackId="a" fill="#8B5CF6" radius={[4, 4, 0, 0]} barSize={20} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+
+                                {/* Patient Inflow Chart */}
+                                <div className="card-medical p-6">
+                                    <h3 className="text-sm font-bold text-gray-700 mb-4">Patient Inflow (Last 7 Days)</h3>
+                                    <div className="h-64">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <AreaChart data={analyticsData.patientInflow}>
+                                                <defs>
+                                                    <linearGradient id="colorPatients" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.3} />
+                                                        <stop offset="95%" stopColor="#F59E0B" stopOpacity={0} />
+                                                    </linearGradient>
+                                                </defs>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dy={10} />
+                                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} />
+                                                <Tooltip
+                                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                                                />
+                                                <Area type="monotone" dataKey="patients" stroke="#F59E0B" strokeWidth={3} fillOpacity={1} fill="url(#colorPatients)" />
+                                            </AreaChart>
+                                        </ResponsiveContainer>
                                     </div>
                                 </div>
                             </div>
