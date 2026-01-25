@@ -83,7 +83,7 @@ export default function PatientProfile() {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50/30">
             {/* ... Sidebar and Header ... */}
             <Sidebar role="doctor" />
 
@@ -143,10 +143,10 @@ export default function PatientProfile() {
                                                     filteredPatients.map(p => (
                                                         <tr key={p.id} className="hover:bg-gray-50 transition-colors group">
                                                             <td
-                                                                className="p-5 font-semibold text-gray-900 flex items-center gap-3 cursor-pointer hover:text-emerald-600 transition-colors"
+                                                                className="p-5 font-semibold text-gray-900 flex items-center gap-3 cursor-pointer hover:text-blue-600 transition-colors"
                                                                 onClick={() => navigate(`/doctor/patients/${p.patientId}`)}
                                                             >
-                                                                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                                                                <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
                                                                     {p.name.charAt(0)}
                                                                 </div>
                                                                 {p.name}
@@ -177,7 +177,7 @@ export default function PatientProfile() {
                                                                             patientData: p.patientData,
                                                                         });
                                                                     }}
-                                                                    className="px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 text-sm font-medium rounded-lg hover:bg-emerald-100 transition-all shadow-sm"
+                                                                    className="px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 text-sm font-medium rounded-lg hover:bg-blue-100 transition-all shadow-sm"
                                                                 >
                                                                     View Details
                                                                 </button>
@@ -203,13 +203,13 @@ export default function PatientProfile() {
                                 {/* Patient Header */}
                                 <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
                                     <div className="flex items-center gap-8">
-                                        <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white text-3xl font-bold shadow-md">
+                                        <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-3xl font-bold shadow-md">
                                             {patient?.name?.charAt(0) || 'P'}
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex items-center gap-3 mb-2">
                                                 <h1 className="text-2xl font-bold text-gray-900">{patient?.name || 'Patient Name'}</h1>
-                                                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full uppercase tracking-wider">Active Patient</span>
+                                                <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full uppercase tracking-wider">Active Patient</span>
                                             </div>
                                             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                                                 <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export default function PatientProfile() {
                                             <button className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors shadow-sm text-sm">
                                                 Summary
                                             </button>
-                                            <button className="px-5 py-2.5 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm text-sm">
+                                            <button className="px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm text-sm">
                                                 Edit
                                             </button>
                                         </div>
@@ -251,7 +251,7 @@ export default function PatientProfile() {
                                                 key={tab}
                                                 onClick={() => setActiveTab(tab)}
                                                 className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${activeTab === tab
-                                                    ? 'text-emerald-600 border-b-2 border-emerald-600 bg-emerald-50/50'
+                                                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
                                                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                                                     }`}
                                             >
@@ -264,9 +264,9 @@ export default function PatientProfile() {
                                         {activeTab === 'overview' && (
                                             <div className="space-y-6">
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <div className="bg-white border border-emerald-100 rounded-xl p-6 shadow-sm">
-                                                        <p className="text-xs font-bold text-emerald-800 uppercase tracking-widest mb-3">Blood Type</p>
-                                                        <p className="text-3xl font-bold text-emerald-600">{patient?.bloodType || 'A+'}</p>
+                                                    <div className="bg-white border border-blue-100 rounded-xl p-6 shadow-sm">
+                                                        <p className="text-xs font-bold text-blue-800 uppercase tracking-widest mb-3">Blood Type</p>
+                                                        <p className="text-3xl font-bold text-blue-600">{patient?.bloodType || 'A+'}</p>
                                                     </div>
                                                     <div className="bg-white border border-amber-100 rounded-xl p-6 shadow-sm">
                                                         <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mb-3">Allergies</p>
@@ -280,7 +280,7 @@ export default function PatientProfile() {
 
                                                 <div className="bg-white border border-gray-100 rounded-xl p-6">
                                                     <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                                        <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                         </svg>
                                                         Clinical Background
@@ -295,13 +295,13 @@ export default function PatientProfile() {
                                         {activeTab === 'history' && (
                                             <div className="space-y-3">
                                                 {patient?.visitHistory?.map((visit, index) => (
-                                                    <div key={index} className="border border-gray-100 rounded-lg p-5 hover:border-emerald-200 transition-colors">
+                                                    <div key={index} className="border border-gray-100 rounded-lg p-5 hover:border-blue-200 transition-colors">
                                                         <div className="flex items-center justify-between">
                                                             <div>
                                                                 <p className="text-sm font-bold text-gray-800">{visit.date}</p>
                                                                 <p className="text-xs text-gray-500 mt-1">{visit.diagnosis}</p>
                                                             </div>
-                                                            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                                                            <span className="px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-full uppercase tracking-wider">
                                                                 {visit.status}
                                                             </span>
                                                         </div>
@@ -334,13 +334,13 @@ export default function PatientProfile() {
                                                         value={consultationNote}
                                                         onChange={(e) => setConsultationNote(e.target.value)}
                                                         rows="6"
-                                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 outline-none transition-all text-sm resize-none"
+                                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 outline-none transition-all text-sm resize-none"
                                                         placeholder="Enter diagnosis and treatment plan..."
                                                     />
                                                 </div>
                                                 <button
                                                     onClick={handleSaveConsultation}
-                                                    className="px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 transition-all text-sm"
+                                                    className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all text-sm"
                                                 >
                                                     Save Consultation
                                                 </button>

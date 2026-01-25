@@ -334,7 +334,7 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
         <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
             <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
                 {/* Modal Header */}
-                <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
                     <div className="flex items-center justify-between">
                         <div className='flex gap-4 items-center'>
                             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold">
@@ -342,7 +342,7 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                             </div>
                             <div>
                                 <h2 className="text-2xl font-bold">{selectedPatient.name}</h2>
-                                <p className="text-emerald-100 mt-1">
+                                <p className="text-blue-100 mt-1">
                                     UHID: {selectedPatient.patientData?.uhid || selectedPatient.patient_uhid || 'N/A'}
                                     {selectedPatient.bed && ` • Bed: ${selectedPatient.bed}`}
                                 </p>
@@ -377,7 +377,7 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
                                     className={`px-4 py-3 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === tab
-                                        ? 'text-emerald-600 border-b-2 border-emerald-600'
+                                        ? 'text-blue-600 border-b-2 border-blue-600'
                                         : 'text-gray-600 hover:text-gray-900'
                                         }`}
                                 >
@@ -487,7 +487,7 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                                                                                 href={test.report_file}
                                                                                 target="_blank"
                                                                                 rel="noopener noreferrer"
-                                                                                className="inline-flex items-center px-3 py-1.5 border border-emerald-200 text-emerald-700 bg-emerald-50 rounded-lg text-xs font-medium hover:bg-emerald-100 transition-colors"
+                                                                                className="inline-flex items-center px-3 py-1.5 border border-blue-200 text-blue-700 bg-blue-50 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
                                                                             >
                                                                                 <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                                                                                 Download
@@ -693,7 +693,7 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                                                 <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
                                                     <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
                                                         <span className="text-sm font-medium text-gray-700">Current Vitals</span>
-                                                        <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-medium">
+                                                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
                                                             Recorded by {vital.recorded_by_name || 'Nurse'}
                                                         </span>
                                                     </div>
