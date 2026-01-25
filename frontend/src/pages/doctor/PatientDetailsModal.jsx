@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { doctorAPI, clinicalNoteAPI, prescriptionAPI, medicineAPI, vitalAPI, aiAPI, operationAPI } from '../../services/api';
+import { doctorAPI, patientAPI, clinicalNoteAPI, prescriptionAPI, medicineAPI, vitalAPI, aiAPI, operationAPI } from '../../services/api';
 import VoiceRecorder from '../../components/VoiceRecorder';
 import { LineChart, Line, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -348,11 +348,40 @@ export default function PatientDetailsModal({ patient: selectedPatient, onClose,
                                 </p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-10 h-10 bg-white rounded-lg flex items-center justify-center transition-all hover:bg-gray-100 hover:scale-110">
-                            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        // Use the correct patient ID - selectedPatient.patient is the FK to Patient model
+                                        const patientId = selectedPatient.patient || selectedPatient.patientData?.id || selectedPatient.id;
+                                        const response = await patientAPI.exportEHR(patientId);
+                                        const blob = new Blob([response.data], { type: 'application/pdf' });
+                                        const url = window.URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = `EHR_${selectedPatient.patientData?.uhid || selectedPatient.patient_uhid}_${new Date().toISOString().split('T')[0]}.pdf`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        window.URL.revokeObjectURL(url);
+                                        document.body.removeChild(a);
+                                    } catch (error) {
+                                        console.error('Export failed:', error);
+                                        alert('Failed to export EHR. Please try again.');
+                                    }
+                                }}
+                                className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg flex items-center gap-2 transition-all"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <span className="text-sm font-medium">Export EHR</span>
+                            </button>
+                            <button onClick={onClose} className="w-10 h-10 bg-white rounded-lg flex items-center justify-center transition-all hover:bg-gray-100 hover:scale-110">
+                                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

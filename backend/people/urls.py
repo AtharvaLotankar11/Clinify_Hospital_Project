@@ -6,8 +6,9 @@ from .views import (
     VitalViewSet, ClinicalNoteViewSet, OrderViewSet, LabTestViewSet, RadiologyTestViewSet, 
     MedicineViewSet, MedicineBatchViewSet, StockTransactionViewSet, PrescriptionViewSet, 
     PrescriptionDispenseViewSet, OperationViewSet, DoctorPatientProfileView, PatientAuthView,
-    AdminDashboardStatsView, AutoBookVisitView
+    AdminDashboardStatsView, AutoBookVisitView, ExportPatientEHRView
 )
+from .search_views import global_search
 
 router = DefaultRouter()
 router.register('patients', PatientViewSet)
@@ -35,6 +36,8 @@ router.register('insurance-claims', InsuranceClaimViewSet)
 from .auth_views import AdminResetPasswordView
 
 urlpatterns = [
+    path('search/', global_search, name='global-search'),
+    path('patients/<int:pk>/export-ehr/', ExportPatientEHRView.as_view(), name='export-patient-ehr'),
     path('doctor/patients/<int:pk>/', DoctorPatientProfileView.as_view(), name='doctor-patient-profile'),
     path('admin-dashboard/stats/', AdminDashboardStatsView.as_view(), name='admin-dashboard-stats'),
     path('admin-reset-password/', AdminResetPasswordView.as_view(), name='admin-reset-password'),

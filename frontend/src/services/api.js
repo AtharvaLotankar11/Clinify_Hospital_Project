@@ -64,6 +64,7 @@ export const patientAPI = {
     create: (data) => api.post('/patients/', data),
     update: (id, data) => api.put(`/patients/${id}/`, data),
     delete: (id) => api.delete(`/patients/${id}/`),
+    exportEHR: (id) => api.get(`/patients/${id}/export-ehr/`, { responseType: 'blob' }),
 };
 
 // Visit endpoints
@@ -279,6 +280,11 @@ export const aiAPI = {
 // Admin endpoints
 export const adminAPI = {
     getDashboardStats: () => api.get('/admin-dashboard/stats/'),
+};
+
+// Search endpoints
+export const searchAPI = {
+    globalSearch: (query) => api.get('/search/', { params: { q: query } }),
 };
 
 export default api;

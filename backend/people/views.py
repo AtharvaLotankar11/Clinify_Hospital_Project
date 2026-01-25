@@ -1041,3 +1041,30 @@ class AutoBookVisitView(APIView):
             'ai_reasoning': f"Analyzed complaint: '{chief_complaint}' -> {doctor_type}. Severity {severity} requires {doctor.get_experience_years_display()}."
         })
 
+
+# EHR Export View
+from django.http import HttpResponse
+from .ehr_pdf import generate_patient_ehr_pdf
+
+class ExportPatientEHRView(APIView):
+    """Export complete patient Electronic Health Record as PDF"""
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request, pk):
+        try:
+            # Generate PDF
+            pdf = generate_patient_ehr_pdf(pk)
+            
+            # Get patient for filename
+            patient = Patient.objects.get(id=pk)
+            filename = f"EHR_{patient.uhid}_{timezone.now().strftime('%Y%m%d')}.pdf"
+            
+            # Return PDF as downloadable file
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+            
+        except Patient.DoesNotExist:
+            return Response({'error': 'Patient not found'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
