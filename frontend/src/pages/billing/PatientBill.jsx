@@ -139,7 +139,7 @@ export default function PatientBill() {
                                                         <select
                                                             value={bill.status}
                                                             onChange={(e) => handleStatusChange(bill.id, e.target.value)}
-                                                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border-0 cursor-pointer focus:ring-2 focus:ring-blue-500 ${statusColors[bill.status] || 'bg-gray-100'}`}
+                                                            className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide border-0 cursor-pointer focus:ring-2 focus:ring-blue-500 transition-all ${statusColors[bill.status] || 'bg-gray-100'}`}
                                                         >
                                                             {statusOptions.map(opt => (
                                                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -170,7 +170,7 @@ export default function PatientBill() {
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         onClick={() => handleViewBill(bill)}
-                                                        className="btn-medical-primary text-xs"
+                                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all shadow-sm text-sm"
                                                     >
                                                         View Details
                                                     </button>
