@@ -298,29 +298,7 @@ export default function UserManagement() {
                             )}
                         </div>
 
-                        {/* Summary Stats */}
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 text-center">
-                                <p className="text-sm text-gray-600 mb-1">Total Users</p>
-                                <p className="text-2xl font-bold text-gray-900">{users.length}</p>
-                            </div>
-                            <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 text-center">
-                                <p className="text-sm text-gray-600 mb-1">Active</p>
-                                <p className="text-2xl font-bold text-green-600">{users.filter(u => u.status === 'active').length}</p>
-                            </div>
-                            <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 text-center">
-                                <p className="text-sm text-gray-600 mb-1">Doctors</p>
-                                <p className="text-2xl font-bold text-emerald-600">{users.filter(u => u.role === 'doctor').length}</p>
-                            </div>
-                            <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 text-center">
-                                <p className="text-sm text-gray-600 mb-1">Nurses</p>
-                                <p className="text-2xl font-bold text-teal-600">{users.filter(u => u.role === 'nurse').length}</p>
-                            </div>
-                            <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 text-center">
-                                <p className="text-sm text-gray-600 mb-1">Staff</p>
-                                <p className="text-2xl font-bold text-blue-600">{users.filter(u => ['lab', 'billing', 'reception'].includes(u.role)).length}</p>
-                            </div>
-                        </div>
+
                     </div>
                 </main>
             </div>
