@@ -24,3 +24,6 @@ PyPDF2==3.0.1
 
 # Additional utilities (optional but recommended)
 pillow==11.0.0
+
+# PDF Generation
+reportlab==4.0.9

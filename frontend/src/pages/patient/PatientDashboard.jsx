@@ -152,6 +152,24 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
         }
     };
 
+    const handleDownloadBill = async (billId) => {
+        try {
+            const response = await patientDashboardAPI.downloadBill(billId);
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Bill_${billId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Download failed:', error);
+            alert('Failed to download bill.');
+        }
+    };
+
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading portal...</div>;
 
     const getStatusBadge = (status) => {
@@ -367,7 +385,9 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                             { id: 'vitals', label: 'Vitals' },
                                             { id: 'reports', label: 'Lab' },
                                             { id: 'notes', label: 'Doctor Notes' },
-                                            { id: 'meds', label: 'Meds' }
+                                            { id: 'notes', label: 'Doctor Notes' },
+                                            { id: 'meds', label: 'Meds' },
+                                            { id: 'bills', label: 'Bills' }
                                         ].map(tab => (
                                             <button
                                                 key={tab.id}
@@ -521,6 +541,51 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                 )) : (
                                                     <div className="col-span-2 py-12 text-center text-gray-400 font-medium">No medications prescribed.</div>
                                                 )}
+                                            </div>
+                                        )}
+
+                                        {activeTab === 'bills' && (
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full">
+                                                    <thead>
+                                                        <tr className="text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                                                            <th className="pb-4 px-4">Bill ID</th>
+                                                            <th className="pb-4 px-4">Date</th>
+                                                            <th className="pb-4 px-4">Total Amount</th>
+                                                            <th className="pb-4 px-4">Status</th>
+                                                            <th className="pb-4 px-4">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {bills.length > 0 ? bills.map(b => (
+                                                            <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50/50">
+                                                                <td className="py-4 px-4 text-sm font-bold text-gray-900">#{b.id}</td>
+                                                                <td className="py-4 px-4 text-sm text-gray-600">{new Date(b.created_at).toLocaleDateString()}</td>
+                                                                <td className="py-4 px-4 text-sm font-bold text-gray-900">₹{b.total_amount}</td>
+                                                                <td className="py-4 px-4">
+                                                                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${getStatusBadge(b.status)}`}>
+                                                                        {b.status.replace(/_/g, ' ')}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="py-4 px-4">
+                                                                    <button
+                                                                        onClick={() => handleDownloadBill(b.id)}
+                                                                        className="text-blue-600 hover:text-blue-800 font-bold text-sm bg-blue-50 px-3 py-1 rounded-lg transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                        </svg>
+                                                                        Download PDF
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        )) : (
+                                                            <tr>
+                                                                <td colSpan="5" className="py-12 text-center text-gray-400 font-medium">No bills found.</td>
+                                                            </tr>
+                                                        )}
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         )}
                                     </div>

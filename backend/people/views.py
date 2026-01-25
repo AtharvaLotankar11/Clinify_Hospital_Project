@@ -14,6 +14,9 @@ import random
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Allergy, Bill, BillItem, InsuranceClaim, Patient, Staff, Visit, Admission, Bed, Vital, ClinicalNote, Order, LabTest, RadiologyTest, Medicine, MedicineBatch, StockTransaction, Prescription, PrescriptionDispense, Operation
 from .serializers import AllergySerializer, BillSerializer, BillItemSerializer, InsuranceClaimSerializer, PatientSerializer, StaffSerializer, StaffRegistrationSerializer, VisitSerializer, AdmissionSerializer, BedSerializer, VitalSerializer, ClinicalNoteSerializer,OrderSerializer, LabTestSerializer, RadiologyTestSerializer, MedicineSerializer, MedicineBatchSerializer, StockTransactionSerializer, PrescriptionSerializer, PrescriptionDispenseSerializer, OperationSerializer, CreateOrderSerializer
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from django.http import HttpResponse
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 
@@ -714,6 +717,86 @@ class BillViewSet(ModelViewSet):
         if patient_id:
             queryset = queryset.filter(visit__patient_id=patient_id)
         return queryset
+
+    @action(detail=True, methods=['get'])
+    def download(self, request, pk=None):
+        bill = self.get_object()
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="Bill_{bill.id}.pdf"'
+
+        p = canvas.Canvas(response, pagesize=letter)
+        width, height = letter
+        
+        # Header
+        p.setFont("Helvetica-Bold", 16)
+        p.drawString(50, height - 50, "Quasar Healthcare")
+        p.setFont("Helvetica", 12)
+        p.drawString(50, height - 70, f"Bill #{bill.id}")
+        p.drawString(50, height - 85, f"Date: {bill.created_at.strftime('%Y-%m-%d')}")
+        p.drawString(50, height - 100, f"Status: {bill.status}")
+
+        # Patient Details
+        p.drawString(50, height - 130, f"Patient: {bill.visit.patient.name} (UHID: {bill.visit.patient.uhid})")
+        p.drawString(50, height - 145, f"Visit ID: {bill.visit.id}")
+
+        # Table Header
+        y = height - 180
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y, "Service / Item")
+        p.drawString(400, y, "Price")
+        p.line(50, y-5, 500, y-5)
+        
+        y -= 25
+        p.setFont("Helvetica", 12)
+
+        # Items
+        items = BillItem.objects.filter(bill=bill)
+        for item in items:
+            item_name = item.service_type
+            
+            # Resolve name based on type
+            try:
+                if item.service_type == 'LAB_TEST':
+                    t = LabTest.objects.filter(id=item.service_ref_id).first()
+                    if t: item_name = t.test_name
+                elif item.service_type == 'RADIOLOGY_TEST':
+                    t = RadiologyTest.objects.filter(id=item.service_ref_id).first()
+                    if t: item_name = t.scan_type
+                elif item.service_type == 'OPERATION':
+                    t = Operation.objects.filter(operation_id=item.service_ref_id).first()
+                    if t: item_name = t.operation_name
+                elif item.service_type == 'CONSULTATION':
+                    # Fetch doctor from visit
+                    doc = item.visit.doctor
+                    if doc:
+                        dept = doc.department.replace('_', ' ').title()
+                        dtype = doc.doctor_type.replace('_', ' ').title() if doc.doctor_type else "Doctor"
+                        item_name = f"Consultation - Dr. {doc.name} ({dept}, {dtype})"
+                    else:
+                        item_name = "Doctor Consultation"
+                elif item.service_type == 'BED':
+                    item_name = "Bed Charges"
+                elif item.service_type == 'PHARMACY':
+                    item_name = "Pharmacy/Medicine Charges"
+            except Exception:
+                pass
+
+            p.drawString(50, y, f"{item_name}")
+            p.drawString(400, y, f"Rs. {item.amount}")
+            y -= 20
+            if y < 50:
+                p.showPage()
+                y = height - 50
+        
+        # Total
+        p.line(50, y+10, 500, y+10)
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y-20, "Total Amount")
+        p.drawString(400, y-20, f"Rs. {bill.total_amount}")
+        
+        p.showPage()
+        p.save()
+        return response
 
     @action(detail=False, methods=['get'])
     def pending_items(self, request):
