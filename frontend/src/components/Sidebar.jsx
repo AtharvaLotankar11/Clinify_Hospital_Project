@@ -18,13 +18,10 @@ export default function Sidebar({ role = 'doctor' }) {
         doctor: [
             { path: '/doctor/dashboard', icon: 'dashboard', label: 'Dashboard' },
             { path: '/doctor/patients', icon: 'patients', label: 'Patients' },
-            { path: '/doctor/orders', icon: 'orders', label: 'Orders' },
             { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' }
         ],
         nurse: [
             { path: '/nurse/dashboard', icon: 'dashboard', label: 'Dashboard' },
-
-            { path: '/nurse/beds', icon: 'beds', label: 'Bed Management' },
             { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' }
         ],
         lab_tech: [
