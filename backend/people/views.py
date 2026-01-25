@@ -151,6 +151,34 @@ class AdminDashboardStatsView(APIView):
         general_total = Bed.objects.filter(bed_type='GENERAL').count()
         general_occupied = Bed.objects.filter(bed_type='GENERAL', status='OCCUPIED').count()
 
+        # Revenue Breakdown
+        revenue_breakdown_qs = BillItem.objects.filter(bill__status='PAID').values('service_type').annotate(total=Sum('amount'))
+        revenue_map = {item['service_type']: item['total'] for item in revenue_breakdown_qs}
+        
+        revenue_breakdown = {
+            'consultation': revenue_map.get('CONSULTATION', 0),
+            'radiology': revenue_map.get('RADIOLOGY_TEST', 0),
+            'labs': revenue_map.get('LAB_TEST', 0),
+            'surgery': revenue_map.get('OPERATION', 0),
+            'pharmacy': revenue_map.get('PHARMACY', 0),
+            'beds': revenue_map.get('BED', 0),
+            'consumables': revenue_map.get('OT_CONSUMABLE', 0),
+        }
+
+        # Revenue Breakdown
+        revenue_breakdown_qs = BillItem.objects.filter(bill__status='PAID').values('service_type').annotate(total=Sum('amount'))
+        revenue_map = {item['service_type']: item['total'] for item in revenue_breakdown_qs}
+        
+        revenue_breakdown = {
+            'consultation': revenue_map.get('CONSULTATION', 0),
+            'radiology': revenue_map.get('RADIOLOGY_TEST', 0),
+            'labs': revenue_map.get('LAB_TEST', 0),
+            'surgery': revenue_map.get('OPERATION', 0),
+            'pharmacy': revenue_map.get('PHARMACY', 0),
+            'beds': revenue_map.get('BED', 0),
+            'consumables': revenue_map.get('OT_CONSUMABLE', 0),
+        }
+
         # 4. Analytics Graphs (Last 7 Days)
         revenue_trend = []
         patient_inflow_trend = []
@@ -184,6 +212,7 @@ class AdminDashboardStatsView(APIView):
                 'procedureCharges': procedure_charges,
                 'collectedToday': collected_today,
                 'pendingPayments': pending_payments,
+                'breakdown': revenue_breakdown
             },
             'hospital': {
                 'totalPatients': total_patients,
