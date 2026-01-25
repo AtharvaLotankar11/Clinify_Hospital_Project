@@ -842,7 +842,7 @@ class BillViewSet(ModelViewSet):
                     'id': test.id,
                     'name': test.test_name,
                     'price': float(test.price),
-                    'date': test.completed_at,
+                    'date': test.completed_at or test.order.ordered_at,
                     'visitId': test.order.visit.id
                 })
 
@@ -858,7 +858,7 @@ class BillViewSet(ModelViewSet):
                     'id': test.id,
                     'name': test.scan_type,
                     'price': float(test.price),
-                    'date': test.completed_at,
+                    'date': test.completed_at or test.order.ordered_at,
                     'visitId': test.order.visit.id
                 })
 
@@ -875,7 +875,7 @@ class BillViewSet(ModelViewSet):
                     'id': op.operation_id,
                     'name': op.operation_name,
                     'price': float(op.price),
-                    'date': op.performed_at,
+                    'date': op.performed_at or op.order.ordered_at,
                     'visitId': op.order.visit.id
                 })
              
