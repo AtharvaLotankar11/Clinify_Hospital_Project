@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { patientDashboardAPI, visitAPI } from '../../services/api';
+import { patientDashboardAPI, visitAPI, patientAPI } from '../../services/api';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 
@@ -188,12 +188,39 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                         <p className="text-sm text-gray-600 mt-1">UHID: {profile?.uhid} • {profile?.gender}, {profile?.age} Years</p>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => setBookingMode(!bookingMode)}
-                                    className="px-6 py-2 btn-medical-primary font-bold rounded-lg transition-colors shadow-sm"
-                                >
-                                    {bookingMode ? 'View Dashboard' : 'Book Appointment +'}
-                                </button>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={async () => {
+                                            try {
+                                                const response = await patientAPI.exportEHR(user.id);
+                                                const blob = new Blob([response.data], { type: 'application/pdf' });
+                                                const url = window.URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = `My_Medical_Records_${profile?.uhid}_${new Date().toISOString().split('T')[0]}.pdf`;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                window.URL.revokeObjectURL(url);
+                                                document.body.removeChild(a);
+                                            } catch (error) {
+                                                console.error('Export failed:', error);
+                                                alert('Failed to download medical records. Please try again.');
+                                            }
+                                        }}
+                                        className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors shadow-sm flex items-center gap-2"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Export My Records
+                                    </button>
+                                    <button
+                                        onClick={() => setBookingMode(!bookingMode)}
+                                        className="px-6 py-2 btn-medical-primary font-bold rounded-lg transition-colors shadow-sm"
+                                    >
+                                        {bookingMode ? 'View Dashboard' : 'Book Appointment +'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
