@@ -7,6 +7,7 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
     const [error, setError] = useState(null);
     const [isSupported, setIsSupported] = useState(true);
     const [isProcessingAI, setIsProcessingAI] = useState(false);
+    const [language, setLanguage] = useState('en-US');
 
     const recognitionRef = useRef(null);
     const isUserRecordingRef = useRef(false);
@@ -35,7 +36,7 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'en-US';
+        recognition.lang = language;
 
         recognition.onresult = (event) => {
             setError(null);
@@ -60,11 +61,9 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
                 // Commit text and restart.
                 committedTextRef.current = latestTranscriptRef.current;
 
-                // console.log('Auto-restarting speech recognition...');
                 try {
                     recognition.start();
                 } catch (e) {
-                    // console.error("Restart failed:", e);
                     setIsRecording(false);
                     isUserRecordingRef.current = false;
                 }
@@ -74,7 +73,6 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
         };
 
         recognition.onerror = (event) => {
-            // console.error('Speech error:', event.error);
             if (['not-allowed', 'service-not-allowed', 'audio-capture'].includes(event.error)) {
                 setIsRecording(false);
                 isUserRecordingRef.current = false;
@@ -82,7 +80,7 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
                 if (event.error === 'audio-capture') setError("No mic found.");
                 if (event.error === 'service-not-allowed') setError("HTTPS required.");
             } else if (event.error === 'network') {
-                setError("Network error. Type manually.");
+                setError("Network error.");
             }
         };
 
@@ -93,9 +91,19 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
         };
     }, []);
 
+    // Update language dynamically
+    useEffect(() => {
+        if (recognitionRef.current) {
+            recognitionRef.current.lang = language;
+        }
+    }, [language]);
+
     const startRecording = () => {
         setError(null);
         if (!recognitionRef.current) return;
+
+        // Ensure language is set before starting
+        recognitionRef.current.lang = language;
 
         committedTextRef.current = transcript;
         latestTranscriptRef.current = transcript;
@@ -105,7 +113,6 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
             recognitionRef.current.start();
             setIsRecording(true);
         } catch (err) {
-            // console.error('Start error:', err);
             setIsRecording(true);
         }
     };
@@ -145,7 +152,34 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
             }
         } catch (err) {
             console.error("AI Fix Error:", err);
-            setError("Failed to improve text (AI Error).");
+            setError("Failed to improve text.");
+        } finally {
+            setIsProcessingAI(false);
+        }
+    };
+
+    const translateText = async () => {
+        if (!transcript.trim()) return;
+
+        setIsProcessingAI(true);
+        setError(null);
+
+        try {
+            // Frontend Hack: Using fixGrammar endpoint with a Translation Prompt since we are restricted to frontend changes
+            const prompt = `Translate the following medical notes to precise English. Maintain all medical facts and terminology accurately:\n\n${transcript}`;
+
+            const response = await aiAPI.fixGrammar(prompt);
+            const translatedText = response.data.fixed_text;
+
+            if (translatedText) {
+                setTranscript(translatedText);
+                latestTranscriptRef.current = translatedText;
+                committedTextRef.current = translatedText;
+                onTranscriptChange(translatedText);
+            }
+        } catch (err) {
+            console.error("AI Translate Error:", err);
+            setError("Translation failed.");
         } finally {
             setIsProcessingAI(false);
         }
@@ -162,61 +196,76 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
 
     return (
         <div className="space-y-3">
-            <div className="flex flex-wrap items-center gap-3 justify-between">
-                <div className="flex items-center gap-3">
-                    {!isRecording ? (
-                        <button
-                            type="button"
-                            onClick={startRecording}
-                            disabled={isProcessingAI}
-                            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-sm font-medium text-sm disabled:bg-red-300"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                            </svg>
-                            Start Recording
-                        </button>
-                    ) : (
-                        <button
-                            type="button"
-                            onClick={stopRecording}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors shadow-sm font-medium text-sm animate-pulse"
-                        >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>
-                            Stop Recording
-                        </button>
-                    )}
+            <div className="flex flex-wrap items-center gap-2">
+                {/* Language Selector */}
+                <select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    disabled={isRecording}
+                    className="w-32 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                >
+                    <option value="en-US">US English</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="mr-IN">Marathi</option>
+                </select>
 
-                    {isRecording && <span className="text-red-600 text-sm font-semibold animate-pulse">Recording...</span>}
-                </div>
-
-                {/* AI Fix Button */}
-                {!isRecording && transcript.trim().length > 5 && (
+                {!isRecording ? (
                     <button
                         type="button"
-                        onClick={fixGrammar}
+                        onClick={startRecording}
                         disabled={isProcessingAI}
-                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium text-sm disabled:bg-indigo-300"
+                        className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-sm font-medium text-sm disabled:bg-red-300 whitespace-nowrap"
                     >
-                        {isProcessingAI ? (
-                            <>
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Refining...
-                            </>
-                        ) : (
-                            <>
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                                AI Fix Grammar
-                            </>
-                        )}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                        </svg>
+                        Start
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={stopRecording}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors shadow-sm font-medium text-sm animate-pulse whitespace-nowrap"
+                    >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>
+                        Stop
                     </button>
                 )}
+
+                {/* AI Tools Group */}
+                <div className="flex items-center gap-2 ml-auto sm:ml-0">
+                    {!isRecording && transcript.trim().length > 2 && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={fixGrammar}
+                                disabled={isProcessingAI}
+                                className="flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium text-xs disabled:bg-indigo-300 whitespace-nowrap"
+                                title="Fix grammar and format"
+                            >
+                                {isProcessingAI ? 'Refining...' : 'AI Fix Grammar'}
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={translateText}
+                                disabled={isProcessingAI}
+                                className="flex items-center gap-2 px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors shadow-sm font-medium text-xs disabled:bg-emerald-300 whitespace-nowrap"
+                                title="Translate to English"
+                            >
+                                {isProcessingAI ? 'Translating...' : 'AI Translate'}
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
+
+            {isRecording && (
+                <div className="flex items-center gap-2 text-red-600 animate-pulse text-xs font-semibold px-1">
+                    <span className="w-2 h-2 bg-red-600 rounded-full"></span>
+                    Recording in {language === 'hi-IN' ? 'Hindi' : language === 'mr-IN' ? 'Marathi' : 'English'}...
+                </div>
+            )}
 
             {/* Inline Error Message */}
             {error && (
@@ -226,26 +275,13 @@ export default function VoiceRecorder({ onTranscriptChange, initialValue = '' })
                 </div>
             )}
 
-            {/* Safety Message */}
-            {!error && !isProcessingAI && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2">
-                    <svg className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <p className="text-xs text-blue-800">
-                        {isRecording ? "Listening..." : "Review text before saving. " + (transcript.length > 5 ? "Use 'AI Fix Grammar' to polish." : "")}
-                    </p>
-                </div>
-            )}
-
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {error ? "Please Type Here:" : "Transcribed Text (Editable)"}
-                </label>
                 <textarea
                     value={transcript}
                     onChange={handleManualEdit}
                     disabled={isProcessingAI}
                     className={`w-full h-32 p-3 border rounded-lg focus:ring-2 text-sm resize-none transition-colors ${error ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/10' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'} ${isProcessingAI ? 'bg-gray-100 cursor-wait' : ''}`}
-                    placeholder="Type progress note here..."
+                    placeholder="Type notes or start recording..."
                 />
             </div>
         </div>
