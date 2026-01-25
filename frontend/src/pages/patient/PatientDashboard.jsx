@@ -285,7 +285,10 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                         <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">👨‍⚕️</div>
                                                         <div>
                                                             <div className="font-bold text-gray-900">Dr. {doc.name}</div>
-                                                            <div className="text-[10px] text-emerald-600 font-bold uppercase">{doc.department}</div>
+                                                            <div className="text-[10px] text-emerald-600 font-bold uppercase">
+                                                                {doc.department}
+                                                                {doc.doctor_type && <span className="text-gray-400"> • {doc.doctor_type.replace(/_/g, ' ')}</span>}
+                                                            </div>
                                                         </div>
                                                     </button>
                                                 ))}
@@ -386,7 +389,9 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                     <thead>
                                                         <tr className="text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
                                                             <th className="pb-4 px-4">Date</th>
+                                                            <th className="pb-4 px-4">Time</th>
                                                             <th className="pb-4 px-4">Doctor</th>
+                                                            <th className="pb-4 px-4">Specialization</th>
                                                             <th className="pb-4 px-4">Reason</th>
                                                             <th className="pb-4 px-4">Status</th>
                                                         </tr>
@@ -395,7 +400,9 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                         {visits.length > 0 ? visits.map(v => (
                                                             <tr key={v.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                                                                 <td className="py-4 px-4 text-sm font-bold text-gray-900">{v.visit_date}</td>
+                                                                <td className="py-4 px-4 text-sm text-gray-600">{v.slot_booked || '-'}</td>
                                                                 <td className="py-4 px-4 text-sm text-gray-600">Dr. {v.doctor?.name || 'Staff'}</td>
+                                                                <td className="py-4 px-4 text-sm text-gray-500 uppercase">{v.doctor?.doctor_type?.replace(/_/g, ' ') || '-'}</td>
                                                                 <td className="py-4 px-4 text-sm text-gray-500 italic">{v.chief_complaint || '-'}</td>
                                                                 <td className="py-4 px-4">
                                                                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${getStatusBadge(v.status)}`}>
@@ -405,7 +412,7 @@ export default function PatientDashboard({ initialTab = 'overview' }) {
                                                             </tr>
                                                         )) : (
                                                             <tr>
-                                                                <td colSpan="4" className="py-12 text-center text-gray-400 font-medium">No medical history found.</td>
+                                                                <td colSpan="6" className="py-12 text-center text-gray-400 font-medium">No medical history found.</td>
                                                             </tr>
                                                         )}
                                                     </tbody>

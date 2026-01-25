@@ -23,6 +23,7 @@ export default function RegisterPatient() {
         gender: '',
         bloodGroup: '',
         aadhaar: '',
+        uniqueness: '',
 
         // Contact Information
         phone: '',
@@ -137,6 +138,7 @@ export default function RegisterPatient() {
             gender: patient.gender,
             bloodGroup: patient.blood_group || '',
             aadhaar: patient.aadhaar || '',
+            uniqueness: patient.uniqueness || '',
             phone: patient.phone,
             email: patient.email || '',
             address: address,
@@ -157,7 +159,7 @@ export default function RegisterPatient() {
     const clearForm = () => {
         setSelectedPatientId(null);
         setFormData({
-            firstName: '', lastName: '', dateOfBirth: '', age: '', gender: '', bloodGroup: '', aadhaar: '',
+            firstName: '', lastName: '', dateOfBirth: '', age: '', gender: '', bloodGroup: '', aadhaar: '', uniqueness: '',
             phone: '', email: '', address: '', city: '', state: '', pincode: '',
             emergencyContactName: '', emergencyContactPhone: '', emergencyContactRelation: '',
             allergies: '', chronicConditions: '', currentMedications: ''
@@ -186,6 +188,7 @@ export default function RegisterPatient() {
             email: formData.email,
             blood_group: formData.bloodGroup,
             aadhaar: formData.aadhaar,
+            uniqueness: formData.uniqueness,
             date_of_birth: formData.dateOfBirth,
             address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
             emergency_contact_name: `${formData.emergencyContactName}${contactRelation}`,
@@ -423,6 +426,17 @@ export default function RegisterPatient() {
                                             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
                                             placeholder="Enter 12-digit Aadhar ID"
                                             maxLength="12"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Uniqueness</label>
+                                        <input
+                                            type="text"
+                                            name="uniqueness"
+                                            value={formData.uniqueness}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all text-sm font-medium"
+                                            placeholder="Unique mark (e.g. Mole on cheek)"
                                         />
                                     </div>
                                 </div>
