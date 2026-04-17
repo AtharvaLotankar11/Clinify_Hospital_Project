@@ -13,37 +13,43 @@ export default function Sidebar({ role = 'doctor' }) {
             { path: '/reception/register-patient', icon: 'add', label: 'Register/Edit Patient' },
             { path: '/reception/create-visit', icon: 'visits', label: 'Create/Edit Visit' },
             { path: '/reception/admissions', icon: 'calendar', label: 'Create/Edit Admission' },
-            { path: '/reception/view-all', icon: 'folder', label: 'View All Records' }
+            { path: '/reception/view-all', icon: 'folder', label: 'View All Records' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Intelligence' }
         ],
         doctor: [
             { path: '/doctor/dashboard', icon: 'dashboard', label: 'Dashboard' },
             { path: '/doctor/patients', icon: 'patients', label: 'Patients' },
-            { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' }
+            { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Insights' }
         ],
         nurse: [
             { path: '/nurse/dashboard', icon: 'dashboard', label: 'Dashboard' },
-            { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' }
+            { path: '/ot/dashboard', icon: 'surgery', label: 'Operation Theater' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Intelligence' }
         ],
         lab_tech: [
             { path: '/lab_tech/dashboard', icon: 'dashboard', label: 'Lab Details' },
-
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Intelligence' }
         ],
         billing: [
             { path: '/billing/dashboard', icon: 'dashboard', label: 'Dashboard' },
             { path: '/billing/create', icon: 'add', label: 'Create Bill' },
-            { path: '/billing/bills', icon: 'billing', label: 'Patient Bills' }
+            { path: '/billing/bills', icon: 'billing', label: 'Patient Bills' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Intelligence' }
         ],
         pharmacy: [
             { path: '/pharmacy/dashboard', icon: 'dashboard', label: 'Dashboard' },
             { path: '/pharmacy/prescriptions', icon: 'prescriptions', label: 'Prescriptions' },
             { path: '/pharmacy/inventory', icon: 'inventory', label: 'Inventory' },
             { path: '/pharmacy/dispense', icon: 'dispense', label: 'Dispense Medicine' },
-            { path: '/pharmacy/alerts', icon: 'alerts', label: 'Allergy & Interactions' }
+            { path: '/pharmacy/alerts', icon: 'alerts', label: 'Allergy & Interactions' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Intelligence' }
         ],
         admin: [
             { path: '/admin/dashboard', icon: 'dashboard', label: 'Dashboard' },
             { path: '/admin/register-user', icon: 'add', label: 'Register User' },
-            { path: '/admin/users', icon: 'users', label: 'Manage Users' }
+            { path: '/admin/users', icon: 'users', label: 'Manage Users' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Insights' }
         ],
         patient: [
             { path: '/patient/dashboard', icon: 'dashboard', label: 'Dashboard' },
@@ -52,7 +58,8 @@ export default function Sidebar({ role = 'doctor' }) {
             { path: '/patient/reports', icon: 'reports', label: 'Lab Reports' }
         ],
         support: [
-            { path: '/support/dashboard', icon: 'beds', label: 'Bed Management' }
+            { path: '/support/dashboard', icon: 'beds', label: 'Bed Management' },
+            { path: '/ml/dashboard', icon: 'ai', label: 'AI Intelligence' }
         ]
     };
 
@@ -140,6 +147,11 @@ export default function Sidebar({ role = 'doctor' }) {
         alerts: (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        ),
+        ai: (
+            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
         )
     };

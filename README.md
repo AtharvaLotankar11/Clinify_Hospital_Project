@@ -1,109 +1,97 @@
-<div align="center">
-  
-  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.png" alt="Clinify AI Logo" width="120" />
+# 🏥 Clinify Hospital Predictive AI Ecosystem
 
-  <h1>🏥 Clinify Hospital Predictive AI</h1>
+**A Next-Generation Clinical Workflow & Predictive Intelligence Platform**
 
-  <p>
-    <strong>A Next-Generation Clinical Workflow & Predictive Intelligence Ecosystem</strong>
-  </p>
+*Leveraging robust local Machine Learning models (XGBoost & SHAP) alongside asynchronous Python APIs and a dynamic React Frontend, this system autonomously tracks synthetic Electronic Health Record (EHR) data to predict patient readmissions and intelligently allocate hospital resources across all administrative verticals.*
 
-  <p>
-    <a href="#"><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green" alt="Django" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/XGBoost-1761A0?style=for-the-badge&logo=xgboost&logoColor=white" alt="XGBoost" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Celery-37814A?style=for-the-badge&logo=celery&logoColor=white" alt="Celery" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Redis-%23DD0031?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" /></a>
-  </p>
-</div>
+<p>
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green" alt="Django" />
+  <img src="https://img.shields.io/badge/XGBoost-1761A0?style=for-the-badge&logo=xgboost&logoColor=white" alt="XGBoost" />
+  <img src="https://img.shields.io/badge/Celery-37814A?style=for-the-badge&logo=celery&logoColor=white" alt="Celery" />
+  <img src="https://img.shields.io/badge/Redis-%23DD0031?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
+</p>
 
 ---
 
-<details open>
-  <summary><b>✨ System Overview (Click to Collapse)</b></summary>
-  <br/>
-  <blockquote>
-    Leveraging robust local Machine Learning models (<b>XGBoost</b> & <b>SHAP</b>) alongside asynchronous Python APIs and a dynamic React Frontend, this system autonomously tracks synthetic Electronic Health Record (EHR) data to predict patient readmissions and intelligently allocate hospital resources.
-  </blockquote>
-</details>
+## 👨‍⚕️ PRD Fulfillment: Ecosystem & Staff Integrations
 
-<br>
+After extensive auditing spanning original legacy workflows and modern data implementations (Phases 1-6), the full suite integrates comprehensively across every single hospital team. 
 
-## 🔮 Core Intelligence Features
+| Role | Legacy Capabilities Preserved | Predictive AI Value Added |
+| :--- | :--- | :--- |
+| **Doctors** | Full patient charting, Orders, Operation Theater, Dashboards. | **Diagnostic SHAP Tools**: Visual feature breakdowns clearly explain *why* the XGBoost model flagged a patient. |
+| **Nurses** | Vitals tracking, OT assistance, Dynamic Bed deployment. | **Triage Prioritization**: "Live Risk Queue" tables automatically surface the highest-risk critical patients. |
+| **Reception** | Patient records, Visit creation, Admission coordination. | **Volume Forecasting**: Predictive banners anticipating total emergency room capacity surges. |
+| **Support Staff**| Physical asset and ward-bed tracking. | **Resource Utilization Scanners**: Real-time bar charts dynamically balancing staffing versus bed capacity limits. |
+| **Lab Techs** | Diagnostic report uploads and sample tagging. | Rapid severity routing allows tech queues to prioritize AI-flagged critical tests. |
+| **Pharmacists**| Medication dispensing, Inventory, Interaction alerts. | Unified view of upcoming prescription demand based on AI-identified disease readmissions. |
+| **Billing** | Fast invoice pipelines and clearance processing. | Full system stability decoupling core hospital financials from ML computation overhead. |
+| **Patients** | Vitals logging, Digital health records, Telemetry. | Protected, siloed routing completely shields PII profiles from analytical components. |
+| **Admin** | Global system visibility, Staff management. | Central oversight of both operational analytics and AI metrics in a unified sidebar. |
+
+---
+
+## 🔮 Core Pipeline & Capabilities
 
 | Module | Sub-System | Description |
 | :--- | :--- | :--- |
-| 💊 **ML Inference** | `Predictive Routing` | Deploys Scikit-Learn pipelines mapped directly against incoming API endpoints to instantly return risk categorizations. |
-| 📊 **Analytics Hub** | `Recharts Dashboard` | Implements a 12-column dynamic CSS grid to visualize real-time capacity and AI resource recommendations. |
-| ⚡ **Async Workers** | `Celery Pipeline` | Prevents the server from bottlenecking when rendering 100K+ synthetic records simultaneously. |
-| 🧬 **Explainable AI** | `SHAP Interventions` | Provides a horizontal dependency chart to visually explain to the Doctor *why* a specific diagnosis was given. |
+| 💊 **ML Inference** | `Predictive Routing` | Deploys Scikit-Learn pipelines dynamically via REST endpoints to categorize patient admission probabilities. |
+| 📊 **Analytics Hub** | `Recharts Dashboard` | A native React 12-column interactive grid visualizing capacity and heuristic resource recommendations. |
+| ⚡ **Heavy Lifting** | `Celery Async Workers` | Defends the Django core from bottlenecking when rendering 100K+ synthetic records via background Redis queues. |
 
 ---
 
-## 🚀 Live Environment Setup
+## 🚀 Local Deployment Guide
 
-<details open>
-  <summary><b>1️⃣ Background Systems (Message Broker)</b></summary>
-  
-  > 🕒 Ensures the system can communicate using the asynchronous task queue.
-  ```bash
-  # Using Docker locally to host Redis Message Broker
-  docker run -d -p 6379:6379 redis
-  ```
-</details>
+You can run the entire hospital simulation suite locally using 3 simultaneous terminal processes.
 
-<details open>
-  <summary><b>2️⃣ Backend Brain (Django + XGBoost)</b></summary>
+### 1️⃣ Background Systems (Message Broker)
+**Ensures Django can communicate securely with the asynchronous task worker.**
+```bash
+# Using Docker (Run once and keep active)
+docker run -d -p 6379:6379 redis
+```
 
-  > 🧠 Handles dataset generation, ML operations, and secure API handshakes.
-  ```bash
-  cd backend
-  python -m venv venv
-  venv\Scripts\activate
-  pip install -r requirements.txt
-  
-  # Boot REST API Server
-  python manage.py runserver 
-  ```
+### 2️⃣ Backend Brain (Django + XGBoost Worker)
+**Handles dataset generation, model processing, and API handshakes.**
+```bash
+cd backend
+venv\Scripts\activate
 
-  Keep that terminal open! Open a **new terminal** explicitly for the Worker:
-  ```bash
-  cd backend
-  venv\Scripts\activate
-  celery -A his worker -l info --pool=solo
-  ```
-</details>
+# Terminal A: Boot REST API Server
+python manage.py runserver 
+```
+```bash
+# Terminal B: Boot the local Celery Pool (Must be in a separate terminal window)
+cd backend
+venv\Scripts\activate
+celery -A his worker -l info --pool=solo
+```
 
-<details open>
-  <summary><b>3️⃣ Visual Interface (Vite React)</b></summary>
+### 3️⃣ Visual Interface (Client)
+**The UI portal featuring high-fidelity clinical analytics and legacy hospital tools.**
+```bash
+# Terminal C (Separate window)
+cd frontend
+npm install
+npm run dev
+```
 
-  > 🎨 The medical UI portal featuring high-fidelity charts and dashboard grids.
-  ```bash
-  cd frontend
-  npm install
-  npm run dev
-  ```
-  🔗 **Access the live AI dashboard at**: [http://localhost:5173/ml/dashboard](http://localhost:5173/ml/dashboard)
-</details>
+Navigate your browser to **`http://localhost:5173/`** to securely login and access your unified dashboard!
 
 ---
 
 ## 🔬 AI Playground Controls
 
-You control the datasets! Play around with the synthetic simulation models.
+The platform handles completely synthetic EHR distributions to train algorithms locally without HIPAA violations. To execute an algorithmic refresh:
 
 ```bash
-# Generate 5,000 brand new randomized EHR profiles with realistic constraints
+# Generate 5,000 completely randomized and anonymized patient data profiles 
 cd backend
 python ml/utils/generate_synthetic_data.py --num_records=5000
 
-# You can then command the AI to adapt via an API script or curl!
-# Endpoint: POST /api/ml/train/
+# Retrain the Scikit-Learn tools and XGBoost Model
+python -m ml.training.train
 ```
-
----
-
-<p align="center">
-  <i>Architected beautifully for clinical intelligence modeling.</i>
-</p>

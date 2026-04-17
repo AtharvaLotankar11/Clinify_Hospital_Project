@@ -332,7 +332,7 @@ function App() {
           <Route
             path="/ml/dashboard"
             element={
-              <PrivateRoute allowedRoles={['admin', 'doctor', 'reception']}>
+              <PrivateRoute allowedRoles={['admin', 'doctor', 'reception', 'nurse', 'lab_tech', 'billing', 'pharmacy', 'pharmacist', 'lab', 'support']}>
                 <MLDashboard />
               </PrivateRoute>
             }

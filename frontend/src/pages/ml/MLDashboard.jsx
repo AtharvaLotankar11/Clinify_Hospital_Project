@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Activity, Users, AlertTriangle, TrendingUp, Search, Bell, Menu, X, BrainCircuit, HeartPulse, ChevronRight, Stethoscope
+  Activity, Users, AlertTriangle, TrendingUp, BrainCircuit, ChevronRight
 } from 'lucide-react';
 import { 
   PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  Tooltip as RechartsTooltip, Legend, ResponsiveContainer, Cell, Tooltip 
+  Tooltip as RechartsTooltip, Legend, ResponsiveContainer, Cell 
 } from 'recharts';
+import Sidebar from '../../components/Sidebar';
+import Header from '../../components/Header';
 
 // --- Theme Colors ---
 const COLORS = {
@@ -47,10 +49,9 @@ const MOCK_PATIENTS = [
 ];
 
 // --- Components ---
-
 function KPICard({ title, value, detail, icon: Icon, trend, isPositive }) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:-translate-y-1 transition-all duration-300 group">
+    <div className="card-medical p-6 hover:-translate-y-1 transition-all duration-300 group">
       <div className="flex justify-between items-start">
         <div>
           <p className="text-gray-500 text-sm font-medium mb-1">{title}</p>
@@ -65,7 +66,7 @@ function KPICard({ title, value, detail, icon: Icon, trend, isPositive }) {
             <span className="text-gray-400 text-xs">{detail}</span>
           </div>
         </div>
-        <div className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
           <Icon size={24} strokeWidth={2} />
         </div>
       </div>
@@ -74,90 +75,44 @@ function KPICard({ title, value, detail, icon: Icon, trend, isPositive }) {
 }
 
 export default function MLDashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Simulate AI Loading
   useEffect(() => {
     setTimeout(() => setLoading(false), 1200);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex font-sans text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 medical-theme font-sans text-gray-800">
       
-      {/* 1. Left Sidebar Navigation */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-white border-r border-gray-200 transition-all duration-300 flex flex-col relative z-20`}>
-        <div className="h-20 flex items-center justify-between px-6 border-b border-gray-100">
-          {sidebarOpen && (
-            <div className="flex items-center gap-2 font-bold text-xl text-gray-900 tracking-tight">
-              <BrainCircuit className="text-blue-600" />
-              Clinify AI<span className="text-blue-600">.</span>
-            </div>
-          )}
-          {!sidebarOpen && <BrainCircuit className="text-blue-600 mx-auto" />}
-        </div>
+      {/* Clinify Global Sidebar */}
+      <Sidebar role={user.role || 'doctor'} />
+
+      <div className="ml-72 transition-all duration-300 flex-1">
         
-        <nav className="flex-1 px-4 py-6 space-y-2">
-          {[
-            { icon: Activity, label: 'Analytics Hub', active: true },
-            { icon: Users, label: 'Patient Triage' },
-            { icon: HeartPulse, label: 'Model Metrics' },
-            { icon: AlertTriangle, label: 'Risk Alerts' },
-          ].map((item, idx) => (
-            <div key={idx} className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all ${
-              item.active 
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
-                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
-            }`}>
-              <item.icon size={20} strokeWidth={item.active ? 2.5 : 2} />
-              {sidebarOpen && <span className="font-medium text-sm">{item.label}</span>}
-            </div>
-          ))}
-        </nav>
-      </aside>
+        {/* Clinify Global Header */}
+        <Header userName={user.name || 'AI Core'} userRole="Predictive Intelligence" />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        
-        {/* 2. Top Header Navigation */}
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-10 transition-all">
-          <div className="flex items-center gap-4">
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg transition-colors">
-              <Menu size={20} />
-            </button>
-            <div className="relative group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search patient by ID, Diagnosis..." 
-                className="pl-10 pr-4 py-2 bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 outline-none rounded-xl w-80 transition-all text-sm shadow-sm"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 text-sm font-medium text-amber-600 bg-amber-50 px-4 py-2 rounded-full border border-amber-100 animate-pulse">
-              <AlertTriangle size={16} />
-              ER Volume Spike Predicted (98%)
-            </div>
-            <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-            <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-blue-600 to-purple-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
-              Dr
-            </div>
-          </div>
-        </header>
-
-        {/* 3. 12-Column Grid Main Canvas */}
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="p-6">
           <div className="max-w-7xl mx-auto space-y-8">
             
             {/* Header Titles */}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Predictive Intelligence</h1>
-              <p className="text-gray-500 mt-1">Real-time XGBoost Analysis & Healthcare Resource Allocation</p>
+            <div className="card-medical p-6 flex justify-between items-center bg-white">
+               <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-200">
+                     <BrainCircuit className="text-white" size={24} />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">AI Diagnostic Center</h1>
+                    <p className="text-sm text-gray-500 mt-1">Real-time XGBoost Analysis & Healthcare Resource Allocation</p>
+                  </div>
+               </div>
+               <div className="text-right">
+                  <p className="text-xs text-gray-500 font-medium uppercase">Model Status</p>
+                  <p className="text-sm font-bold text-emerald-600 flex items-center gap-1 justify-end">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Active
+                  </p>
+               </div>
             </div>
 
             {/* KPI Cards Row */}
@@ -169,10 +124,10 @@ export default function MLDashboard() {
             </div>
 
             {/* AI Insight Banner */}
-            <div className="w-full bg-gradient-to-r from-blue-600 to-teal-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-200/50 flex items-center justify-between">
+            <div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-200 flex items-center justify-between border-l-4 border-teal-400">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                  <BrainCircuit className="text-white" size={28} />
+                  <AlertTriangle className="text-white" size={28} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">AI Recommendation Engine</h3>
@@ -181,7 +136,7 @@ export default function MLDashboard() {
                   </p>
                 </div>
               </div>
-              <button className="px-6 py-2.5 bg-white text-blue-600 font-bold text-sm rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
+              <button className="px-6 py-2.5 bg-white text-blue-600 font-bold text-sm rounded-xl hover:bg-gray-50 transition-colors shadow-sm whitespace-nowrap">
                 Apply Action
               </button>
             </div>
@@ -189,12 +144,12 @@ export default function MLDashboard() {
             {/* Charts Row 1: 12-Col Grid */}
             <div className="grid grid-cols-12 gap-6">
               {/* Doughnut Chart */}
-              <div className="col-span-12 lg:col-span-4 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden">
+              <div className="col-span-12 lg:col-span-4 card-medical p-6 relative overflow-hidden">
                 <h3 className="font-bold text-gray-900">Readmission Risk Spread</h3>
                 <p className="text-xs text-gray-400 mb-6">Real-time XGBoost Prediction</p>
                 
                 {loading ? (
-                  <div className="h-64 flex items-center justify-center animate-pulse bg-gray-50 rounded-xl">Loading Model...</div>
+                  <div className="h-64 flex items-center justify-center animate-pulse bg-gray-50 rounded-xl">Analyzing Data...</div>
                 ) : (
                   <div className="h-64 relative">
                     <ResponsiveContainer width="100%" height="100%">
@@ -218,7 +173,7 @@ export default function MLDashboard() {
               </div>
 
               {/* Resource Bar Chart */}
-              <div className="col-span-12 lg:col-span-8 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+              <div className="col-span-12 lg:col-span-8 card-medical p-6">
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h3 className="font-bold text-gray-900">Resource Utilization</h3>
@@ -253,7 +208,7 @@ export default function MLDashboard() {
             <div className="grid grid-cols-12 gap-6 pb-12">
               
               {/* Patient DataTable */}
-              <div className="col-span-12 lg:col-span-8 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+              <div className="col-span-12 lg:col-span-8 card-medical overflow-hidden flex flex-col">
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white z-10 sticky top-0">
                   <h3 className="font-bold text-gray-900">Live Patient Risk Queue</h3>
                   <div className="bg-gray-100 p-1 rounded-lg flex text-sm font-medium text-gray-500">
@@ -300,7 +255,7 @@ export default function MLDashboard() {
               </div>
 
               {/* SHAP Feature Importance */}
-              <div className="col-span-12 lg:col-span-4 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+              <div className="col-span-12 lg:col-span-4 card-medical p-6">
                 <h3 className="font-bold text-gray-900 mb-1">SHAP Factor Influence</h3>
                 <p className="text-xs text-gray-400 mb-6">Top drivers for model decisions</p>
                 <div className="space-y-5 mt-4">
