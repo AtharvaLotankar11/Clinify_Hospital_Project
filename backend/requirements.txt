@@ -27,3 +27,12 @@ pillow==11.0.0
 
 # PDF Generation
 reportlab==4.0.9
+
+# Async ML Processing
+celery>=5.4.0
+redis>=5.2.0
+faker
+pandas
+scikit-learn
+xgboost
+shap

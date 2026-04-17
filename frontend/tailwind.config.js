@@ -33,6 +33,10 @@ export default {
           800: '#065f46',
           900: '#064e3b',
         },
+        'dashboard-success': '#10B981',
+        'dashboard-warning': '#F59E0B',
+        'dashboard-danger': '#EF4444',
+        'dashboard-teal': '#0D9488',
         // Professional Purple for accents
         'medical-purple': {
           50: '#faf5ff',

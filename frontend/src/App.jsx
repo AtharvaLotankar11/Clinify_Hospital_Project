@@ -32,6 +32,7 @@ import SurgeryConsole from './pages/ot/SurgeryConsole';
 import SupportDashboard from './pages/support/Dashboard';
 import PatientLogin from './pages/auth/PatientLogin';
 import PatientDashboard from './pages/patient/PatientDashboard';
+import MLDashboard from './pages/ml/MLDashboard';
 import './App.css'
 
 function App() {
@@ -323,6 +324,16 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['patient']}>
                 <PatientDashboard initialTab="reports" />
+              </PrivateRoute>
+            }
+          />
+
+          {/* ML Analytics Dashboard */}
+          <Route
+            path="/ml/dashboard"
+            element={
+              <PrivateRoute allowedRoles={['admin', 'doctor', 'reception']}>
+                <MLDashboard />
               </PrivateRoute>
             }
           />
